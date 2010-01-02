@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2010 Marc Schroeder
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">Mindfulness Bell</string>
+    <!--  Settings dialog -->
+    <string name="settingsTitle">Mindfulness Bell Settings</string>
+	<string name="bellActive">Mindfulness Bell Active</string>
+	<string name="titleFrequency">Ring bell about every</string>
+	<string name="titleStartTime">from</string>
+	<string name="titleEndTime">to</string>
+	<string name="bUpdate">Update</string>
+	<string name="titleTry">Try it now:</string>
+	<string name="ringBell">Ring Bell</string>
+
+
+	<!-- Status bar notification -->
+	<string name="statusTitleBellActive">Mindfulness Bell is active</string>
+	<string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
+</resources>

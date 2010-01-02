@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2010 Marc Schroeder
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">Glocke der Achtsamkeit</string>
+    <!--  Settings dialog -->
+    <string name="settingsTitle">Glocke der Achtsamkeit: Einstellungen</string>
+	<string name="bellActive">Glocke der Achtsamkeit aktiv</string>
+	<string name="titleFrequency">Schlage die Glocke etwa alle</string>
+	<string name="titleStartTime">von</string>
+	<string name="titleEndTime">bis</string>
+	<string name="bUpdate">Übernehmen</string>
+	<string name="titleTry">Testen:</string>
+	<string name="ringBell">Glocke schlagen</string>
+
+
+	<!-- Status bar notification -->
+	<string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
+	<string name="statusTextBellActive">Glocke schlägt von _STARTTIME_ bis _ENDTIME_</string>
+</resources>
