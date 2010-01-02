@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mindfulness Bell</string>
+    <!--  Settings dialog -->
+    <string name="settingsTitle">Mindfulness Bell Settings</string>
+	<string name="bellActive">Mindfulness Bell Active</string>
+	<string name="titleFrequency">Ring bell about every</string>
+	<string name="titleStartTime">from</string>
+	<string name="titleEndTime">to</string>
+	<string name="bUpdate">Update</string>
+	<string name="titleTry">Try it now:</string>
+	<string name="ringBell">Ring Bell</string>
+
+
+	<!-- Status bar notification -->
+	<string name="statusTitleBellActive">Mindfulness Bell is active</string>
+	<string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
+</resources>

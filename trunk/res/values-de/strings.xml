@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Glocke der Achtsamkeit</string>
+    <!--  Settings dialog -->
+    <string name="settingsTitle">Glocke der Achtsamkeit: Einstellungen</string>
+	<string name="bellActive">Glocke der Achtsamkeit aktiv</string>
+	<string name="titleFrequency">Schlage die Glocke etwa alle</string>
+	<string name="titleStartTime">von</string>
+	<string name="titleEndTime">bis</string>
+	<string name="bUpdate">Übernehmen</string>
+	<string name="titleTry">Testen:</string>
+	<string name="ringBell">Glocke schlagen</string>
+
+
+	<!-- Status bar notification -->
+	<string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
+	<string name="statusTextBellActive">Glocke schlägt von _STARTTIME_ bis _ENDTIME_</string>
+</resources>
