@@ -1,0 +1,7 @@
+<resources>
+<string-array name="bellFrequencies">
+	<item>Stunde</item>
+	<item>halbe Stunde</item>
+    <item>Viertelstunde</item>
+</string-array>
+</resources>
