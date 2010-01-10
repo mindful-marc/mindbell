@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:orientation="vertical" 
+              android:background="@drawable/bell"
+              android:gravity="bottom">
+
+<TextView android:text="@string/explanation" android:id="@+id/tvExplanation" 
+	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:gravity="center_horizontal" android:padding="20px"
+	android:background="#444"></TextView>
+
+</LinearLayout>

@@ -15,17 +15,19 @@
 -->
 <resources>
     <string name="app_name">Glocke der Achtsamkeit</string>
-    <!--  Settings dialog -->
-    <string name="settingsTitle">Glocke der Achtsamkeit: Einstellungen</string>
-	<string name="bellActive">Glocke der Achtsamkeit aktiv</string>
-	<string name="titleFrequency">Schlage die Glocke etwa alle</string>
-	<string name="titleStartTime">von</string>
-	<string name="titleEndTime">bis</string>
-	<string name="bUpdate">Übernehmen</string>
-	<string name="titleTry">Testen:</string>
-	<string name="ringBell">Glocke schlagen</string>
 
-	<!-- Preference dialogue -->
+	<!-- Main window -->
+	<string name="explanation">
+	Die Glocke der Achtsamkeit erklingt regelmäßig im Laufe des Tages. Dadurch können wir 
+	kurz innehalten und uns bewusst werden, was wir gerade tun, und in welchem 
+	Geisteszustand wir das angehen, was wir gerade tun. Gemäß dem buddhistischen
+	Lehrer Thich Nhat Hanh ist dies ein wirksames Mittel, um Achtsamkeit zu entwickeln.
+	</string>
+
+	<!-- Menu -->
+	<string name="menuSettings">Einstellungen</string>
+	
+	<!-- Preference window -->
 	<string name="preferencesTitle">Glocke der Achtsamkeit: Einstellungen</string>
 	<string name="prefsCategoryGlobal">Globale Einstellungen</string>
 	<string name="prefsActive">Glocke der Achtsamkeit aktiv</string>

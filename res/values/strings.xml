@@ -15,17 +15,18 @@
 -->
 <resources>
     <string name="app_name">Mindfulness Bell</string>
-    <!--  Settings dialog -->
-    <string name="settingsTitle">Mindfulness Bell Settings</string>
-	<string name="bellActive">Mindfulness Bell Active</string>
-	<string name="titleFrequency">Ring bell about every</string>
-	<string name="titleStartTime">from</string>
-	<string name="titleEndTime">to</string>
-	<string name="bUpdate">Update</string>
-	<string name="titleTry">Try it now:</string>
-	<string name="ringBell">Ring Bell</string>
 
-	<!-- Preference dialogue -->
+	<!-- Main window -->
+	<string name="explanation">The Mindfulness Bell rings periodically during the day,
+	 to give you the opportunity to hold on for a moment and consider what you are 
+	 currently doing, and in what state of mind you are while you are doing it. 
+	 According to the Buddhist teacher Thich Nhat Hanh, this is an effective 
+	 means of developing mindfulness.</string>
+
+	<!-- Menu -->
+	<string name="menuSettings">Settings</string>
+	
+	<!-- Preference window -->
 	<string name="preferencesTitle">Mindfulness Bell Preferences</string>
 	<string name="prefsCategoryGlobal">Global settings</string>
 	<string name="prefsActive">Mindfulness Bell Active</string>
