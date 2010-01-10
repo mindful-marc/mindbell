@@ -25,6 +25,19 @@
 	<string name="titleTry">Testen:</string>
 	<string name="ringBell">Glocke schlagen</string>
 
+	<!-- Preference dialogue -->
+	<string name="preferencesTitle">Glocke der Achtsamkeit: Einstellungen</string>
+	<string name="prefsCategoryGlobal">Globale Einstellungen</string>
+	<string name="prefsActive">Glocke der Achtsamkeit aktiv</string>
+	<string name="summaryNotActive">Glocke ist derzeit ausgeschaltet.</string>
+	<string name="summaryActive">Glocke ist derzeit angeschaltet.</string>
+	<string name="prefsCategoryDetails">Details</string>
+	<string name="prefsFrequency">Schlage die Glocke etwa alle...</string>
+	<string name="prefsStart">Starte Glocke täglich um...</string>
+	<string name="prefsEnd">Beende Glocke täglich um...</string>
+	<string name="prefsCategoryTry">Testen:</string>
+	<string name="prefsRingBell">Glocke schlagen</string>
+
 
 	<!-- Status bar notification -->
 	<string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
