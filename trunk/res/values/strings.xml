@@ -25,8 +25,27 @@
 	<string name="titleTry">Try it now:</string>
 	<string name="ringBell">Ring Bell</string>
 
+	<!-- Preference dialogue -->
+	<string name="preferencesTitle">Mindfulness Bell Preferences</string>
+	<string name="prefsCategoryGlobal">Global settings</string>
+	<string name="prefsActive">Mindfulness Bell Active</string>
+	<string name="summaryNotActive">Mindfulness Bell is turned off.</string>
+	<string name="summaryActive">Mindfulness Bell is turned on.</string>
+	<string name="prefsCategoryDetails">Details</string>
+	<string name="prefsFrequency">Ring bell about every...</string>
+	<string name="prefsStart">Start bell every day at...</string>
+	<string name="prefsEnd">Stop bell every day at...</string>
+	<string name="prefsCategoryTry">Try it now</string>
+	<string name="prefsRingBell">Ring Bell</string>
 
 	<!-- Status bar notification -->
 	<string name="statusTitleBellActive">Mindfulness Bell is active</string>
 	<string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
+	
+	<!-- Preference keys (don't localize) -->
+	<string name="keyActive">active</string>
+	<string name="keyFrequency">frequency</string>
+	<string name="keyStart">start</string>
+	<string name="keyEnd">end</string>
+	<string name="keyTry">try</string>
 </resources>

@@ -24,13 +24,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
  * Turn the mindbell automatically on and off depending on the time of day.
  * This is called from alarm controller every morning (to turn the mind bell on)
  * and every evening (to turn the mind bell off).
- * Also it is called from MindBellSettings when the user turns on or off the mind bell altogether:
+ * Also it is called from MindBellPreferences when the user turns on or off the mind bell altogether:
  * When the mind bell is activated, and it is daytime, this is called as if it was morning;
  * if the mind bell is deactivated, and it is daytime, this is called as if it was evening.
  * @author marc
@@ -39,54 +40,57 @@ import android.util.Log;
 public class MindBellScheduler extends BroadcastReceiver {
 	private AlarmManager theAlarmManager;
 	private SharedPreferences settings;
+	private Context context;
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(Context aContext, Intent intent) {
 		
-        Log.d(MindBellSettings.LOGTAG, "scheduler reached");
+        Log.d(MindBellPreferences.LOGTAG, "scheduler reached");
+        this.context = aContext;
+        
         theAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        settings = context.getSharedPreferences(MindBellSettings.PREFS_NAME, 0);
+        settings = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Are we requested to turn on or off the mind bell?
-        boolean activate = intent.getBooleanExtra(MindBellSettings.ACTIVATEBELL, false);
-        boolean reschedule = intent.getBooleanExtra(MindBellSettings.RESCHEDULEBELL, false);
-        Log.d(MindBellSettings.LOGTAG, "activate: "+activate+", reschedule: "+reschedule);
+        boolean activate = intent.getBooleanExtra(MindBellPreferences.ACTIVATEBELL, false);
+        boolean reschedule = intent.getBooleanExtra(MindBellPreferences.RESCHEDULEBELL, false);
+        Log.d(MindBellPreferences.LOGTAG, "activate: "+activate+", reschedule: "+reschedule);
 		if (activate) { // turned on
 			activateBell(context);
-			Log.i(MindBellSettings.LOGTAG, "activated bell for daytime use");
+			Log.i(MindBellPreferences.LOGTAG, "activated bell for daytime use");
 	        if (reschedule) {
 	        	// Schedule our own "off" call at the end of daytime:
 	        	Intent nextIntent = new Intent(context, MindBellScheduler.class);
-	        	nextIntent.putExtra(MindBellSettings.ACTIVATEBELL, false);
-	        	nextIntent.putExtra(MindBellSettings.RESCHEDULEBELL, true);
+	        	nextIntent.putExtra(MindBellPreferences.ACTIVATEBELL, false);
+	        	nextIntent.putExtra(MindBellPreferences.RESCHEDULEBELL, true);
 	        	PendingIntent sender = PendingIntent.getBroadcast(context, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-	        	int tEnd = settings.getInt(MindBellSettings.PREFS_END, 0);
+	        	int tEnd = getDaytimeEnd();
 	    		Calendar evening = Calendar.getInstance();
 	    		evening.set(Calendar.HOUR_OF_DAY, tEnd/100);
 	    		evening.set(Calendar.MINUTE, tEnd%100);
 	    		evening.set(Calendar.SECOND, 0);
 	    		theAlarmManager.set(AlarmManager.RTC_WAKEUP, evening.getTimeInMillis(), sender);
-		        Log.d(MindBellSettings.LOGTAG, "scheduled 'off' alarm for "+(tEnd/100)+":"+String.format("%02d", tEnd%100));
+		        Log.d(MindBellPreferences.LOGTAG, "scheduled 'off' alarm for "+(tEnd/100)+":"+String.format("%02d", tEnd%100));
 	        }
 		} else {
 			deactivateBell(context);
-			Log.i(MindBellSettings.LOGTAG, "scheduler deactivated bell");
+			Log.i(MindBellPreferences.LOGTAG, "scheduler deactivated bell");
 	        if (reschedule) {
 	        	// Schedule our own "on" call at tomorrow's start of daytime:
 	        	Intent nextIntent = new Intent(context, MindBellScheduler.class);
-	        	nextIntent.putExtra(MindBellSettings.ACTIVATEBELL, true);
-	        	nextIntent.putExtra(MindBellSettings.RESCHEDULEBELL, true);
+	        	nextIntent.putExtra(MindBellPreferences.ACTIVATEBELL, true);
+	        	nextIntent.putExtra(MindBellPreferences.RESCHEDULEBELL, true);
 	        	PendingIntent sender = PendingIntent.getBroadcast(context, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-	        	int tStart = settings.getInt(MindBellSettings.PREFS_START, 0);
+	        	int tStart = getDaytimeStart();
 	    		Calendar morning = Calendar.getInstance();
 	    		morning.add(Calendar.DATE, 1);
 	    		morning.set(Calendar.HOUR_OF_DAY, tStart/100);
 	    		morning.set(Calendar.MINUTE, tStart%100);
 	    		morning.set(Calendar.SECOND, 0);
 	    		theAlarmManager.set(AlarmManager.RTC_WAKEUP, morning.getTimeInMillis(), sender);
-		        Log.d(MindBellSettings.LOGTAG, "scheduled 'on' alarm for "+(tStart/100)+":"+String.format("%02d", tStart%100));
+		        Log.d(MindBellPreferences.LOGTAG, "scheduled 'on' alarm for "+(tStart/100)+":"+String.format("%02d", tStart%100));
 	        }
 		}
 	}
@@ -96,7 +100,27 @@ public class MindBellScheduler extends BroadcastReceiver {
         PendingIntent sender = PendingIntent.getActivity(context, -1, ringBell, PendingIntent.FLAG_UPDATE_CURRENT);
         // Schedule for running every X minutes:
         long firstTime = SystemClock.elapsedRealtime();
-        int frequencySetting = settings.getInt(MindBellSettings.PREFS_FREQUENCY, 0);
+        long interval = getInterval();
+        theAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, interval, sender);
+    }
+    
+    private void deactivateBell(Context context) {
+        Intent ringBell = new Intent(context, MindBell.class);
+        PendingIntent sender = PendingIntent.getActivity(context, -1, ringBell, PendingIntent.FLAG_UPDATE_CURRENT);
+        // And cancel the alarm.
+        theAlarmManager.cancel(sender);
+    }
+
+	private int getDaytimeStart() {
+		return 100 * Integer.valueOf(settings.getString(context.getString(R.string.keyStart), "0"));
+	}
+	
+	private int getDaytimeEnd() {
+		return 100 * Integer.valueOf(settings.getString(context.getString(R.string.keyEnd), "0"));
+	}
+	
+	private long getInterval() {
+        int frequencySetting = Integer.valueOf(settings.getString(context.getString(R.string.keyFrequency), "0"));
         long interval;
         switch(frequencySetting) {
         case 1: // half hour
@@ -109,14 +133,7 @@ public class MindBellScheduler extends BroadcastReceiver {
         	interval = AlarmManager.INTERVAL_HOUR;
         }
         //long interval = 15*1000; // 15 seconds
-        theAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, interval, sender);
-    }
-    
-    private void deactivateBell(Context context) {
-        Intent ringBell = new Intent(context, MindBell.class);
-        PendingIntent sender = PendingIntent.getActivity(context, -1, ringBell, PendingIntent.FLAG_UPDATE_CURRENT);
-        // And cancel the alarm.
-        theAlarmManager.cancel(sender);
-    }
+        return interval;
+	}
 
 }
