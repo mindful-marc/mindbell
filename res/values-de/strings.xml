@@ -33,6 +33,9 @@
 	<string name="prefsActive">Glocke der Achtsamkeit aktiv</string>
 	<string name="summaryNotActive">Glocke ist derzeit ausgeschaltet.</string>
 	<string name="summaryActive">Glocke ist derzeit angeschaltet.</string>
+	<string name="prefsMuteOffHook">Beim Telefonieren</string>
+	<string name="summaryNotMuted">Glocke läutet auch während Telefongesprächen</string>
+	<string name="summaryMuted">Glocke läutet nicht während Telefongesprächen</string>
 	<string name="prefsCategoryDetails">Details</string>
 	<string name="prefsFrequency">Schlage die Glocke etwa alle...</string>
 	<string name="prefsStart">Starte Glocke täglich um...</string>

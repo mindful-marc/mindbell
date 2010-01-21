@@ -32,6 +32,9 @@
 	<string name="prefsActive">Mindfulness Bell Active</string>
 	<string name="summaryNotActive">Mindfulness Bell is turned off.</string>
 	<string name="summaryActive">Mindfulness Bell is turned on.</string>
+	<string name="prefsMuteOffHook">Mute during phone calls</string>
+	<string name="summaryNotMuted">Bell will also ring during phone calls</string>
+	<string name="summaryMuted">Bell will not ring during phone calls</string>
 	<string name="prefsCategoryDetails">Details</string>
 	<string name="prefsFrequency">Ring bell about every...</string>
 	<string name="prefsStart">Start bell every day at...</string>
@@ -45,6 +48,7 @@
 	
 	<!-- Preference keys (don't localize) -->
 	<string name="keyActive">active</string>
+	<string name="keyMuteOffHook">muteOffHook</string>
 	<string name="keyFrequency">frequency</string>
 	<string name="keyStart">start</string>
 	<string name="keyEnd">end</string>

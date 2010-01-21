@@ -26,6 +26,11 @@
                 android:title="@string/prefsActive"
                 android:summaryOff="@string/summaryNotActive"
                 android:summaryOn="@string/summaryActive" />
+        <CheckBoxPreference
+                android:key="@string/keyMuteOffHook"
+                android:title="@string/prefsMuteOffHook"
+                android:summaryOff="@string/summaryNotMuted"
+                android:summaryOn="@string/summaryMuted" />
             
     </PreferenceCategory>
                 
