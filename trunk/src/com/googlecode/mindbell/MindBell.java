@@ -18,8 +18,13 @@ package com.googlecode.mindbell;
 import com.googlecode.mindbell.R;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.widget.Toast;
 
 public class MindBell extends Activity {
     /** Called when the activity is first created. */
@@ -32,14 +37,29 @@ public class MindBell extends Activity {
     protected void onStart() {
     	super.onStart();
     	
-        MediaPlayer mp = MediaPlayer.create(this, R.raw.bell10s);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-			public void onCompletion(MediaPlayer mp) {
-				mp.release();
-				MindBell.this.finish();
-			}
-        });
-        mp.start();
-        
+    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean play = true;
+    	// If settings ask us to mute if the phone is active in a call, and that is the case, do not play.
+    	boolean muteOffHook = settings.getBoolean(getString(R.string.keyMuteOffHook), false);
+    	if (muteOffHook) {
+    		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+    		if (telephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
+    			play = false;
+        		Log.d(MindBellPreferences.LOGTAG, "muting because the phone is off hook");
+        		Toast.makeText(this, "muting because the phone is off hook", Toast.LENGTH_SHORT).show();
+    		}
+    	}
+    	if (play) {
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.bell10s);
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+    			public void onCompletion(MediaPlayer mp) {
+    				mp.release();
+    				MindBell.this.finish();
+    			}
+            });
+            mp.start();
+    	} else {
+    		finish();
+    	}
     }
 }
