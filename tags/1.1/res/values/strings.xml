@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2010 Marc Schroeder
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">Mindfulness Bell</string>
+
+	<!-- Main window -->
+	<string name="explanation">The Mindfulness Bell rings periodically during the day,
+	 to give you the opportunity to hold on for a moment and consider what you are 
+	 currently doing, and in what state of mind you are while you are doing it. 
+	 According to the Buddhist teacher Thich Nhat Hanh, this is an effective 
+	 means of developing mindfulness.</string>
+
+	<!-- Menu -->
+	<string name="menuSettings">Settings</string>
+	
+	<!-- Preference window -->
+	<string name="preferencesTitle">Mindfulness Bell Preferences</string>
+	<string name="prefsCategoryGlobal">Global settings</string>
+	<string name="prefsActive">Mindfulness Bell Active</string>
+	<string name="summaryNotActive">Mindfulness Bell is turned off.</string>
+	<string name="summaryActive">Mindfulness Bell is turned on.</string>
+	<string name="prefsMuteOffHook">Mute during phone calls</string>
+	<string name="summaryNotMuted">Bell will also ring during phone calls</string>
+	<string name="summaryMuted">Bell will not ring during phone calls</string>
+	<string name="prefsCategoryDetails">Details</string>
+	<string name="prefsFrequency">Ring bell about every...</string>
+	<string name="prefsStart">Start bell every day at...</string>
+	<string name="prefsEnd">Stop bell every day at...</string>
+	<string name="prefsCategoryTry">Try it now</string>
+	<string name="prefsRingBell">Ring Bell</string>
+
+	<!-- Status bar notification -->
+	<string name="statusTitleBellActive">Mindfulness Bell is active</string>
+	<string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
+	
+	<!-- Preference keys (don't localize) -->
+	<string name="keyActive">active</string>
+	<string name="keyMuteOffHook">muteOffHook</string>
+	<string name="keyFrequency">frequency</string>
+	<string name="keyStart">start</string>
+	<string name="keyEnd">end</string>
+	<string name="keyTry">try</string>
+</resources>
