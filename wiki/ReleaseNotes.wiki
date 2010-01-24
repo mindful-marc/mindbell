@@ -1,5 +1,9 @@
 #summary Release notes for the Mindfulness Bell
 
+= 1.1.1 = 
+
+use program icon in status bar too; added settings icon
+
 = 1.1 =
 
 A number of practical improvements:
