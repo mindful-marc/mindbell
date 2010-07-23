@@ -14,26 +14,49 @@
      limitations under the License.
 -->
 
-<!-- This is a primitive example showing the different types of preferences available. -->
+
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
             android:title="@string/prefsCategoryGlobal">
-            
         <CheckBoxPreference
                 android:key="@string/keyActive"
                 android:title="@string/prefsActive"
                 android:summaryOff="@string/summaryNotActive"
                 android:summaryOn="@string/summaryActive" />
-        <CheckBoxPreference
-                android:key="@string/keyMuteOffHook"
-                android:title="@string/prefsMuteOffHook"
-                android:summaryOff="@string/summaryNotMuted"
-                android:summaryOn="@string/summaryMuted" />
-            
     </PreferenceCategory>
-                
+
+	<PreferenceCategory android:title="@string/prefsCategoryDisplay">
+	  <CheckBoxPreference android:key="@string/keyShow"
+	    android:title="@string/prefsShow"
+	    android:summaryOff="@string/summaryDontShow"
+	    android:summaryOn="@string/summaryShow"
+	    android:defaultValue="true"/>
+	  <CheckBoxPreference android:key="@string/keyStatus"
+	    android:title="@string/prefsStatus"
+	    android:summaryOff="@string/summaryNoStatus"
+	    android:summaryOn="@string/summaryStatus"
+	    android:defaultValue="true"/>
+	</PreferenceCategory>
+
+	<PreferenceCategory android:title="@string/prefsCategorySound">
+		<ListPreference android:title="@string/prefsVolume"
+			android:dialogTitle="@string/prefsVolume"
+			android:key="@string/keyVolume" />
+		<CheckBoxPreference android:key="@string/keyMuteWithPhone"
+			android:title="@string/prefsMuteWithPhone"
+			android:summaryOn="@string/summaryMuteWithPhone"
+			android:summaryOff="@string/summaryNoMuteWithPhone"
+			android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="@string/keyMuteOffHook"
+            android:title="@string/prefsMuteOffHook"
+            android:summaryOff="@string/summaryNotMuted"
+            android:summaryOn="@string/summaryMuted" 
+			android:defaultValue="true"/>
+	</PreferenceCategory>
+
     <PreferenceCategory
             android:title="@string/prefsCategoryDetails">
 
