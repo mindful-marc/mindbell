@@ -46,8 +46,7 @@ public class MindBellMain extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
     	if (e.getAction() == MotionEvent.ACTION_DOWN) {
-        	MediaPlayer mp = MediaPlayer.create(this, R.raw.bell10s);
-        	mp.start();
+    		MindBell.ringBell(this, null);
     	}
     	return true;
     }

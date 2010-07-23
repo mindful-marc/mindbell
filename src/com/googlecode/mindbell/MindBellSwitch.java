@@ -121,6 +121,12 @@ public class MindBellSwitch extends BroadcastReceiver {
     private boolean isDaytime() {
     	int tStart = getDaytimeStart();
     	int tEnd = getDaytimeEnd();
+    	// Some people may set the end to midnight, or 1am etc.
+    	// -- in such cases, simply consider the end time to be 24:00, 25:00 etc.
+    	if (tEnd <= tStart) {
+    		tEnd += 2400;
+    	}
+    	assert tEnd > tStart;
     	Calendar now = Calendar.getInstance();
     	int currentHour = now.get(Calendar.HOUR_OF_DAY);
     	int currentMinute = now.get(Calendar.MINUTE);

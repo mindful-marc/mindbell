@@ -18,6 +18,7 @@ package com.googlecode.mindbell;
 import com.googlecode.mindbell.R;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -50,16 +51,27 @@ public class MindBell extends Activity {
     		}
     	}
     	if (play) {
-            MediaPlayer mp = MediaPlayer.create(this, R.raw.bell10s);
-            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+    		ringBell(this, new MediaPlayer.OnCompletionListener() {
     			public void onCompletion(MediaPlayer mp) {
     				mp.release();
     				MindBell.this.finish();
     			}
             });
-            mp.start();
     	} else {
     		finish();
     	}
+    }
+    
+    /**
+     * Trigger the bell's sound. This is the preferred way to play the sound.
+     * @param context the context in which to play the sound.
+     * @param listener an optional listener to call on completion of the sound, or null.
+     */
+    public static void ringBell(Context context, MediaPlayer.OnCompletionListener listener) {
+    	MediaPlayer mp = MediaPlayer.create(context, R.raw.bell10s);
+    	if (listener != null) {
+    		mp.setOnCompletionListener(listener);
+    	}
+    	mp.start();
     }
 }
