@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -63,11 +65,13 @@ public class MindBellPreferences extends PreferenceActivity {
 
         frequencies = getResources().getStringArray(R.array.bellFrequencies);
         hours = getResources().getStringArray(R.array.hourStrings);
-        
+
         setupListPreference(R.string.keyFrequency, frequencies);
         setupListPreference(R.string.keyStart, hours);
         setupListPreference(R.string.keyEnd, hours);
 
+        setupVolumePreference();
+        
         Preference ringBell = getPreferenceScreen().findPreference(getText(R.string.keyTry));
         ringBell.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
@@ -76,6 +80,32 @@ public class MindBellPreferences extends PreferenceActivity {
 			}
         });
     }
+
+
+	private void setupVolumePreference() {
+		// Dynamically fill volumes from audio manager's value range:
+        AudioManager audioMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    	int maxVolume = audioMan.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+    	int currentVolume = audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
+    	assert 0 <= currentVolume;
+    	assert currentVolume <= maxVolume;
+    	String[] volumes = new String[maxVolume+1];
+    	for (int i=0; i <= maxVolume; i++) {
+    		volumes[i] = String.valueOf(i);
+    	}
+    	ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
+    	lp.setEntries(volumes);
+    	lp.setEntryValues(volumes);
+    	// By default, ring bell at 2/3 of maximum volume:
+    	int defaultBellVolume = maxVolume*2/3;
+    	lp.setDefaultValue(String.valueOf(defaultBellVolume));
+    	if (lp.getValue() == null) {
+    		lp.setValue(String.valueOf(defaultBellVolume));
+    	}
+        lp.setSummary(lp.getValue());
+        listPrefStrings.put(lp, volumes);
+        lp.setOnPreferenceChangeListener(listChangeListener);
+	}
 
     
     @Override

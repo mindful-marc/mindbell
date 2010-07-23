@@ -32,9 +32,24 @@
 	<string name="prefsActive">Mindfulness Bell Active</string>
 	<string name="summaryNotActive">Mindfulness Bell is turned off.</string>
 	<string name="summaryActive">Mindfulness Bell is turned on.</string>
+
+	<string name="prefsCategoryDisplay">Display</string>
+	<string name="prefsShow">Show bell when ringing</string>
+	<string name="summaryShow">Play sound and show bell</string>
+	<string name="summaryDontShow">Play sound but do not show bell</string>
+	<string name="prefsStatus">Show status icon</string>
+	<string name="summaryStatus">Show status icon when bell is active</string>
+	<string name="summaryNoStatus">No status icon, set and forget</string>
+
+	<string name="prefsCategorySound">Sound</string>
+	<string name="prefsVolume">Volume</string>
+	<string name="prefsMuteWithPhone">Mute with phone</string>
+	<string name="summaryMuteWithPhone">Bell will not ring when phone is muted</string>
+	<string name="summaryNoMuteWithPhone">Ring bell even when phone is muted</string>
 	<string name="prefsMuteOffHook">Mute during phone calls</string>
 	<string name="summaryNotMuted">Bell will also ring during phone calls</string>
 	<string name="summaryMuted">Bell will not ring during phone calls</string>
+
 	<string name="prefsCategoryDetails">Details</string>
 	<string name="prefsFrequency">Ring bell about every...</string>
 	<string name="prefsStart">Start bell every day at...</string>
@@ -48,6 +63,10 @@
 	
 	<!-- Preference keys (don't localize) -->
 	<string name="keyActive">active</string>
+	<string name="keyShow">show</string>
+	<string name="keyStatus">status</string>
+	<string name="keyVolume">volume</string>
+	<string name="keyMuteWithPhone">muteWithPhone</string>
 	<string name="keyMuteOffHook">muteOffHook</string>
 	<string name="keyFrequency">frequency</string>
 	<string name="keyStart">start</string>
