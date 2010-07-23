@@ -40,9 +40,13 @@ public class MindBellSwitch extends BroadcastReceiver {
         hours = context.getResources().getStringArray(R.array.hourStrings);
         
         deactivateBell(); // always cancel anything using any previous settings first
-    	boolean isChecked = settings.getBoolean(context.getString(R.string.keyActive), false);
-    	if (isChecked) {
+    	boolean isBellActive = settings.getBoolean(context.getString(R.string.keyActive), false);
+    	boolean doStatusNotification = settings.getBoolean(context.getString(R.string.keyStatus), false);
+    	if (isBellActive) {
     		activateBell();
+        	if (doStatusNotification) {
+        		putUpStatusNotification();
+        	}
     	}
 	}
 
@@ -83,7 +87,12 @@ public class MindBellSwitch extends BroadcastReceiver {
     		morning.set(Calendar.SECOND, 0);
     		theAlarmManager.set(AlarmManager.RTC_WAKEUP, morning.getTimeInMillis(), sender);
     	}
-        Notification notif = new Notification(R.drawable.bell_status_active, "", System.currentTimeMillis());
+    }
+
+
+
+	private void putUpStatusNotification() {
+		Notification notif = new Notification(R.drawable.bell_status_active, "", System.currentTimeMillis());
         CharSequence contentTitle = theContext.getText(R.string.statusTitleBellActive);
         String contentText = theContext.getText(R.string.statusTextBellActive).toString();
         contentText = contentText.replace("_STARTTIME_", getDaytimeStartString())
@@ -94,8 +103,7 @@ public class MindBellSwitch extends BroadcastReceiver {
         notif.flags |= Notification.FLAG_ONGOING_EVENT;
         int id = R.layout.bell; // unique ID
         theNotificationManager.notify(id, notif);
-        
-    }
+	}
     
     private void deactivateBell() {
     	// Day or night, we cancel the next message in stock for the scheduler.
@@ -121,17 +129,21 @@ public class MindBellSwitch extends BroadcastReceiver {
     private boolean isDaytime() {
     	int tStart = getDaytimeStart();
     	int tEnd = getDaytimeEnd();
-    	// Some people may set the end to midnight, or 1am etc.
-    	// -- in such cases, simply consider the end time to be 24:00, 25:00 etc.
-    	if (tEnd <= tStart) {
-    		tEnd += 2400;
-    	}
-    	assert tEnd > tStart;
     	Calendar now = Calendar.getInstance();
     	int currentHour = now.get(Calendar.HOUR_OF_DAY);
     	int currentMinute = now.get(Calendar.MINUTE);
     	int currentTime = 100*currentHour + currentMinute;
-    	return (tStart <= currentTime && currentTime < tEnd);
+
+    	// Some people may set the end to midnight, or 1am etc.
+    	// Two cases:
+    	// a) start < end: it is day time if start <= t <= end
+    	// b) end <= start: it is day time if either t <= end or start <= t
+    	//    (i.e. if end == start, we treat things as always day time)
+    	if (tStart < tEnd) {
+    		return (tStart <= currentTime && currentTime < tEnd);
+    	} else {
+    		return (currentTime <= tEnd || tStart <= currentTime);
+    	}
     }
 
 
