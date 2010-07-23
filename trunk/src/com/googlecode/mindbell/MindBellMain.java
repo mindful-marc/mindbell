@@ -18,10 +18,13 @@ package com.googlecode.mindbell;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 public class MindBellMain extends Activity {
     @Override
@@ -40,4 +43,12 @@ public class MindBellMain extends Activity {
         return true;
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+    	if (e.getAction() == MotionEvent.ACTION_DOWN) {
+        	MediaPlayer mp = MediaPlayer.create(this, R.raw.bell10s);
+        	mp.start();
+    	}
+    	return true;
+    }
 }
