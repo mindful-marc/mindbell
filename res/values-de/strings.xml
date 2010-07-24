@@ -33,13 +33,29 @@
 	<string name="prefsActive">Glocke der Achtsamkeit aktiv</string>
 	<string name="summaryNotActive">Glocke ist derzeit ausgeschaltet.</string>
 	<string name="summaryActive">Glocke ist derzeit angeschaltet.</string>
+	
+	<string name="prefsCategoryDisplay">Anzeige</string>
+	<string name="prefsShow">Glocke beim Schlagen zeigen</string>
+	<string name="summaryShow">Klang abspielen und Glocke anzeigen</string>
+	<string name="summaryDontShow">Klang abspielen aber Glocke nicht zeigen</string>
+	<string name="prefsStatus">Status-Icon anzeigen</string>
+	<string name="summaryStatus">Zeige Status-Icon wenn Glocke aktiv ist</string>
+	<string name="summaryNoStatus">Kein Status-Icon</string>
+	
+	<string name="prefsCategorySound">Klang</string>
+	<string name="prefsVolume">Lautstärke</string>
+	<string name="prefsMuteWithPhone">Mit Telefon stummschalten</string>
+	<string name="summaryMuteWithPhone">Glocke schlägt nicht im Lautlosmodus</string>
+	<string name="summaryNoMuteWithPhone">Glocke schlägt auch im Lautlosmodus</string>
 	<string name="prefsMuteOffHook">Beim Telefonieren still</string>
 	<string name="summaryNotMuted">Glocke läutet auch während Telefongesprächen</string>
 	<string name="summaryMuted">Glocke läutet nicht während Telefongesprächen</string>
+
 	<string name="prefsCategoryDetails">Details</string>
 	<string name="prefsFrequency">Schlage die Glocke etwa alle...</string>
 	<string name="prefsStart">Starte Glocke täglich um...</string>
 	<string name="prefsEnd">Beende Glocke täglich um...</string>
+
 	<string name="prefsCategoryTry">Testen:</string>
 	<string name="prefsRingBell">Glocke schlagen</string>
 

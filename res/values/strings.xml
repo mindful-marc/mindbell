@@ -54,6 +54,7 @@
 	<string name="prefsFrequency">Ring bell about every...</string>
 	<string name="prefsStart">Start bell every day at...</string>
 	<string name="prefsEnd">Stop bell every day at...</string>
+
 	<string name="prefsCategoryTry">Try it now</string>
 	<string name="prefsRingBell">Ring Bell</string>
 
