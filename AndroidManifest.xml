@@ -36,6 +36,7 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name="MindBellAudioOnly" android:process=":remote" />
         <receiver android:name="MindBellScheduler" android:process=":remote" />
         <receiver android:name="MindBellSwitch" android:process=":remote">
         	<intent-filter>
