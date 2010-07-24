@@ -96,8 +96,15 @@ public class MindBellScheduler extends BroadcastReceiver {
 	}
 
     private void activateBell(Context context) {
-        Intent ringBell = new Intent(context, MindBell.class);
-        PendingIntent sender = PendingIntent.getActivity(context, -1, ringBell, PendingIntent.FLAG_UPDATE_CURRENT);
+    	PendingIntent sender = null;
+    	boolean showBell = settings.getBoolean(context.getString(R.string.keyShow), true);
+    	if (showBell) {
+            Intent ringBell = new Intent(context, MindBell.class);
+            sender = PendingIntent.getActivity(context, -1, ringBell, PendingIntent.FLAG_UPDATE_CURRENT);
+    	} else {
+    		Intent ringBellAudioOnly = new Intent(context, MindBellAudioOnly.class);
+    		sender = PendingIntent.getBroadcast(context, -1, ringBellAudioOnly, PendingIntent.FLAG_UPDATE_CURRENT);
+    	}
         // Schedule for running every X minutes:
         long firstTime = SystemClock.elapsedRealtime();
         long interval = getInterval();
@@ -105,10 +112,14 @@ public class MindBellScheduler extends BroadcastReceiver {
     }
     
     private void deactivateBell(Context context) {
+    	// Make sure to deactivate any pending audio-visual and audio-only bells:
         Intent ringBell = new Intent(context, MindBell.class);
         PendingIntent sender = PendingIntent.getActivity(context, -1, ringBell, PendingIntent.FLAG_UPDATE_CURRENT);
         // And cancel the alarm.
         theAlarmManager.cancel(sender);
+        Intent ringBellAudioOnly = new Intent(context, MindBellAudioOnly.class);
+        PendingIntent sender2 = PendingIntent.getBroadcast(context, -1, ringBellAudioOnly, PendingIntent.FLAG_UPDATE_CURRENT);
+        theAlarmManager.cancel(sender2);
     }
 
 	private int getDaytimeStart() {
@@ -132,7 +143,7 @@ public class MindBellScheduler extends BroadcastReceiver {
         default:
         	interval = AlarmManager.INTERVAL_HOUR;
         }
-        //long interval = 15*1000; // 15 seconds
+        //interval = 30*1000; // 30 seconds
         return interval;
 	}
 

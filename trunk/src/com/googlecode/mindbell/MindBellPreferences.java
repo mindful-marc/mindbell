@@ -24,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -133,8 +134,14 @@ public class MindBellPreferences extends PreferenceActivity {
 
 
 	private void ringBell() {
-    	Intent ringBell = new Intent(this, MindBell.class);
-    	startActivity(ringBell);
+		CheckBoxPreference showBellPref = (CheckBoxPreference) getPreferenceScreen().findPreference(getText(R.string.keyShow));
+		if (showBellPref.isChecked()) {
+			Intent ringBell = new Intent(this, MindBell.class);
+			startActivity(ringBell);
+		} else {
+			Intent ringBell = new Intent(this, MindBellAudioOnly.class);
+			sendBroadcast(ringBell);
+		}
     }
 
 }
