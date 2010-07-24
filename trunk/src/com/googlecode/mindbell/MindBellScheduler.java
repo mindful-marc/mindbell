@@ -24,6 +24,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -101,11 +102,12 @@ public class MindBellScheduler extends BroadcastReceiver {
     	}
         // Schedule for running every X minutes:
         // the "inexact" scheduler ends up scheduling at regular intervals in the end:
-    	//long firstTime = SystemClock.elapsedRealtime();
-        //long interval = getInterval(); // in milliseconds
-        //theAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, interval, sender);
-        
-        // Instead, schedule our own quasi-random events from now until eveningTime:
+    	long firstTime = SystemClock.elapsedRealtime();
+        long interval = getInterval(); // in milliseconds
+        theAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, interval, sender);
+  
+    	// The following doesn't work because alarmManager.set() overwrites previous entries with same time.
+/*        // Instead, schedule our own quasi-random events from now until eveningTime:
         long firstTime = Calendar.getInstance().getTimeInMillis();
         long interval = getInterval(); // in milliseconds
         long currentTime = firstTime;
@@ -119,7 +121,7 @@ public class MindBellScheduler extends BroadcastReceiver {
         	theAlarmManager.set(AlarmManager.RTC_WAKEUP, currentTime, sender);
         	//Log.d(MindBellPreferences.LOGTAG, "Scheduling bell for "+currentTime);
         	currentTime += interval * (1.0 + 0.2 * random.nextGaussian());
-        }
+        }*/
     }
     
     private void deactivateBell(Context context) {
