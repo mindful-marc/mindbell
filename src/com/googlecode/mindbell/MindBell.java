@@ -31,6 +31,7 @@ import android.widget.Toast;
 public class MindBell extends Activity {
 	private static MediaPlayer mediaPlayer = null;
 	private static int originalVolume = -1;
+	private static final Object lock = new Object();
 	
     /** Called when the activity is first created. */
     @Override
@@ -54,20 +55,25 @@ public class MindBell extends Activity {
      * @param runWhenDone an optional Runnable to call on completion of the sound, or null.
      */
     public static void ringBell(Context context, final Runnable runWhenDone) {
+    	Log.d(MindBellPreferences.LOGTAG, "Ring bell request received");
     	final AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
     	
-    	// Stop any running bell sounds
-    	if (mediaPlayer != null) {
-    		if (mediaPlayer.isPlaying()) {
-    			mediaPlayer.stop();
-    		}
-			mediaPlayer.release();
-			mediaPlayer = null;
-			// but leave originalVolume as it is
-    	} else {
-    		// no current sound: remember volume
-    		originalVolume = audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
+    	synchronized (lock) {
+        	// Stop any running bell sounds
+        	if (mediaPlayer != null) {
+        		if (mediaPlayer.isPlaying()) {
+        			mediaPlayer.stop();
+        	    	Log.d(MindBellPreferences.LOGTAG, "Stopped ongoing player.");
+        		}
+    			mediaPlayer.release();
+    			mediaPlayer = null;
+    			// but leave originalVolume as it is
+        	} else {
+        		// no current sound: remember volume
+        		originalVolume = audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
+            	Log.d(MindBellPreferences.LOGTAG, "Remembering original music volume: "+originalVolume);
+        	}
     	}
     	
     	boolean play = true;
@@ -102,11 +108,14 @@ public class MindBell extends Activity {
     	mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
     	mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			public void onCompletion(MediaPlayer mp) {
-				mediaPlayer.release();
-				mediaPlayer = null;
-				if (originalVolume != -1) {
-					audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0);
-					originalVolume = -1;
+				Log.d(MindBellPreferences.LOGTAG, "Upon completion, originalVolume is "+originalVolume);
+				synchronized (lock) {
+					mediaPlayer.release();
+					if (originalVolume != -1) {
+						audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0);
+						originalVolume = -1;
+					}
+					mediaPlayer = null;
 				}
 				if (runWhenDone != null) {
 					runWhenDone.run();
@@ -118,6 +127,7 @@ public class MindBell extends Activity {
         	int bellVolume = Integer.valueOf(bellVolumeString);
         	audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, bellVolume, 0);
     	}
+    	Log.d(MindBellPreferences.LOGTAG, "Ringing bell with volume "+bellVolumeString);
     	mediaPlayer.start();
     }
 }
