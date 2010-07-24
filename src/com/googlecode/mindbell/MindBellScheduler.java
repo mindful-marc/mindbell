@@ -16,6 +16,7 @@
 package com.googlecode.mindbell;
 
 import java.util.Calendar;
+import java.util.Random;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -23,7 +24,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -66,11 +66,9 @@ public class MindBellScheduler extends BroadcastReceiver {
 	        	PendingIntent sender = PendingIntent.getBroadcast(context, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 	        	int tEnd = getDaytimeEnd();
-	    		Calendar evening = Calendar.getInstance();
-	    		evening.set(Calendar.HOUR_OF_DAY, tEnd/100);
-	    		evening.set(Calendar.MINUTE, tEnd%100);
-	    		evening.set(Calendar.SECOND, 0);
-	    		theAlarmManager.set(AlarmManager.RTC_WAKEUP, evening.getTimeInMillis(), sender);
+	        	long eveningTimeInMillis = getNextDaytimeEndInMillis();
+	        	
+	    		theAlarmManager.set(AlarmManager.RTC_WAKEUP, eveningTimeInMillis, sender);
 		        Log.d(MindBellPreferences.LOGTAG, "scheduled 'off' alarm for "+(tEnd/100)+":"+String.format("%02d", tEnd%100));
 	        }
 		} else {
@@ -84,12 +82,8 @@ public class MindBellScheduler extends BroadcastReceiver {
 	        	PendingIntent sender = PendingIntent.getBroadcast(context, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 	        	int tStart = getDaytimeStart();
-	    		Calendar morning = Calendar.getInstance();
-	    		morning.add(Calendar.DATE, 1);
-	    		morning.set(Calendar.HOUR_OF_DAY, tStart/100);
-	    		morning.set(Calendar.MINUTE, tStart%100);
-	    		morning.set(Calendar.SECOND, 0);
-	    		theAlarmManager.set(AlarmManager.RTC_WAKEUP, morning.getTimeInMillis(), sender);
+	        	long morningTimeInMillis = getNextDaytimeStartInMillis();
+	    		theAlarmManager.set(AlarmManager.RTC_WAKEUP, morningTimeInMillis, sender);
 		        Log.d(MindBellPreferences.LOGTAG, "scheduled 'on' alarm for "+(tStart/100)+":"+String.format("%02d", tStart%100));
 	        }
 		}
@@ -106,9 +100,26 @@ public class MindBellScheduler extends BroadcastReceiver {
     		sender = PendingIntent.getBroadcast(context, -1, ringBellAudioOnly, PendingIntent.FLAG_UPDATE_CURRENT);
     	}
         // Schedule for running every X minutes:
-        long firstTime = SystemClock.elapsedRealtime();
-        long interval = getInterval();
-        theAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, interval, sender);
+        // the "inexact" scheduler ends up scheduling at regular intervals in the end:
+    	//long firstTime = SystemClock.elapsedRealtime();
+        //long interval = getInterval(); // in milliseconds
+        //theAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, firstTime, interval, sender);
+        
+        // Instead, schedule our own quasi-random events from now until eveningTime:
+        long firstTime = Calendar.getInstance().getTimeInMillis();
+        long interval = getInterval(); // in milliseconds
+        long currentTime = firstTime;
+        long eveningTime = getNextDaytimeEndInMillis();
+        Random random = new Random();
+//        Log.i(MindBellPreferences.LOGTAG, "firstTime="+firstTime);
+//        Log.i(MindBellPreferences.LOGTAG, "eveningTime="+eveningTime);
+//        Log.i(MindBellPreferences.LOGTAG, "interval="+interval);
+//        Log.i(MindBellPreferences.LOGTAG, "That means into the time from first to evening, we can fit interval "+((eveningTime-firstTime)/interval)+" times");
+        while (currentTime < eveningTime) {
+        	theAlarmManager.set(AlarmManager.RTC_WAKEUP, currentTime, sender);
+        	//Log.d(MindBellPreferences.LOGTAG, "Scheduling bell for "+currentTime);
+        	currentTime += interval * (1.0 + 0.2 * random.nextGaussian());
+        }
     }
     
     private void deactivateBell(Context context) {
@@ -128,6 +139,29 @@ public class MindBellScheduler extends BroadcastReceiver {
 	
 	private int getDaytimeEnd() {
 		return 100 * Integer.valueOf(settings.getString(context.getString(R.string.keyEnd), "0"));
+	}
+	
+	private long getNextDaytimeStartInMillis() {
+		int tStart = getDaytimeStart();
+		Calendar morning = Calendar.getInstance();
+		morning.add(Calendar.DATE, 1);
+		morning.set(Calendar.HOUR_OF_DAY, tStart/100);
+		morning.set(Calendar.MINUTE, tStart%100);
+		morning.set(Calendar.SECOND, 0);
+		return morning.getTimeInMillis();
+	}
+	
+	private long getNextDaytimeEndInMillis() {
+		int tStart = getDaytimeStart();
+    	int tEnd = getDaytimeEnd();
+		Calendar evening = Calendar.getInstance();
+		evening.set(Calendar.HOUR_OF_DAY, tEnd/100);
+		evening.set(Calendar.MINUTE, tEnd%100);
+		evening.set(Calendar.SECOND, 0);
+		if (tEnd <= tStart) { // end time is in the early hours of next day
+			evening.add(Calendar.DATE, 1);
+		}
+		return evening.getTimeInMillis();
 	}
 	
 	private long getInterval() {
