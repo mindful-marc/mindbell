@@ -16,7 +16,6 @@
 package com.googlecode.mindbell;
 
 import java.util.Calendar;
-import java.util.Random;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
