@@ -73,13 +73,13 @@ public class MindBellPreferences extends PreferenceActivity {
 
         setupVolumePreference();
         
-        Preference ringBell = getPreferenceScreen().findPreference(getText(R.string.keyTry));
+        /* Preference ringBell = getPreferenceScreen().findPreference(getText(R.string.keyTry));
         ringBell.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
 				ringBell();
 				return false;
 			}
-        });
+        }); */
     }
 
 
@@ -131,6 +131,7 @@ public class MindBellPreferences extends PreferenceActivity {
         listPrefStrings.put(lp, valueStrings);
         lp.setOnPreferenceChangeListener(listChangeListener);
 	}
+
 
 
 	private void ringBell() {
