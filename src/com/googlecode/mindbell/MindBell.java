@@ -15,12 +15,9 @@
  */
 package com.googlecode.mindbell;
 
-import java.util.List;
-
 import com.googlecode.mindbell.R;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
