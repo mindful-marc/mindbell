@@ -45,14 +45,6 @@ public class MindBell extends Activity {
     
     protected void onStart() {
     	super.onStart();
-    	ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-    	List<ActivityManager.RunningTaskInfo> tasks = activityManager.getRunningTasks(10);
-    	StringBuilder buf = new StringBuilder();
-    	buf.append(tasks.size()).append(" tasks\n");
-    	for (ActivityManager.RunningTaskInfo info : tasks) {
-    		buf.append(info.topActivity.flattenToShortString()).append("\n");
-    	}
-    	Log.d(MindBellPreferences.LOGTAG, buf.toString());
 		ringBell(this, new Runnable() {
 			public void run() {
 				MindBell.this.moveTaskToBack(true);
