@@ -15,7 +15,6 @@
  */
 package com.googlecode.mindbell;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ public class MindBellMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the currently selected menu XML resource.
@@ -43,9 +42,9 @@ public class MindBellMain extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-    	if (e.getAction() == MotionEvent.ACTION_DOWN) {
-    		MindBell.ringBell(this, null);
-    	}
-    	return true;
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+            MindBell.ringBell(this, null);
+        }
+        return true;
     }
 }

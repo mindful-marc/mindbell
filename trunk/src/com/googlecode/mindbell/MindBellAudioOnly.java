@@ -21,32 +21,36 @@ import android.content.Intent;
 
 /**
  * @author marc
- *
+ * 
  */
 public class MindBellAudioOnly extends BroadcastReceiver {
 
-	boolean isDone = false;
-	
-	private void setDone() {
-		isDone = true;
-	}
+    boolean isDone = false;
 
-	/* (non-Javadoc)
-	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
-	 */
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		final boolean isDone = false;
-		MindBell.ringBell(context, new Runnable() {
-			public void run() {
-				setDone();
-			}
-		});
-		while (!isDone) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException ie) {}
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see android.content.BroadcastReceiver#onReceive(android.content.Context,
+     * android.content.Intent)
+     */
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        final boolean isDone = false;
+        MindBell.ringBell(context, new Runnable() {
+            public void run() {
+                setDone();
+            }
+        });
+        while (!isDone) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ie) {
+            }
+        }
+    }
+
+    private void setDone() {
+        isDone = true;
+    }
 
 }
