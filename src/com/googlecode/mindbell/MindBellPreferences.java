@@ -15,7 +15,6 @@
  */
 package com.googlecode.mindbell;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,36 +30,39 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 
 public class MindBellPreferences extends PreferenceActivity {
-	public static final String LOGTAG = "MindBell";
-	public static final String ACTIVATEBELL = "mindBellActive";
-	public static final String RESCHEDULEBELL = "mindBellReschedule";
+    public static final String                          LOGTAG             = "MindBell";
+    public static final String                          ACTIVATEBELL       = "mindBellActive";
+    public static final String                          RESCHEDULEBELL     = "mindBellReschedule";
 
-	private String[] frequencies;
-	private String[] hours;
-	private Map<Preference, String[]> listPrefStrings = new HashMap<Preference, String[]>();
+    private String[]                                    frequencies;
+    private String[]                                    hours;
+    private final Map<Preference, String[]>             listPrefStrings    = new HashMap<Preference, String[]>();
 
+    private final Preference.OnPreferenceChangeListener listChangeListener = new Preference.OnPreferenceChangeListener() {
+                                                                               public boolean onPreferenceChange(
+                                                                                       Preference preference, Object newValue) {
+                                                                                   // We
+                                                                                   // have
+                                                                                   // put
+                                                                                   // the
+                                                                                   // index
+                                                                                   // numbers
+                                                                                   // as
+                                                                                   // values:
+                                                                                   int val = Integer.valueOf((String) newValue);
+                                                                                   String[] prefStrings = listPrefStrings
+                                                                                           .get(preference);
+                                                                                   if (prefStrings != null) {
+                                                                                       preference.setSummary(prefStrings[val]);
+                                                                                   }
+                                                                                   return true;
+                                                                               }
+                                                                           };
 
-	private Preference.OnPreferenceChangeListener listChangeListener = new Preference.OnPreferenceChangeListener() {
-		public boolean onPreferenceChange(Preference preference, Object newValue) {
-			// We have put the index numbers as values:
-			int val = Integer.valueOf((String)newValue);
-			String[] prefStrings = listPrefStrings.get(preference);
-			if (prefStrings != null) {
-				preference.setSummary(prefStrings[val]);
-			}
-			return true;
-		}
-    }; 
-
-
-	
-	
-	
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
@@ -72,77 +74,71 @@ public class MindBellPreferences extends PreferenceActivity {
         setupListPreference(R.string.keyEnd, hours);
 
         setupVolumePreference();
-        
-        /* Preference ringBell = getPreferenceScreen().findPreference(getText(R.string.keyTry));
-        ringBell.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			public boolean onPreferenceClick(Preference preference) {
-				ringBell();
-				return false;
-			}
-        }); */
+
+        /*
+         * Preference ringBell =
+         * getPreferenceScreen().findPreference(getText(R.string.keyTry));
+         * ringBell.setOnPreferenceClickListener(new
+         * Preference.OnPreferenceClickListener() { public boolean
+         * onPreferenceClick(Preference preference) { ringBell(); return false;
+         * } });
+         */
     }
 
-
-	private void setupVolumePreference() {
-		// Dynamically fill volumes from audio manager's value range:
-        AudioManager audioMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    	int maxVolume = audioMan.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-    	int currentVolume = audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
-    	assert 0 <= currentVolume;
-    	assert currentVolume <= maxVolume;
-    	String[] volumes = new String[maxVolume+1];
-    	for (int i=0; i <= maxVolume; i++) {
-    		volumes[i] = String.valueOf(i);
-    	}
-    	ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
-    	lp.setEntries(volumes);
-    	lp.setEntryValues(volumes);
-    	// By default, ring bell at 2/3 of maximum volume:
-    	int defaultBellVolume = maxVolume*2/3;
-    	lp.setDefaultValue(String.valueOf(defaultBellVolume));
-    	if (lp.getValue() == null) {
-    		lp.setValue(String.valueOf(defaultBellVolume));
-    	}
-        lp.setSummary(lp.getValue());
-        listPrefStrings.put(lp, volumes);
-        lp.setOnPreferenceChangeListener(listChangeListener);
-	}
-
-    
     @Override
     public void onPause() {
-    	super.onPause();
-    	Intent intent = new Intent(this, MindBellSwitch.class);
-    	PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    	try {
-    		sender.send();
+        super.onPause();
+        Intent intent = new Intent(this, MindBellSwitch.class);
+        PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        try {
+            sender.send();
         } catch (PendingIntent.CanceledException e) {
-        	Log.e(LOGTAG, "Could not send: "+e.getMessage());
+            Log.e(LOGTAG, "Could not send: " + e.getMessage());
         }
     }
-    	
-    	
-    	
-    
-	private void setupListPreference(int keyID, String[] valueStrings) {
-		ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(keyID));
-        int val = Integer.valueOf((String)lp.getValue());
+
+    private void ringBell() {
+        CheckBoxPreference showBellPref = (CheckBoxPreference) getPreferenceScreen().findPreference(getText(R.string.keyShow));
+        if (showBellPref.isChecked()) {
+            Intent ringBell = new Intent(this, MindBell.class);
+            startActivity(ringBell);
+        } else {
+            Intent ringBell = new Intent(this, MindBellAudioOnly.class);
+            sendBroadcast(ringBell);
+        }
+    }
+
+    private void setupListPreference(int keyID, String[] valueStrings) {
+        ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(keyID));
+        int val = Integer.valueOf(lp.getValue());
         lp.setSummary(valueStrings[val]);
         listPrefStrings.put(lp, valueStrings);
         lp.setOnPreferenceChangeListener(listChangeListener);
-	}
+    }
 
-
-
-	private void ringBell() {
-		CheckBoxPreference showBellPref = (CheckBoxPreference) getPreferenceScreen().findPreference(getText(R.string.keyShow));
-		if (showBellPref.isChecked()) {
-			Intent ringBell = new Intent(this, MindBell.class);
-			startActivity(ringBell);
-		} else {
-			Intent ringBell = new Intent(this, MindBellAudioOnly.class);
-			sendBroadcast(ringBell);
-		}
+    private void setupVolumePreference() {
+        // Dynamically fill volumes from audio manager's value range:
+        AudioManager audioMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        int maxVolume = audioMan.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int currentVolume = audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
+        assert 0 <= currentVolume;
+        assert currentVolume <= maxVolume;
+        String[] volumes = new String[maxVolume + 1];
+        for (int i = 0; i <= maxVolume; i++) {
+            volumes[i] = String.valueOf(i);
+        }
+        ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
+        lp.setEntries(volumes);
+        lp.setEntryValues(volumes);
+        // By default, ring bell at 2/3 of maximum volume:
+        int defaultBellVolume = maxVolume * 2 / 3;
+        lp.setDefaultValue(String.valueOf(defaultBellVolume));
+        if (lp.getValue() == null) {
+            lp.setValue(String.valueOf(defaultBellVolume));
+        }
+        lp.setSummary(lp.getValue());
+        listPrefStrings.put(lp, volumes);
+        lp.setOnPreferenceChangeListener(listChangeListener);
     }
 
 }
