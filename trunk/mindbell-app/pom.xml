@@ -9,7 +9,7 @@
     <groupId>com.googlecode.mindbell</groupId>
     <artifactId>mindbell-app</artifactId>
     <packaging>apk</packaging>
-    <name>MindBell</name>
+    <name>MindBell App</name>
 
     <dependencies>
         <dependency>
