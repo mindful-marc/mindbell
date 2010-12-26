@@ -24,7 +24,7 @@
     <groupId>com.googlecode.mindbell</groupId>
     <artifactId>mindbell-instrumentationtest</artifactId>
     <packaging>apk</packaging>
-    <name>MindBell - Instrumentation Test</name>
+    <name>MindBell Instrumentation Test</name>
 
     <dependencies>
         <dependency>
