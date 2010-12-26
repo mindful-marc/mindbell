@@ -16,6 +16,8 @@
 package com.googlecode.mindbell;
 
 import com.googlecode.mindbell.R;
+import com.googlecode.mindbell.util.AndroidContextAccessor;
+import com.googlecode.mindbell.util.ContextAccessor;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,11 +26,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.Toast;
 
 public class MindBell extends Activity {
+
 	private static MediaPlayer mediaPlayer = null;
 	private static int originalVolume = -1;
 	private static final Object lock = new Object();
@@ -56,7 +57,7 @@ public class MindBell extends Activity {
      * @param runWhenDone an optional Runnable to call on completion of the sound, or null.
      */
     public static void ringBell(Context context, final Runnable runWhenDone) {
-    	Log.d(MindBellPreferences.LOGTAG, "Ring bell request received");
+    	logDebug("Ring bell request received");
     	final AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
     	
@@ -65,7 +66,7 @@ public class MindBell extends Activity {
         	if (mediaPlayer != null) {
         		if (mediaPlayer.isPlaying()) {
         			mediaPlayer.stop();
-        	    	Log.d(MindBellPreferences.LOGTAG, "Stopped ongoing player.");
+        	    	logDebug("Stopped ongoing player.");
         		}
     			mediaPlayer.release();
     			mediaPlayer = null;
@@ -73,32 +74,12 @@ public class MindBell extends Activity {
         	} else {
         		// no current sound: remember volume
         		originalVolume = audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
-            	Log.d(MindBellPreferences.LOGTAG, "Remembering original music volume: "+originalVolume);
+            	logDebug("Remembering original music volume: "+originalVolume);
         	}
     	}
     	
-    	boolean play = true;
-    	// If we are to be muted, don't go any further:
-    	boolean muteWithPhone = settings.getBoolean(context.getString(R.string.keyMuteWithPhone), false);
-    	if (muteWithPhone && audioMan.getStreamVolume(AudioManager.STREAM_RING) == 0) {
-    		play = false;
-			String message = "muting bell because the phone is muted";
-    		Log.d(MindBellPreferences.LOGTAG, message);
-    		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    	}
-    	
-    	// If settings ask us to mute if the phone is active in a call, and that is the case, do not play.
-    	boolean muteOffHook = settings.getBoolean(context.getString(R.string.keyMuteOffHook), false);
-    	if (muteOffHook) {
-    		TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(TELEPHONY_SERVICE);
-    		if (telephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
-    			play = false;
-    			String message = "muting bell because the phone is off hook";
-        		Log.d(MindBellPreferences.LOGTAG, message);
-        		Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    		}
-    	}
-    	if (!play) {
+    	ContextAccessor ca = new AndroidContextAccessor(context);
+    	if (ca.isMuteRequested()) {
     		if (runWhenDone != null) {
     			runWhenDone.run();
     		}
@@ -109,7 +90,7 @@ public class MindBell extends Activity {
     	mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
     	mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 			public void onCompletion(MediaPlayer mp) {
-				Log.d(MindBellPreferences.LOGTAG, "Upon completion, originalVolume is "+originalVolume);
+				logDebug("Upon completion, originalVolume is "+originalVolume);
 				synchronized (lock) {
 					mediaPlayer.release();
 					if (originalVolume != -1) {
@@ -128,7 +109,13 @@ public class MindBell extends Activity {
         	int bellVolume = Integer.valueOf(bellVolumeString);
         	audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, bellVolume, 0);
     	}
-    	Log.d(MindBellPreferences.LOGTAG, "Ringing bell with volume "+bellVolumeString);
+    	logDebug("Ringing bell with volume "+bellVolumeString);
     	mediaPlayer.start();
     }
+
+	public static void logDebug(String message) {
+		Log.d(MindBellPreferences.LOGTAG, message);
+	}
+
+
 }
