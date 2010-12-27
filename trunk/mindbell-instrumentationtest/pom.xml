@@ -64,33 +64,37 @@
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>maven-android-plugin</artifactId>
             </plugin>
-            <plugin>
-		<artifactId>maven-pmd-plugin</artifactId>
-		<version>2.5</version>
-		<configuration>
-			<linkXref>true</linkXref>
-			<sourceEncoding>UTF-8</sourceEncoding>
-			<minimumTokens>30</minimumTokens>
-			<targetJdk>1.5</targetJdk>
-		</configuration>
-	      </plugin>
-	      <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-checkstyle-plugin</artifactId>
-		<version>2.6</version>
-	      </plugin>
-	      <plugin>
-		<groupId>org.codehaus.mojo</groupId>
-		<artifactId>findbugs-maven-plugin</artifactId>
-		<version>2.0.1</version>
-		<configuration>
-		  <findbugsXmlOutput>true</findbugsXmlOutput>
-		  <!-- Optional directory to put findbugs xml report -->
-		  <findbugsXmlOutputDirectory>target/site</findbugsXmlOutputDirectory>
-		</configuration>
-	      </plugin>
-
         </plugins>
     </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+	<artifactId>maven-pmd-plugin</artifactId>
+	<version>2.5</version>
+	<configuration>
+		<linkXref>true</linkXref>
+		<sourceEncoding>UTF-8</sourceEncoding>
+		<minimumTokens>30</minimumTokens>
+		<targetJdk>1.5</targetJdk>
+	</configuration>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-checkstyle-plugin</artifactId>
+	<version>2.6</version>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>2.0.1</version>
+        <configuration>
+          <xmlOutput>true</xmlOutput>
+          <!-- Optional derectory to put findbugs xdoc xml report -->
+          <xmlOutputDirectory>target/site</xmlOutputDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
 
 </project>
