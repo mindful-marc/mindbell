@@ -32,11 +32,13 @@ public class RingBellTest extends AndroidTestCase {
     private Context                    context;
     private final Map<String, Boolean> booleanSettings = new HashMap<String, Boolean>();
 
+    private final Runnable             dummyRunnable   = new Runnable() {
+                                                           public void run() {
+                                                           };
+                                                       };
+
     private Runnable getDummyRunnable() {
-        return new Runnable() {
-            public void run() {
-            };
-        };
+        return dummyRunnable;
     }
 
     private void setBooleanContext(int keyID, boolean value) {
@@ -59,11 +61,13 @@ public class RingBellTest extends AndroidTestCase {
 
     @Override
     protected void setUp() throws Exception {
+        super.setUp();
         context = getContext();
     }
 
     @Override
-    protected void tearDown() {
+    protected void tearDown() throws Exception {
+        super.tearDown();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor spe = sp.edit();
         for (String s : booleanSettings.keySet()) {
