@@ -77,30 +77,32 @@ public class MindBell extends Activity {
         }
 
         // OK, let's play the sound
-        mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                logDebug("Upon completion, originalVolume is " + originalVolume);
-                synchronized (lock) {
-                    mediaPlayer.release();
-                    if (originalVolume != -1) {
-                        audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0);
-                        originalVolume = -1;
+        synchronized (lock) {
+            mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    logDebug("Upon completion, originalVolume is " + originalVolume);
+                    synchronized (lock) {
+                        mediaPlayer.release();
+                        if (originalVolume != -1) {
+                            audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, originalVolume, 0);
+                            originalVolume = -1;
+                        }
+                        mediaPlayer = null;
                     }
-                    mediaPlayer = null;
+                    if (runWhenDone != null) {
+                        runWhenDone.run();
+                    }
                 }
-                if (runWhenDone != null) {
-                    runWhenDone.run();
-                }
+            });
+            String bellVolumeString = settings.getString(context.getString(R.string.keyVolume), null);
+            if (bellVolumeString != null) {
+                int bellVolume = Integer.valueOf(bellVolumeString);
+                audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, bellVolume, 0);
             }
-        });
-        String bellVolumeString = settings.getString(context.getString(R.string.keyVolume), null);
-        if (bellVolumeString != null) {
-            int bellVolume = Integer.valueOf(bellVolumeString);
-            audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, bellVolume, 0);
+            logDebug("Ringing bell with volume " + bellVolumeString);
+            mediaPlayer.start();
         }
-        logDebug("Ringing bell with volume " + bellVolumeString);
-        mediaPlayer.start();
     }
 
     /** Called when the activity is first created. */
