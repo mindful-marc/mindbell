@@ -54,6 +54,7 @@
                         </sdk>
                         <emulator>
                             <avd>16</avd>
+                            <wait>150000</wait> <!-- wait time for the emulator to start -->
                         </emulator>
                         <deleteConflictingFiles>true</deleteConflictingFiles>
                         <undeployBeforeDeploy>true</undeployBeforeDeploy>
