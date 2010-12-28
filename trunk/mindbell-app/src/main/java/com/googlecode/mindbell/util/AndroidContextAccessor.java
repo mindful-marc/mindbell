@@ -18,6 +18,7 @@ package com.googlecode.mindbell.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
@@ -35,14 +36,52 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     private final Context   context;
 
+    private MediaPlayer     mediaPlayer      = null;
+
     public AndroidContextAccessor(Context context) {
         this.context = context;
+    }
+
+    @Override
+    public void destroyMediaPlayer() {
+
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            MindBell.logDebug("Stopped ongoing player.");
+        }
+        mediaPlayer.release();
+        mediaPlayer = null;
+        // but leave originalVolume as it is
+    }
+
+    public int getBellVolume() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+        String bellVolumeString = settings.getString(context.getString(R.string.keyVolume), "10");
+        assert bellVolumeString != null;
+        try {
+            int bellVolume = Integer.valueOf(bellVolumeString);
+            return bellVolume;
+        } catch (NumberFormatException nfe) {
+            return 10;
+        }
     }
 
     private boolean getBooleanSetting(int keyID) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String key = context.getString(keyID);
         return settings.getBoolean(key, false);
+    }
+
+    @Override
+    public int getOriginalVolume() {
+        AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        return audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+    }
+
+    @Override
+    public boolean haveMediaPlayer() {
+        return mediaPlayer != null;
     }
 
     @Override
@@ -65,6 +104,36 @@ public class AndroidContextAccessor extends ContextAccessor {
     @Override
     public boolean isSettingMuteWithPhone() {
         return getBooleanSetting(KEYMUTEWITHPHONE);
+    }
+
+    @Override
+    public void kickoffMediaPlayer(final Runnable runWhenDone, final int originalVolume) {
+        mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+                MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
+                mediaPlayer.release();
+                if (originalVolume != -1) {
+                    setMusicVolume(originalVolume);
+                }
+                mediaPlayer = null;
+                if (runWhenDone != null) {
+                    runWhenDone.run();
+                }
+            }
+        });
+        int bellVolume = getBellVolume();
+        setMusicVolume(bellVolume);
+        MindBell.logDebug("Ringing bell with volume " + bellVolume);
+        mediaPlayer.start();
+
+    }
+
+    @Override
+    public void setMusicVolume(int volume) {
+        AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+
     }
 
     @Override

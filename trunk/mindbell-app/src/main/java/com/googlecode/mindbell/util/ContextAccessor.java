@@ -51,4 +51,14 @@ public abstract class ContextAccessor {
 
     public abstract void showMessage(String message);
 
+    public abstract boolean haveMediaPlayer();
+
+    public abstract void destroyMediaPlayer();
+
+    public abstract int getOriginalVolume();
+
+    public abstract void setMusicVolume(int volume);
+
+    public abstract void kickoffMediaPlayer(final Runnable runWhenDone, final int originalVolume);
+
 }
