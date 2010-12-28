@@ -40,9 +40,11 @@ public class MindBell extends Activity {
      * @param runWhenDone
      *            an optional Runnable to call on completion of the sound, or
      *            null.
+     * @return true if bell started ringing, false otherwise
      */
-    public static void ringBell(Context context, final Runnable runWhenDone) {
+    public static boolean ringBell(Context context, final Runnable runWhenDone) {
         ContextAccessor ca = new AndroidContextAccessor(context);
+        return ringBell(ca, runWhenDone);
     }
 
     /**
@@ -53,29 +55,27 @@ public class MindBell extends Activity {
      * @param runWhenDone
      *            an optional Runnable to call on completion of the sound, or
      *            null.
+     * @return true if bell started ringing, false otherwise
      */
-    public static void ringBell(ContextAccessor ca, final Runnable runWhenDone) {
+    public static boolean ringBell(ContextAccessor ca, final Runnable runWhenDone) {
         logDebug("Ring bell request received");
 
-        synchronized (lock) {
-            // Stop any running bell sounds
-            if (ca.haveMediaPlayer()) {
-                ca.destroyMediaPlayer();
-            } else {
-                // no current sound: remember volume
-                originalVolume = ca.getOriginalVolume();
-                logDebug("Remembering original music volume: " + originalVolume);
-            }
-        }
-
+        // 1. Verify if we should be muted
         if (ca.isMuteRequested()) {
             if (runWhenDone != null) {
                 runWhenDone.run();
             }
-            return;
+            return false;
+        }
+        // 2. Stop any ongoing ring, and manually reset volume to original.
+        if (ca.isBellSoundPlaying()) {
+            ca.finishBellSound();
         }
 
-        ca.kickoffMediaPlayer(runWhenDone, originalVolume);
+        // 3. Kick off the playback of the bell sound, with an automatic volume
+        // reset built-in if not stopped.
+        ca.startBellSound(runWhenDone);
+        return true;
     }
 
     /** Called when the activity is first created. */

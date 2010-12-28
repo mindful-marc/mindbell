@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 
 import com.googlecode.mindbell.MindBell;
+import com.googlecode.mindbell.test.util.MockContextAccessor;
 import com.googlecode.mindbell.util.AndroidContextAccessor;
 import com.googlecode.mindbell.util.ContextAccessor;
 
@@ -116,17 +117,45 @@ public class RingBellTest extends AndroidTestCase {
         assertNotNull(context);
     }
 
-    public void testRingBell() {
-        MindBell.ringBell(context, null);
+    public void testRingBell_Mock_false() {
+        // setup
+        MockContextAccessor mca = new MockContextAccessor();
+        mca.setPhoneMuted(true);
+        mca.setSettingMuteWithPhone(true);
+        // exercise
+        boolean isRinging = MindBell.ringBell(mca, null);
+        // verify
+        assertFalse(isRinging);
+    }
+
+    public void testRingBell_Mock_true() {
+        // setup
+        MockContextAccessor mca = new MockContextAccessor();
+        mca.setPhoneMuted(false);
+        mca.setPhoneOffHook(false);
+        // exercise
+        boolean isRinging = MindBell.ringBell(mca, null);
+        // verify
+        assertTrue(isRinging);
     }
 
     public void testRingBell_throwNPE1() {
         try {
-            MindBell.ringBell(null, getDummyRunnable());
+            MindBell.ringBell((ContextAccessor) null, getDummyRunnable());
             fail("Should have thrown null pointer exception");
         } catch (NullPointerException npe) {
             // OK, expected
         }
+    }
+
+    public void testRingBell_true() {
+        // setup
+        setContextMuteWithPhone(false);
+        setContextMuteOffHook(false);
+        // exercise
+        boolean isRinging = MindBell.ringBell(context, null);
+        // verify
+        assertTrue(isRinging);
     }
 
 }

@@ -18,10 +18,37 @@ package com.googlecode.mindbell.test.util;
 import com.googlecode.mindbell.util.ContextAccessor;
 
 public class MockContextAccessor extends ContextAccessor {
-    private boolean isSettingMuteWithPhone = false;
-    private boolean isSettingMuteOffHook   = false;
-    private boolean isPhoneMuted           = false;
-    private boolean isPhoneOffHook         = false;
+    private boolean          isSettingMuteWithPhone = false;
+    private boolean          isSettingMuteOffHook   = false;
+    private boolean          isPhoneMuted           = false;
+    private boolean          isPhoneOffHook         = false;
+    private boolean          isPlaying              = false;
+
+    private static final int ORIGINAL_VOLUME        = 15;
+    private static final int BELL_VOLUME            = 10;
+
+    private int              musicVolume            = ORIGINAL_VOLUME;
+
+    @Override
+    public void finishBellSound() {
+        isPlaying = false;
+        musicVolume = ORIGINAL_VOLUME;
+    }
+
+    @Override
+    public int getBellVolume() {
+        return BELL_VOLUME;
+    }
+
+    @Override
+    public int getMusicVolume() {
+        return musicVolume;
+    }
+
+    @Override
+    public boolean isBellSoundPlaying() {
+        return isPlaying;
+    }
 
     @Override
     public boolean isPhoneMuted() {
@@ -43,6 +70,10 @@ public class MockContextAccessor extends ContextAccessor {
         return isSettingMuteWithPhone;
     }
 
+    @Override
+    public void setMusicVolume(int volume) {
+    }
+
     public void setPhoneMuted(boolean value) {
         isPhoneMuted = value;
     }
@@ -62,6 +93,12 @@ public class MockContextAccessor extends ContextAccessor {
     @Override
     public void showMessage(String message) {
         System.out.println(message);
+    }
+
+    @Override
+    public void startBellSound(final Runnable runWhenDone) {
+        isPlaying = true;
+        musicVolume = BELL_VOLUME;
     }
 
 }
