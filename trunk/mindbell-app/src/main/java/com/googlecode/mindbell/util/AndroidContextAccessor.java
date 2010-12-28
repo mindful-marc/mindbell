@@ -38,22 +38,24 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     private MediaPlayer     mediaPlayer      = null;
 
+    private int             originalVolume   = -1;
+
     public AndroidContextAccessor(Context context) {
         this.context = context;
     }
 
     @Override
-    public void destroyMediaPlayer() {
-
+    public void finishBellSound() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
             MindBell.logDebug("Stopped ongoing player.");
         }
         mediaPlayer.release();
         mediaPlayer = null;
-        // but leave originalVolume as it is
+        restoreOriginalVolume();
     }
 
+    @Override
     public int getBellVolume() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String bellVolumeString = settings.getString(context.getString(R.string.keyVolume), "10");
@@ -73,14 +75,14 @@ public class AndroidContextAccessor extends ContextAccessor {
     }
 
     @Override
-    public int getOriginalVolume() {
+    public int getMusicVolume() {
         AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         return audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
 
     }
 
     @Override
-    public boolean haveMediaPlayer() {
+    public boolean isBellSoundPlaying() {
         return mediaPlayer != null;
     }
 
@@ -106,27 +108,10 @@ public class AndroidContextAccessor extends ContextAccessor {
         return getBooleanSetting(KEYMUTEWITHPHONE);
     }
 
-    @Override
-    public void kickoffMediaPlayer(final Runnable runWhenDone, final int originalVolume) {
-        mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
-                mediaPlayer.release();
-                if (originalVolume != -1) {
-                    setMusicVolume(originalVolume);
-                }
-                mediaPlayer = null;
-                if (runWhenDone != null) {
-                    runWhenDone.run();
-                }
-            }
-        });
-        int bellVolume = getBellVolume();
-        setMusicVolume(bellVolume);
-        MindBell.logDebug("Ringing bell with volume " + bellVolume);
-        mediaPlayer.start();
-
+    private void restoreOriginalVolume() {
+        if (originalVolume != -1) {
+            setMusicVolume(originalVolume);
+        }
     }
 
     @Override
@@ -140,6 +125,29 @@ public class AndroidContextAccessor extends ContextAccessor {
     public void showMessage(String message) {
         MindBell.logDebug(message);
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void startBellSound(final Runnable runWhenDone) {
+        originalVolume = getMusicVolume();
+        MindBell.logDebug("Remembering original music volume: " + originalVolume);
+
+        mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+                MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
+                finishBellSound();
+                restoreOriginalVolume();
+                if (runWhenDone != null) {
+                    runWhenDone.run();
+                }
+            }
+        });
+        int bellVolume = getBellVolume();
+        setMusicVolume(bellVolume);
+        MindBell.logDebug("Ringing bell with volume " + bellVolume);
+        mediaPlayer.start();
+
     }
 
 }

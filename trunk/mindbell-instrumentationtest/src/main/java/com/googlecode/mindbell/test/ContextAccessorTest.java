@@ -3,8 +3,33 @@ package com.googlecode.mindbell.test;
 import junit.framework.TestCase;
 
 import com.googlecode.mindbell.test.util.MockContextAccessor;
+import com.googlecode.mindbell.util.ContextAccessor;
 
 public class ContextAccessorTest extends TestCase {
+
+    private ContextAccessor createContextAccessor() {
+        return new MockContextAccessor();
+    }
+
+    public void testBellVolume() {
+        // setup
+        ContextAccessor ca = createContextAccessor();
+        // exercise
+        ca.startBellSound(null);
+        // verify
+        assertEquals(ca.getBellVolume(), ca.getMusicVolume());
+    }
+
+    public void testFinish() {
+        // setup
+        ContextAccessor ca = createContextAccessor();
+        ca.startBellSound(null);
+        // exercise
+        ca.finishBellSound();
+        // verify
+        assertFalse(ca.isBellSoundPlaying());
+
+    }
 
     public void testMuted_false1() {
         // setup
@@ -60,4 +85,24 @@ public class ContextAccessorTest extends TestCase {
         assertTrue(ca.isMuteRequested());
     }
 
+    public void testOriginalVolume() {
+        // setup
+        ContextAccessor ca = createContextAccessor();
+        int originalVolume = ca.getMusicVolume();
+        // exercise
+        ca.startBellSound(null);
+        ca.finishBellSound();
+        // verify
+        assertEquals(originalVolume, ca.getMusicVolume());
+
+    }
+
+    public void testPlay() {
+        // setup
+        ContextAccessor ca = createContextAccessor();
+        // exercise
+        ca.startBellSound(null);
+        // verify
+        assertTrue(ca.isBellSoundPlaying());
+    }
 }

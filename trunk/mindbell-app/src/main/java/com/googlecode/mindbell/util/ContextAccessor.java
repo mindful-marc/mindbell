@@ -24,6 +24,12 @@ package com.googlecode.mindbell.util;
  */
 public abstract class ContextAccessor {
 
+    public abstract void finishBellSound();
+
+    public abstract int getMusicVolume();
+
+    public abstract boolean isBellSoundPlaying();
+
     public boolean isMuteRequested() {
         boolean mute = false;
         // If we are to be muted, don't go any further:
@@ -49,16 +55,12 @@ public abstract class ContextAccessor {
 
     public abstract boolean isSettingMuteWithPhone();
 
-    public abstract void showMessage(String message);
-
-    public abstract boolean haveMediaPlayer();
-
-    public abstract void destroyMediaPlayer();
-
-    public abstract int getOriginalVolume();
+    public abstract void startBellSound(final Runnable runWhenDone);
 
     public abstract void setMusicVolume(int volume);
 
-    public abstract void kickoffMediaPlayer(final Runnable runWhenDone, final int originalVolume);
+    public abstract void showMessage(String message);
+
+    public abstract int getBellVolume();
 
 }
