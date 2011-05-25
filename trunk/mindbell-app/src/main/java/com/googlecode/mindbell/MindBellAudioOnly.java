@@ -19,13 +19,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.googlecode.mindbell.util.AndroidContextAccessor;
+import com.googlecode.mindbell.util.KeepAlive;
+
 /**
  * @author marc
  * 
  */
 public class MindBellAudioOnly extends BroadcastReceiver {
-
-    boolean isDone = false;
 
     /*
      * (non-Javadoc)
@@ -35,22 +36,7 @@ public class MindBellAudioOnly extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
-        final boolean isDone = false;
-        MindBell.ringBell(context, new Runnable() {
-            public void run() {
-                setDone();
-            }
-        });
-        while (!isDone) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ie) {
-            }
-        }
-    }
-
-    private void setDone() {
-        isDone = true;
+        new KeepAlive(AndroidContextAccessor.get(context), 15000).ringBell();
     }
 
 }

@@ -23,6 +23,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 
+import com.googlecode.mindbell.util.AndroidContextAccessor;
+import com.googlecode.mindbell.util.RingingLogic;
+
 public class MindBellMain extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class MindBellMain extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         if (e.getAction() == MotionEvent.ACTION_DOWN) {
-            MindBell.ringBell(this, null);
+            RingingLogic.ringBell(AndroidContextAccessor.get(this), null);
         }
         return true;
     }

@@ -34,13 +34,17 @@ public class AndroidContextAccessor extends ContextAccessor {
     public static final int KEYMUTEOFFHOOK   = R.string.keyMuteOffHook;
     public static final int KEYMUTEWITHPHONE = R.string.keyMuteWithPhone;
 
-    private final Context   context;
+    public static AndroidContextAccessor get(Context context) {
+        return new AndroidContextAccessor(context);
+    }
 
-    private MediaPlayer     mediaPlayer      = null;
+    private final Context context;
 
-    private int             originalVolume   = -1;
+    private MediaPlayer   mediaPlayer    = null;
 
-    public AndroidContextAccessor(Context context) {
+    private int           originalVolume = -1;
+
+    private AndroidContextAccessor(Context context) {
         this.context = context;
     }
 
@@ -129,6 +133,7 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     @Override
     public void startBellSound(final Runnable runWhenDone) {
+        MindBell.logDebug("Starting bell sound");
         originalVolume = getMusicVolume();
         MindBell.logDebug("Remembering original music volume: " + originalVolume);
 
@@ -137,7 +142,6 @@ public class AndroidContextAccessor extends ContextAccessor {
             public void onCompletion(MediaPlayer mp) {
                 MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
                 finishBellSound();
-                restoreOriginalVolume();
                 if (runWhenDone != null) {
                     runWhenDone.run();
                 }
