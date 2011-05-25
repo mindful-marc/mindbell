@@ -23,10 +23,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 
-import com.googlecode.mindbell.MindBell;
 import com.googlecode.mindbell.test.util.MockContextAccessor;
 import com.googlecode.mindbell.util.AndroidContextAccessor;
 import com.googlecode.mindbell.util.ContextAccessor;
+import com.googlecode.mindbell.util.RingingLogic;
 
 public class RingBellTest extends AndroidTestCase {
 
@@ -81,7 +81,7 @@ public class RingBellTest extends AndroidTestCase {
         // setup
         setContextMuteOffHook(false);
         // exercise
-        ContextAccessor ca = new AndroidContextAccessor(context);
+        ContextAccessor ca = AndroidContextAccessor.get(context);
         // verify
         assertFalse(ca.isSettingMuteOffHook());
     }
@@ -90,7 +90,7 @@ public class RingBellTest extends AndroidTestCase {
         // setup
         setContextMuteOffHook(true);
         // exercise
-        ContextAccessor ca = new AndroidContextAccessor(context);
+        ContextAccessor ca = AndroidContextAccessor.get(context);
         // verify
         assertTrue(ca.isSettingMuteOffHook());
     }
@@ -99,7 +99,7 @@ public class RingBellTest extends AndroidTestCase {
         // setup
         setContextMuteWithPhone(false);
         // exercise
-        ContextAccessor ca = new AndroidContextAccessor(context);
+        ContextAccessor ca = AndroidContextAccessor.get(context);
         // verify
         assertFalse(ca.isSettingMuteWithPhone());
     }
@@ -108,7 +108,7 @@ public class RingBellTest extends AndroidTestCase {
         // setup
         setContextMuteWithPhone(true);
         // exercise
-        ContextAccessor ca = new AndroidContextAccessor(context);
+        ContextAccessor ca = AndroidContextAccessor.get(context);
         // verify
         assertTrue(ca.isSettingMuteWithPhone());
     }
@@ -123,7 +123,7 @@ public class RingBellTest extends AndroidTestCase {
         mca.setPhoneMuted(true);
         mca.setSettingMuteWithPhone(true);
         // exercise
-        boolean isRinging = MindBell.ringBell(mca, null);
+        boolean isRinging = RingingLogic.ringBell(mca, null);
         // verify
         assertFalse(isRinging);
     }
@@ -134,14 +134,14 @@ public class RingBellTest extends AndroidTestCase {
         mca.setPhoneMuted(false);
         mca.setPhoneOffHook(false);
         // exercise
-        boolean isRinging = MindBell.ringBell(mca, null);
+        boolean isRinging = RingingLogic.ringBell(mca, null);
         // verify
         assertTrue(isRinging);
     }
 
     public void testRingBell_throwNPE1() {
         try {
-            MindBell.ringBell((ContextAccessor) null, getDummyRunnable());
+            RingingLogic.ringBell((ContextAccessor) null, getDummyRunnable());
             fail("Should have thrown null pointer exception");
         } catch (NullPointerException npe) {
             // OK, expected
@@ -153,7 +153,7 @@ public class RingBellTest extends AndroidTestCase {
         setContextMuteWithPhone(false);
         setContextMuteOffHook(false);
         // exercise
-        boolean isRinging = MindBell.ringBell(context, null);
+        boolean isRinging = RingingLogic.ringBell(AndroidContextAccessor.get(context), null);
         // verify
         assertTrue(isRinging);
     }

@@ -8,7 +8,7 @@ import com.googlecode.mindbell.util.ContextAccessor;
 public class AndroidContextAccessorTest extends AndroidTestCase {
 
     private ContextAccessor createContextAccessor() {
-        return new AndroidContextAccessor(getContext());
+        return AndroidContextAccessor.get(getContext());
     }
 
     public void testBellVolume() {
