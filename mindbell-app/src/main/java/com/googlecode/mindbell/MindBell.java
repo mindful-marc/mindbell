@@ -24,9 +24,6 @@ import com.googlecode.mindbell.util.RingingLogic;
 
 public class MindBell extends Activity {
 
-    private static int          originalVolume = -1;
-    private static final Object lock           = new Object();
-
     public static void logDebug(String message) {
         Log.d(MindBellPreferences.LOGTAG, message);
     }

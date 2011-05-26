@@ -23,41 +23,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
 
 public class MindBellPreferences extends PreferenceActivity {
-    public static final String                          LOGTAG             = "MindBell";
-    public static final String                          ACTIVATEBELL       = "mindBellActive";
-    public static final String                          RESCHEDULEBELL     = "mindBellReschedule";
+    public static final String LOGTAG = "MindBell";
+    public static final String ACTIVATEBELL = "mindBellActive";
+    public static final String RESCHEDULEBELL = "mindBellReschedule";
 
-    private String[]                                    frequencies;
-    private String[]                                    hours;
-    private final Map<Preference, String[]>             listPrefStrings    = new HashMap<Preference, String[]>();
+    private String[] frequencies;
+    private String[] hours;
+    private final Map<Preference, String[]> listPrefStrings = new HashMap<Preference, String[]>();
 
     private final Preference.OnPreferenceChangeListener listChangeListener = new Preference.OnPreferenceChangeListener() {
-                                                                               public boolean onPreferenceChange(
-                                                                                       Preference preference, Object newValue) {
-                                                                                   // We
-                                                                                   // have
-                                                                                   // put
-                                                                                   // the
-                                                                                   // index
-                                                                                   // numbers
-                                                                                   // as
-                                                                                   // values:
-                                                                                   int val = Integer.valueOf((String) newValue);
-                                                                                   String[] prefStrings = listPrefStrings
-                                                                                           .get(preference);
-                                                                                   if (prefStrings != null) {
-                                                                                       preference.setSummary(prefStrings[val]);
-                                                                                   }
-                                                                                   return true;
-                                                                               }
-                                                                           };
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            // We have put the index numbers as values:
+            int val = Integer.valueOf((String) newValue);
+            String[] prefStrings = listPrefStrings.get(preference);
+            if (prefStrings != null) {
+                preference.setSummary(prefStrings[val]);
+            }
+            return true;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,16 +87,14 @@ public class MindBellPreferences extends PreferenceActivity {
         }
     }
 
-    private void ringBell() {
-        CheckBoxPreference showBellPref = (CheckBoxPreference) getPreferenceScreen().findPreference(getText(R.string.keyShow));
-        if (showBellPref.isChecked()) {
-            Intent ringBell = new Intent(this, MindBell.class);
-            startActivity(ringBell);
-        } else {
-            Intent ringBell = new Intent(this, MindBellAudioOnly.class);
-            sendBroadcast(ringBell);
-        }
-    }
+    /*
+     * private void ringBell() { CheckBoxPreference showBellPref =
+     * (CheckBoxPreference)
+     * getPreferenceScreen().findPreference(getText(R.string.keyShow)); if
+     * (showBellPref.isChecked()) { Intent ringBell = new Intent(this,
+     * MindBell.class); startActivity(ringBell); } else { Intent ringBell = new
+     * Intent(this, MindBellAudioOnly.class); sendBroadcast(ringBell); } }
+     */
 
     private void setupListPreference(int keyID, String[] valueStrings) {
         ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(keyID));
