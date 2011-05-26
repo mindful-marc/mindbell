@@ -40,9 +40,9 @@ import android.util.Log;
  * 
  */
 public class MindBellScheduler extends BroadcastReceiver {
-    private AlarmManager      theAlarmManager;
+    private AlarmManager theAlarmManager;
     private SharedPreferences settings;
-    private Context           context;
+    private Context context;
 
     private void activateBell(Context context) {
         PendingIntent sender = null;
@@ -169,8 +169,8 @@ public class MindBellScheduler extends BroadcastReceiver {
                 long eveningTimeInMillis = getNextDaytimeEndInMillis();
 
                 theAlarmManager.set(AlarmManager.RTC_WAKEUP, eveningTimeInMillis, sender);
-                Log.d(MindBellPreferences.LOGTAG,
-                        "scheduled 'off' alarm for " + (tEnd / 100) + ":" + String.format("%02d", tEnd % 100));
+                Log.d(MindBellPreferences.LOGTAG, "scheduled 'off' alarm for " + (tEnd / 100) + ":"
+                        + String.format("%02d", tEnd % 100));
             }
         } else {
             deactivateBell(context);
@@ -185,8 +185,8 @@ public class MindBellScheduler extends BroadcastReceiver {
                 int tStart = getDaytimeStart();
                 long morningTimeInMillis = getNextDaytimeStartInMillis();
                 theAlarmManager.set(AlarmManager.RTC_WAKEUP, morningTimeInMillis, sender);
-                Log.d(MindBellPreferences.LOGTAG,
-                        "scheduled 'on' alarm for " + (tStart / 100) + ":" + String.format("%02d", tStart % 100));
+                Log.d(MindBellPreferences.LOGTAG, "scheduled 'on' alarm for " + (tStart / 100) + ":"
+                        + String.format("%02d", tStart % 100));
             }
         }
     }

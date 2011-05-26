@@ -20,13 +20,13 @@ public class KeepAlive {
                 setDone();
             }
         });
-        int i = 0;
-        while (!isDone && i < 10) {
+        long totalSlept = 0;
+        while (!isDone && totalSlept < timeout) {
             try {
                 Thread.sleep(sleepDuration);
             } catch (InterruptedException ie) {
             }
-            i++;
+            totalSlept += sleepDuration;
         }
     }
 

@@ -41,11 +41,11 @@ import android.widget.Toast;
  * 
  */
 public class MindBellSwitch extends BroadcastReceiver {
-    private Context             theContext;
+    private Context theContext;
     private NotificationManager theNotificationManager;
-    private AlarmManager        theAlarmManager;
-    private SharedPreferences   settings;
-    private String[]            hours;
+    private AlarmManager theAlarmManager;
+    private SharedPreferences settings;
+    private String[] hours;
 
     private void activateBell() {
         Intent intent = new Intent(theContext, MindBellScheduler.class);
@@ -89,7 +89,7 @@ public class MindBellSwitch extends BroadcastReceiver {
         Intent intent = new Intent(theContext, MindBellScheduler.class);
         PendingIntent sender = PendingIntent.getBroadcast(theContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         theAlarmManager.cancel(sender); // filterEquals() matches irrespective
-                                        // of extras
+        // of extras
         // Now we send a "deactivate" message to the scheduler irrespective of
         // day- or nighttime
         // because the boundaries of day and night may have been changed, and
@@ -155,7 +155,7 @@ public class MindBellSwitch extends BroadcastReceiver {
         hours = context.getResources().getStringArray(R.array.hourStrings);
 
         deactivateBell(); // always cancel anything using any previous settings
-                          // first
+        // first
         boolean isBellActive = settings.getBoolean(context.getString(R.string.keyActive), false);
         boolean doStatusNotification = settings.getBoolean(context.getString(R.string.keyStatus), false);
         if (isBellActive) {
