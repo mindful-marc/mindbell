@@ -1,0 +1,10 @@
+Duties time converter
+
+we have three types of time
+
+- integer hours, in preferences
+- integer hours*100 + minutes, (where?)
+- long milliseconds since 1970
+- anything else?
+
+these need to somehow be converted back and forth...

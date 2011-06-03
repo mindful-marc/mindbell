@@ -30,13 +30,13 @@ import com.googlecode.mindbell.util.RingingLogic;
 
 public class RingBellTest extends AndroidTestCase {
 
-    private Context                    context;
+    private Context context = null;
     private final Map<String, Boolean> booleanSettings = new HashMap<String, Boolean>();
 
-    private final Runnable             dummyRunnable   = new Runnable() {
-                                                           public void run() {
-                                                           };
-                                                       };
+    private final Runnable dummyRunnable = new Runnable() {
+        public void run() {
+        };
+    };
 
     private Runnable getDummyRunnable() {
         return dummyRunnable;

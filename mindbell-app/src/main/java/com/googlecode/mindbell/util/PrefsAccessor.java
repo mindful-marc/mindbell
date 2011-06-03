@@ -19,7 +19,7 @@ import java.util.Calendar;
 
 /**
  * @author marc
- *
+ * 
  */
 public abstract class PrefsAccessor {
 
@@ -30,63 +30,57 @@ public abstract class PrefsAccessor {
         super();
     }
 
-    public abstract int getDaytimeStart();
+    public abstract boolean doShowBell();
 
-    public abstract int getDaytimeEnd();
+    public abstract boolean doStatusNotification();
 
-    public boolean isDaytime() {
-        int tStart = getDaytimeStart();
-        int tEnd = getDaytimeEnd();
-        Calendar now = Calendar.getInstance();
-        int currentHour = now.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = now.get(Calendar.MINUTE);
-        int currentTime = 100 * currentHour + currentMinute;
-    
-        // Some people may set the end to midnight, or 1am etc.
-        // Two cases:
-        // a) start < end: it is day time if start <= t <= end
-        // b) end <= start: it is day time if either t <= end or start <= t
-        // (i.e. if end == start, we treat things as always day time)
-        if (tStart < tEnd) {
-            return (tStart <= currentTime && currentTime < tEnd);
-        } else {
-            return (currentTime <= tEnd || tStart <= currentTime);
-        }
-    }
+    public abstract TimeOfDay getDaytimeEnd();
 
-    public long getNextDaytimeStartInMillis() {
-        int tStart = getDaytimeStart();
-        Calendar morning = Calendar.getInstance();
-        morning.add(Calendar.DATE, 1);
-        morning.set(Calendar.HOUR_OF_DAY, tStart / 100);
-        morning.set(Calendar.MINUTE, tStart % 100);
-        morning.set(Calendar.SECOND, 0);
-        return morning.getTimeInMillis();
-    }
+    public abstract String getDaytimeEndString();
+
+    public abstract TimeOfDay getDaytimeStart();
+
+    public abstract String getDaytimeStartString();
+
+    public abstract long getInterval();
 
     public long getNextDaytimeEndInMillis() {
-        int tStart = getDaytimeStart();
-        int tEnd = getDaytimeEnd();
+        TimeOfDay tNow = new TimeOfDay();
+        TimeOfDay tEnd = getDaytimeEnd();
         Calendar evening = Calendar.getInstance();
-        evening.set(Calendar.HOUR_OF_DAY, tEnd / 100);
-        evening.set(Calendar.MINUTE, tEnd % 100);
+        evening.set(Calendar.HOUR_OF_DAY, tEnd.hour);
+        evening.set(Calendar.MINUTE, tEnd.minute);
         evening.set(Calendar.SECOND, 0);
-        if (tEnd <= tStart) { // end time is in the early hours of next day
+        if (tEnd.isBefore(tNow)) { // today's end time has already passed
             evening.add(Calendar.DATE, 1);
         }
         return evening.getTimeInMillis();
     }
 
-    public abstract boolean doShowBell();
+    public long getNextDaytimeStartInMillis() {
+        TimeOfDay tStart = getDaytimeStart();
+        TimeOfDay tNow = new TimeOfDay();
+        Calendar morning = Calendar.getInstance();
+        morning.set(Calendar.HOUR_OF_DAY, tStart.hour);
+        morning.set(Calendar.MINUTE, tStart.minute);
+        morning.set(Calendar.SECOND, 0);
+        if (tStart.isBefore(tNow)) { // today's start time has already passed
+            morning.add(Calendar.DATE, 1);
+        }
+        return morning.getTimeInMillis();
+    }
 
     public abstract boolean isBellActive();
 
-    public abstract long getInterval();
+    public boolean isDaytime() {
+        return isDaytime(new TimeOfDay());
+    }
 
-    public abstract String getDaytimeStartString();
+    public boolean isDaytime(TimeOfDay t) {
+        TimeOfDay tStart = getDaytimeStart();
+        TimeOfDay tEnd = getDaytimeEnd();
 
-    public abstract String getDaytimeEndString();
-
-    public abstract boolean doStatusNotification();
+        return t.isInInterval(tStart, tEnd);
+    }
 
 }

@@ -15,8 +15,6 @@
  */
 package com.googlecode.mindbell;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -31,6 +29,7 @@ import android.widget.Toast;
 
 import com.googlecode.mindbell.util.AndroidPrefsAccessor;
 import com.googlecode.mindbell.util.PrefsAccessor;
+import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * When triggered, turn mindbell altogether on or off depending on settings. This is triggered in two circumstances:
@@ -55,7 +54,7 @@ public class MindBellSwitch extends BroadcastReceiver {
         PendingIntent sender = PendingIntent.getBroadcast(theContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Now determine if we are in "daytime"
-        int tStart = prefs.getDaytimeStart();
+        TimeOfDay tStart = prefs.getDaytimeStart();
         if (prefs.isDaytime()) {
             // start scheduler now:
             try {
@@ -69,20 +68,8 @@ public class MindBellSwitch extends BroadcastReceiver {
             Toast.makeText(theContext, msg, Toast.LENGTH_SHORT).show();
             Log.d(MindBellPreferences.LOGTAG, msg);
             // program start of scheduler for next morning
-            Calendar morning = Calendar.getInstance();
-            int currentHour = morning.get(Calendar.HOUR_OF_DAY);
-            int currentMinute = morning.get(Calendar.MINUTE);
-            int currentTime = 100 * currentHour + currentMinute;
-            if (currentTime < tStart) {
-                // already right day
-            } else {
-                // need to add one day
-                morning.add(Calendar.DATE, 1);
-            }
-            morning.set(Calendar.HOUR_OF_DAY, tStart / 100);
-            morning.set(Calendar.MINUTE, tStart % 100);
-            morning.set(Calendar.SECOND, 0);
-            theAlarmManager.set(AlarmManager.RTC_WAKEUP, morning.getTimeInMillis(), sender);
+            long nextMorningMillis = prefs.getNextDaytimeStartInMillis();
+            theAlarmManager.set(AlarmManager.RTC_WAKEUP, nextMorningMillis, sender);
         }
     }
 
