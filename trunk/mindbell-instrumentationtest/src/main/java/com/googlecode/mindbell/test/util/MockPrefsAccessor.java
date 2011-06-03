@@ -1,6 +1,7 @@
 package com.googlecode.mindbell.test.util;
 
 import com.googlecode.mindbell.util.PrefsAccessor;
+import com.googlecode.mindbell.util.TimeOfDay;
 
 public class MockPrefsAccessor extends PrefsAccessor {
 
@@ -8,11 +9,11 @@ public class MockPrefsAccessor extends PrefsAccessor {
 
     private boolean statusNotification = true;
 
-    private int daytimeEnd = 21;
+    private TimeOfDay daytimeEnd = new TimeOfDay(21, 0);
 
     private String daytimeEndString = "21:00";
 
-    private int daytimeStart = 9;
+    private TimeOfDay daytimeStart = new TimeOfDay(9, 0);
 
     private String daytimeStartString = "09:00";
 
@@ -31,7 +32,7 @@ public class MockPrefsAccessor extends PrefsAccessor {
     }
 
     @Override
-    public int getDaytimeEnd() {
+    public TimeOfDay getDaytimeEnd() {
         return daytimeEnd;
     }
 
@@ -41,7 +42,7 @@ public class MockPrefsAccessor extends PrefsAccessor {
     }
 
     @Override
-    public int getDaytimeStart() {
+    public TimeOfDay getDaytimeStart() {
         return daytimeStart;
     }
 
@@ -72,7 +73,7 @@ public class MockPrefsAccessor extends PrefsAccessor {
      * @param theDaytimeEnd
      *            the daytimeEnd to set
      */
-    public void setDaytimeEnd(int theDaytimeEnd) {
+    public void setDaytimeEnd(TimeOfDay theDaytimeEnd) {
         this.daytimeEnd = theDaytimeEnd;
     }
 
@@ -88,7 +89,7 @@ public class MockPrefsAccessor extends PrefsAccessor {
      * @param theDaytimeStart
      *            the daytimeStart to set
      */
-    public void setDaytimeStart(int theDaytimeStart) {
+    public void setDaytimeStart(TimeOfDay theDaytimeStart) {
         this.daytimeStart = theDaytimeStart;
     }
 

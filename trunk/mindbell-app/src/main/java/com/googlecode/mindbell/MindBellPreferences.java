@@ -65,14 +65,6 @@ public class MindBellPreferences extends PreferenceActivity {
 
         setupVolumePreference();
 
-        /*
-         * Preference ringBell =
-         * getPreferenceScreen().findPreference(getText(R.string.keyTry));
-         * ringBell.setOnPreferenceClickListener(new
-         * Preference.OnPreferenceClickListener() { public boolean
-         * onPreferenceClick(Preference preference) { ringBell(); return false;
-         * } });
-         */
     }
 
     @Override
@@ -86,15 +78,6 @@ public class MindBellPreferences extends PreferenceActivity {
             Log.e(LOGTAG, "Could not send: " + e.getMessage());
         }
     }
-
-    /*
-     * private void ringBell() { CheckBoxPreference showBellPref =
-     * (CheckBoxPreference)
-     * getPreferenceScreen().findPreference(getText(R.string.keyShow)); if
-     * (showBellPref.isChecked()) { Intent ringBell = new Intent(this,
-     * MindBell.class); startActivity(ringBell); } else { Intent ringBell = new
-     * Intent(this, MindBellAudioOnly.class); sendBroadcast(ringBell); } }
-     */
 
     private void setupListPreference(int keyID, String[] valueStrings) {
         ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(keyID));

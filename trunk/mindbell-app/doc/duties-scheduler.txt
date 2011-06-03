@@ -1,0 +1,18 @@
+Duties of the Mindfulness bell scheduler
+
+1. Whenever scheduler is called
+(do we have to cancel any calls to ourselves?)
+a) checks the preferences to see if it is day or night
+b) if day, ring now, else don't ring 
+c) schedule the next activation
+
+
+2. Ring
+a) check prefs for av vs audio-only setting
+b) if audiovisual, trigger mindbell, else audio only
+
+3. Reschedule
+a) check prefs for average ring interval
+b) compute target time from a concrete ring interval
+c) if target time is at night, shift target into next day as (dusk + (t-dawn))
+d) set alarm for target time.

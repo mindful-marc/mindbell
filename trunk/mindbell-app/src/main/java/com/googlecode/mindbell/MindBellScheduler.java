@@ -27,6 +27,7 @@ import android.util.Log;
 
 import com.googlecode.mindbell.util.AndroidPrefsAccessor;
 import com.googlecode.mindbell.util.PrefsAccessor;
+import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * Turn the mindbell automatically on and off depending on the time of day. This is called from alarm controller every morning (to
@@ -109,12 +110,12 @@ public class MindBellScheduler extends BroadcastReceiver {
                 nextIntent.putExtra(MindBellPreferences.RESCHEDULEBELL, true);
                 PendingIntent sender = PendingIntent.getBroadcast(context, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                int tEnd = prefs.getDaytimeEnd();
+                TimeOfDay tEnd = prefs.getDaytimeEnd();
                 long eveningTimeInMillis = prefs.getNextDaytimeEndInMillis();
 
                 theAlarmManager.set(AlarmManager.RTC_WAKEUP, eveningTimeInMillis, sender);
-                Log.d(MindBellPreferences.LOGTAG, "scheduled 'off' alarm for " + (tEnd / 100) + ":"
-                        + String.format("%02d", tEnd % 100));
+                Log.d(MindBellPreferences.LOGTAG, "scheduled 'off' alarm for " + tEnd.hour + ":"
+                        + String.format("%02d", tEnd.minute));
             }
         } else {
             deactivateBell(context);
@@ -126,11 +127,11 @@ public class MindBellScheduler extends BroadcastReceiver {
                 nextIntent.putExtra(MindBellPreferences.RESCHEDULEBELL, true);
                 PendingIntent sender = PendingIntent.getBroadcast(context, 0, nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                int tStart = prefs.getDaytimeStart();
+                TimeOfDay tStart = prefs.getDaytimeStart();
                 long morningTimeInMillis = prefs.getNextDaytimeStartInMillis();
                 theAlarmManager.set(AlarmManager.RTC_WAKEUP, morningTimeInMillis, sender);
-                Log.d(MindBellPreferences.LOGTAG, "scheduled 'on' alarm for " + (tStart / 100) + ":"
-                        + String.format("%02d", tStart % 100));
+                Log.d(MindBellPreferences.LOGTAG, "scheduled 'on' alarm for " + tStart.hour + ":"
+                        + String.format("%02d", tStart.minute));
             }
         }
     }

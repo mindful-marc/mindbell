@@ -15,7 +15,6 @@
  */
 package com.googlecode.mindbell.util;
 
-
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,30 +38,44 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     }
 
     @Override
+    public boolean doShowBell() {
+        return settings.getBoolean(context.getString(R.string.keyShow), true);
+    }
+
+    @Override
     public boolean doStatusNotification() {
         return settings.getBoolean(context.getString(R.string.keyStatus), false);
     }
 
     @Override
-    public int getDaytimeEnd() {
-        return 100 * Integer.valueOf(settings.getString(context.getString(R.string.keyEnd), "0"));
+    public TimeOfDay getDaytimeEnd() {
+        return new TimeOfDay(getDaytimeEndHour(), 0);
+    }
+
+    /**
+     * @return
+     */
+    private int getDaytimeEndHour() {
+        return Integer.valueOf(settings.getString(context.getString(R.string.keyEnd), "0"));
     }
 
     @Override
     public String getDaytimeEndString() {
-        int endStringIndex = Integer.valueOf(settings.getString(context.getString(R.string.keyEnd), "0"));
-        return hours[endStringIndex];
+        return hours[getDaytimeEndHour()];
     }
 
     @Override
-    public int getDaytimeStart() {
-        return 100 * Integer.valueOf(settings.getString(context.getString(R.string.keyStart), "0"));
+    public TimeOfDay getDaytimeStart() {
+        return new TimeOfDay(getDaytimeStartHour(), 0);
+    }
+
+    private int getDaytimeStartHour() {
+        return Integer.valueOf(settings.getString(context.getString(R.string.keyStart), "0"));
     }
 
     @Override
     public String getDaytimeStartString() {
-        int startStringIndex = Integer.valueOf(settings.getString(context.getString(R.string.keyStart), "0"));
-        return hours[startStringIndex];
+        return hours[getDaytimeStartHour()];
     }
 
     @Override
@@ -86,11 +99,6 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean isBellActive() {
         return settings.getBoolean(context.getString(R.string.keyActive), false);
-    }
-
-    @Override
-    public boolean doShowBell() {
-        return settings.getBoolean(context.getString(R.string.keyShow), true);
     }
 
 }
