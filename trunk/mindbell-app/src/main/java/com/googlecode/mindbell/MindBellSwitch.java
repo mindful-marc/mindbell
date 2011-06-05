@@ -48,7 +48,7 @@ public class MindBellSwitch extends BroadcastReceiver {
     private PrefsAccessor prefs;
 
     private void activateBell() {
-        Intent intent = new Intent(theContext, MindBellScheduler.class);
+        Intent intent = new Intent(theContext, Scheduler.class);
         intent.putExtra(MindBellPreferences.ACTIVATEBELL, true);
         intent.putExtra(MindBellPreferences.RESCHEDULEBELL, true);
         PendingIntent sender = PendingIntent.getBroadcast(theContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -75,7 +75,7 @@ public class MindBellSwitch extends BroadcastReceiver {
 
     private void deactivateBell() {
         // Day or night, we cancel the next message in stock for the scheduler.
-        Intent intent = new Intent(theContext, MindBellScheduler.class);
+        Intent intent = new Intent(theContext, Scheduler.class);
         PendingIntent sender = PendingIntent.getBroadcast(theContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         theAlarmManager.cancel(sender); // filterEquals() matches irrespective
         // of extras

@@ -1,7 +1,6 @@
 Duties of the Mindfulness bell scheduler
 
 1. Whenever scheduler is called
-(do we have to cancel any calls to ourselves?)
 a) checks the preferences to see if it is day or night
 b) if day, ring now, else don't ring 
 c) schedule the next activation

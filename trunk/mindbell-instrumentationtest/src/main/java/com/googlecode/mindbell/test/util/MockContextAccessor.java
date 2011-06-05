@@ -26,7 +26,7 @@ public class MockContextAccessor extends ContextAccessor {
     private boolean isPhoneMuted = false;
     private boolean isPhoneOffHook = false;
     private boolean isPlaying = false;
-    private long mockSoundDuration = 100; // ms
+    private long mockSoundDuration = 1000; // ms
 
     private static final int ORIGINAL_VOLUME = 15;
     private static final int BELL_VOLUME = 10;
