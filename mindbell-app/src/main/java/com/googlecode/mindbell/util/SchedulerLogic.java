@@ -15,10 +15,43 @@
  */
 package com.googlecode.mindbell.util;
 
+import java.util.Random;
+
 /**
  * @author marc
- *
+ * 
  */
 public class SchedulerLogic {
+    private static Random random = new Random();
 
+    public static long getNextTargetTimeMillis(long nowMillis, PrefsAccessor prefs) {
+        long meanInterval = prefs.getInterval();
+        long randomInterval = getRandomInterval(meanInterval);
+        long targetTimeMillis = nowMillis + randomInterval;
+        if (!prefs.isDaytime(new TimeOfDay(targetTimeMillis))) {
+            // target is in night time
+            long dayStartMillis = prefs.getNextDaytimeStartInMillis();
+            targetTimeMillis = dayStartMillis + randomInterval - meanInterval / 2;
+            assert targetTimeMillis >= dayStartMillis;
+        }
+        return targetTimeMillis;
+    }
+
+    /**
+     * Compute a random value following a Gaussian distribution around the given mean. The value is guaranteed not to fall below
+     * 0.5 * mean and not above 1.5 * mean.
+     * 
+     * @param mean
+     * @return
+     */
+    private static long getRandomInterval(long mean) {
+        long value = (long) (mean * (1.0 + 0.3 * random.nextGaussian()));
+        if (value < mean / 2) {
+            value = mean / 2;
+        }
+        if (value > 3 * mean / 2) {
+            value = 3 * mean / 2;
+        }
+        return value;
+    }
 }
