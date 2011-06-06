@@ -1,5 +1,8 @@
 package com.googlecode.mindbell.util;
 
+import com.googlecode.mindbell.accessors.ContextAccessor;
+import com.googlecode.mindbell.logic.RingingLogic;
+
 public class KeepAlive {
 
     private boolean               isDone = false;

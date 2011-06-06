@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.mindbell.test.util;
+package com.googlecode.mindbell.test.accessors;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.googlecode.mindbell.util.ContextAccessor;
+import com.googlecode.mindbell.accessors.ContextAccessor;
 
 public class MockContextAccessor extends ContextAccessor {
     private boolean isSettingMuteWithPhone = false;

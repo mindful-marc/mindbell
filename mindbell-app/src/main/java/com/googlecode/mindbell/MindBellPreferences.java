@@ -32,8 +32,8 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.googlecode.mindbell.util.AndroidPrefsAccessor;
-import com.googlecode.mindbell.util.PrefsAccessor;
+import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
+import com.googlecode.mindbell.accessors.PrefsAccessor;
 
 public class MindBellPreferences extends PreferenceActivity {
     public static final String LOGTAG = "MindBell";

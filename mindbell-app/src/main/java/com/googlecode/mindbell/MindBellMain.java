@@ -23,8 +23,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 
-import com.googlecode.mindbell.util.AndroidContextAccessor;
-import com.googlecode.mindbell.util.RingingLogic;
+import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.logic.RingingLogic;
 
 public class MindBellMain extends Activity {
     @Override

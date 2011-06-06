@@ -19,8 +19,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.googlecode.mindbell.util.AndroidContextAccessor;
-import com.googlecode.mindbell.util.RingingLogic;
+import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.logic.RingingLogic;
 
 public class MindBell extends Activity {
 

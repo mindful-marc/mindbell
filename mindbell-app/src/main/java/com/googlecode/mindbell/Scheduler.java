@@ -27,11 +27,11 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.googlecode.mindbell.util.AndroidContextAccessor;
-import com.googlecode.mindbell.util.AndroidPrefsAccessor;
+import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
+import com.googlecode.mindbell.accessors.PrefsAccessor;
+import com.googlecode.mindbell.logic.SchedulerLogic;
 import com.googlecode.mindbell.util.KeepAlive;
-import com.googlecode.mindbell.util.PrefsAccessor;
-import com.googlecode.mindbell.util.SchedulerLogic;
 import com.googlecode.mindbell.util.TimeOfDay;
 
 /**

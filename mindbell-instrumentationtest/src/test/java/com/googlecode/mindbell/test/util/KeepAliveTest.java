@@ -17,6 +17,7 @@ package com.googlecode.mindbell.test.util;
 
 import junit.framework.TestCase;
 
+import com.googlecode.mindbell.test.accessors.MockContextAccessor;
 import com.googlecode.mindbell.util.KeepAlive;
 
 /**

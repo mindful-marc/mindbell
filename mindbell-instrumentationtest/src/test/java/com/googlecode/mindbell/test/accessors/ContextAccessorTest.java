@@ -1,9 +1,8 @@
-package com.googlecode.mindbell.test;
+package com.googlecode.mindbell.test.accessors;
 
 import junit.framework.TestCase;
 
-import com.googlecode.mindbell.test.util.MockContextAccessor;
-import com.googlecode.mindbell.util.ContextAccessor;
+import com.googlecode.mindbell.accessors.ContextAccessor;
 
 public class ContextAccessorTest extends TestCase {
 

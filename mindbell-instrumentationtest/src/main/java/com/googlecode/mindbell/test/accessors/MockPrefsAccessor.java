@@ -1,6 +1,6 @@
-package com.googlecode.mindbell.test.util;
+package com.googlecode.mindbell.test.accessors;
 
-import com.googlecode.mindbell.util.PrefsAccessor;
+import com.googlecode.mindbell.accessors.PrefsAccessor;
 import com.googlecode.mindbell.util.TimeOfDay;
 
 public class MockPrefsAccessor extends PrefsAccessor {
