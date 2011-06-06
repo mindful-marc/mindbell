@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.mindbell.util;
+package com.googlecode.mindbell.accessors;
 
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.googlecode.mindbell.R;
+import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * @author marc

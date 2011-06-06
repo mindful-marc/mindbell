@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.mindbell.util;
+package com.googlecode.mindbell.accessors;
 
 /**
  * Convenience access to information from the context. Can be replaced by test

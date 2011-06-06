@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.mindbell.test.util;
+package com.googlecode.mindbell.test.logic;
 
 import java.util.Calendar;
 
 import junit.framework.TestCase;
 
-import com.googlecode.mindbell.util.PrefsAccessor;
-import com.googlecode.mindbell.util.SchedulerLogic;
+import com.googlecode.mindbell.accessors.PrefsAccessor;
+import com.googlecode.mindbell.logic.SchedulerLogic;
+import com.googlecode.mindbell.test.accessors.MockPrefsAccessor;
 import com.googlecode.mindbell.util.TimeOfDay;
 
 /**

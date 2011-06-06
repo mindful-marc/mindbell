@@ -23,10 +23,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 
-import com.googlecode.mindbell.test.util.MockContextAccessor;
-import com.googlecode.mindbell.util.AndroidContextAccessor;
-import com.googlecode.mindbell.util.ContextAccessor;
-import com.googlecode.mindbell.util.RingingLogic;
+import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.accessors.ContextAccessor;
+import com.googlecode.mindbell.logic.RingingLogic;
+import com.googlecode.mindbell.test.accessors.MockContextAccessor;
 
 public class RingBellTest extends AndroidTestCase {
 

@@ -1,9 +1,9 @@
-package com.googlecode.mindbell.test;
+package com.googlecode.mindbell.test.accessors;
 
 import android.test.AndroidTestCase;
 
-import com.googlecode.mindbell.util.AndroidContextAccessor;
-import com.googlecode.mindbell.util.ContextAccessor;
+import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.accessors.ContextAccessor;
 
 public class AndroidContextAccessorTest extends AndroidTestCase {
 
