@@ -36,9 +36,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="MindBellAudioOnly" android:process=":remote" />
-        <receiver android:name="MindBellScheduler" android:process=":remote" />
-        <receiver android:name="MindBellSwitch" android:process=":remote">
+        <receiver android:name="Scheduler" android:process=":remote">
         	<intent-filter>
         		<action android:name="android.intent.action.BOOT_COMPLETED"/>
         	</intent-filter>
