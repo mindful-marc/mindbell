@@ -18,20 +18,29 @@ package com.googlecode.mindbell;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.googlecode.mindbell.util.AndroidPrefsAccessor;
+import com.googlecode.mindbell.util.PrefsAccessor;
 
 public class MindBellPreferences extends PreferenceActivity {
     public static final String LOGTAG = "MindBell";
     public static final String ACTIVATEBELL = "mindBellActive";
     public static final String RESCHEDULEBELL = "mindBellReschedule";
+
+    private static final int uniqueNotificationID = R.layout.bell;
 
     private String[] frequencies;
     private String[] hours;
@@ -70,13 +79,34 @@ public class MindBellPreferences extends PreferenceActivity {
     @Override
     public void onPause() {
         super.onPause();
-        Intent intent = new Intent(this, MindBellSwitch.class);
-        PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        try {
-            sender.send();
-        } catch (PendingIntent.CanceledException e) {
-            Log.e(LOGTAG, "Could not send: " + e.getMessage());
+        // Intent intent = new Intent(this, MindBellSwitch.class);
+        // PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        // try {
+        // sender.send();
+        // } catch (PendingIntent.CanceledException e) {
+        // Log.e(LOGTAG, "Could not send: " + e.getMessage());
+        // }
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        PrefsAccessor prefs = new AndroidPrefsAccessor(sharedPrefs, this);
+        if (prefs.isBellActive()) {
+            if (prefs.doStatusNotification()) {
+                updateStatusNotification(prefs);
+            } else {
+                removeStatusNotification();
+            }
+            Intent intent = new Intent(this, Scheduler.class);
+            PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            try {
+                sender.send();
+            } catch (PendingIntent.CanceledException e) {
+                Log.e(LOGTAG, "Could not send: " + e.getMessage());
+            }
         }
+    }
+
+    private void removeStatusNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(uniqueNotificationID);
     }
 
     private void setupListPreference(int keyID, String[] valueStrings) {
@@ -110,6 +140,20 @@ public class MindBellPreferences extends PreferenceActivity {
         lp.setSummary(lp.getValue());
         listPrefStrings.put(lp, volumes);
         lp.setOnPreferenceChangeListener(listChangeListener);
+    }
+
+    private void updateStatusNotification(PrefsAccessor prefs) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notif = new Notification(R.drawable.bell_status_active, "", System.currentTimeMillis());
+        CharSequence contentTitle = getText(R.string.statusTitleBellActive);
+        String contentText = getText(R.string.statusTextBellActive).toString();
+        contentText = contentText.replace("_STARTTIME_", prefs.getDaytimeStartString()).replace("_ENDTIME_",
+                prefs.getDaytimeEndString());
+        Intent notificationIntent = new Intent(this, MindBellMain.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notif.setLatestEventInfo(getApplicationContext(), contentTitle, contentText, contentIntent);
+        notif.flags |= Notification.FLAG_ONGOING_EVENT;
+        notificationManager.notify(uniqueNotificationID, notif);
     }
 
 }

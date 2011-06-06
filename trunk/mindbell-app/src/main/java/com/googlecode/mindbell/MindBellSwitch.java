@@ -103,10 +103,13 @@ public class MindBellSwitch extends BroadcastReceiver {
         theAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         theNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+
         prefs = new AndroidPrefsAccessor(settings, context);
 
+        Log.d(MindBellPreferences.LOGTAG, "switch is deactivating bell");
         deactivateBell(); // always cancel anything using any previous settings first
         if (prefs.isBellActive()) {
+            Log.d(MindBellPreferences.LOGTAG, "switch is activating bell");
             activateBell();
             if (prefs.doStatusNotification()) {
                 putUpStatusNotification();
