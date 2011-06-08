@@ -138,7 +138,7 @@ public class AndroidContextAccessor extends ContextAccessor {
     }
 
     private void restoreOriginalVolume() {
-        if (originalVolume != -1) {
+        if (originalVolume != -1 && !isBellSoundPlaying()) {
             setAlarmVolume(originalVolume);
         }
     }
@@ -158,13 +158,16 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     @Override
     public void startBellSound(final Runnable runWhenDone) {
-        MindBell.logDebug("Starting bell sound");
-        originalVolume = getAlarmVolume();
-        MindBell.logDebug("Remembering original music volume: " + originalVolume);
+        // MindBell.logDebug("Starting bell sound");
+
+        if (!isBellSoundPlaying()) {
+            originalVolume = getAlarmVolume();
+            // MindBell.logDebug("Remembering original alarm volume: " + originalVolume);
+        }
 
         int bellVolume = getBellVolume();
         setAlarmVolume(bellVolume);
-        MindBell.logDebug("Ringing bell with volume " + bellVolume);
+        // MindBell.logDebug("Ringing bell with volume " + bellVolume);
         Uri bellUri = Utils.getResourceUri(context, R.raw.bell10s);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
@@ -173,7 +176,7 @@ public class AndroidContextAccessor extends ContextAccessor {
             mediaPlayer.prepare();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 public void onCompletion(MediaPlayer mp) {
-                    MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
+                    // MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
                     finishBellSound();
                     if (runWhenDone != null) {
                         runWhenDone.run();
