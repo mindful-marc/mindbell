@@ -209,7 +209,7 @@ public class AndroidContextAccessor extends ContextAccessor {
                 Log.e(MindBellPreferences.LOGTAG, "Could not send: " + e.getMessage());
             }
         } else {
-            Log.d(MindBellPreferences.LOGTAG, "Bell is deactivated");
+            Log.d(MindBellPreferences.LOGTAG, "Bell is not active");
         }
     }
 
