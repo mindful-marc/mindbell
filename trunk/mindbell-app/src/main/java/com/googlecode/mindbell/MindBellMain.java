@@ -22,11 +22,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
 import com.googlecode.mindbell.logic.RingingLogic;
 
 public class MindBellMain extends Activity {
+    /**
+     * 
+     */
+    private void notifyIfNotActive() {
+        if (!new AndroidPrefsAccessor(this).isBellActive()) {
+            Toast.makeText(this, R.string.howToSet, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +56,8 @@ public class MindBellMain extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        if (e.getAction() == MotionEvent.ACTION_DOWN) {
+        if (e.getAction() == MotionEvent.ACTION_UP) {
+            notifyIfNotActive();
             RingingLogic.ringBell(AndroidContextAccessor.get(this), null);
         }
         return true;

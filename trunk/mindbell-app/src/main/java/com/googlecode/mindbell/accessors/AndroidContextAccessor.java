@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -183,7 +184,11 @@ public class AndroidContextAccessor extends ContextAccessor {
                     }
                 }
             });
+
             mediaPlayer.start();
+
+            Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+            vibrator.vibrate(20);
 
         } catch (IOException ioe) {
             Log.e(MindBellPreferences.LOGTAG, "Cannot set up bell sound", ioe);

@@ -18,6 +18,7 @@ package com.googlecode.mindbell.accessors;
 import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.googlecode.mindbell.R;
 import com.googlecode.mindbell.util.TimeOfDay;
@@ -31,6 +32,10 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final SharedPreferences settings;
     private final Context context;
     private final String[] hours;
+
+    public AndroidPrefsAccessor(Context context) {
+        this(PreferenceManager.getDefaultSharedPreferences(context), context);
+    }
 
     public AndroidPrefsAccessor(SharedPreferences settings, Context context) {
         this.settings = settings;
