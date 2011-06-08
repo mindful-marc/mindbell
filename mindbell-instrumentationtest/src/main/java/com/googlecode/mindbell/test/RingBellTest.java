@@ -45,8 +45,10 @@ public class RingBellTest extends AndroidTestCase {
     private void setBooleanContext(int keyID, boolean value) {
         String key = context.getString(keyID);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean orig = sp.getBoolean(key, value);
-        booleanSettings.put(key, orig);
+        if (!booleanSettings.containsKey(key)) {
+            boolean orig = sp.getBoolean(key, value);
+            booleanSettings.put(key, orig);
+        }
         SharedPreferences.Editor spe = sp.edit();
         spe.putBoolean(key, value);
         spe.commit();
@@ -64,6 +66,7 @@ public class RingBellTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         context = getContext();
+        fail();
     }
 
     @Override
