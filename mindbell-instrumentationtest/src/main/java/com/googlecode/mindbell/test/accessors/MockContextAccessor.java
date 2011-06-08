@@ -28,25 +28,31 @@ public class MockContextAccessor extends ContextAccessor {
     private boolean isPlaying = false;
     private long mockSoundDuration = 1000; // ms
 
-    private static final int ORIGINAL_VOLUME = 15;
-    private static final int BELL_VOLUME = 10;
+    private static final int ORIGINAL_VOLUME = 7;
+    private static final int MAX_VOLUME = 7;
+    private static final int BELL_VOLUME = 5;
 
-    private int musicVolume = ORIGINAL_VOLUME;
+    private int alarmVolume = ORIGINAL_VOLUME;
 
     @Override
     public void finishBellSound() {
         isPlaying = false;
-        musicVolume = ORIGINAL_VOLUME;
+        alarmVolume = ORIGINAL_VOLUME;
+    }
+
+    @Override
+    public int getAlarmMaxVolume() {
+        return MAX_VOLUME;
+    }
+
+    @Override
+    public int getAlarmVolume() {
+        return alarmVolume;
     }
 
     @Override
     public int getBellVolume() {
         return BELL_VOLUME;
-    }
-
-    @Override
-    public int getMusicVolume() {
-        return musicVolume;
     }
 
     public long getSoundDuration() {
@@ -79,7 +85,7 @@ public class MockContextAccessor extends ContextAccessor {
     }
 
     @Override
-    public void setMusicVolume(int volume) {
+    public void setAlarmVolume(int volume) {
     }
 
     public void setPhoneMuted(boolean value) {
@@ -110,7 +116,7 @@ public class MockContextAccessor extends ContextAccessor {
     @Override
     public void startBellSound(final Runnable runWhenDone) {
         isPlaying = true;
-        musicVolume = BELL_VOLUME;
+        alarmVolume = BELL_VOLUME;
 
         Timer t = new Timer();
         t.schedule(new TimerTask() {

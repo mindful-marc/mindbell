@@ -24,7 +24,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -32,13 +31,13 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.googlecode.mindbell.accessors.AndroidContextAccessor;
 import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
+import com.googlecode.mindbell.accessors.ContextAccessor;
 import com.googlecode.mindbell.accessors.PrefsAccessor;
 
 public class MindBellPreferences extends PreferenceActivity {
     public static final String LOGTAG = "MindBell";
-    public static final String ACTIVATEBELL = "mindBellActive";
-    public static final String RESCHEDULEBELL = "mindBellReschedule";
 
     private static final int uniqueNotificationID = R.layout.bell;
 
@@ -119,11 +118,8 @@ public class MindBellPreferences extends PreferenceActivity {
 
     private void setupVolumePreference() {
         // Dynamically fill volumes from audio manager's value range:
-        AudioManager audioMan = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int maxVolume = audioMan.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int currentVolume = audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
-        assert 0 <= currentVolume;
-        assert currentVolume <= maxVolume;
+        ContextAccessor ca = AndroidContextAccessor.get(this);
+        int maxVolume = ca.getAlarmMaxVolume();
         String[] volumes = new String[maxVolume + 1];
         for (int i = 0; i <= maxVolume; i++) {
             volumes[i] = String.valueOf(i);
@@ -131,8 +127,7 @@ public class MindBellPreferences extends PreferenceActivity {
         ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
         lp.setEntries(volumes);
         lp.setEntryValues(volumes);
-        // By default, ring bell at 2/3 of maximum volume:
-        int defaultBellVolume = maxVolume * 2 / 3;
+        int defaultBellVolume = ca.getBellDefaultVolume();
         lp.setDefaultValue(String.valueOf(defaultBellVolume));
         if (lp.getValue() == null) {
             lp.setValue(String.valueOf(defaultBellVolume));

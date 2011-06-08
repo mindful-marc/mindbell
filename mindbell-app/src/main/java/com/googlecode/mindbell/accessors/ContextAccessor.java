@@ -16,8 +16,7 @@
 package com.googlecode.mindbell.accessors;
 
 /**
- * Convenience access to information from the context. Can be replaced by test
- * implementation.
+ * Convenience access to information from the context. Can be replaced by test implementation.
  * 
  * @author marc
  * 
@@ -26,7 +25,15 @@ public abstract class ContextAccessor {
 
     public abstract void finishBellSound();
 
-    public abstract int getMusicVolume();
+    public abstract int getAlarmMaxVolume();
+
+    public abstract int getAlarmVolume();
+
+    public int getBellDefaultVolume() {
+        return (int) Math.ceil(getAlarmMaxVolume() * 0.67);
+    }
+
+    public abstract int getBellVolume();
 
     public abstract boolean isBellSoundPlaying();
 
@@ -55,12 +62,10 @@ public abstract class ContextAccessor {
 
     public abstract boolean isSettingMuteWithPhone();
 
-    public abstract void startBellSound(final Runnable runWhenDone);
-
-    public abstract void setMusicVolume(int volume);
+    public abstract void setAlarmVolume(int volume);
 
     public abstract void showMessage(String message);
 
-    public abstract int getBellVolume();
+    public abstract void startBellSound(final Runnable runWhenDone);
 
 }

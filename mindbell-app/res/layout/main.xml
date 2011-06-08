@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout 
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+
+<ImageView
+    android:src="@drawable/bell"
+    android:scaleType="fitCenter"
+    android:layout_width="fill_parent" 
+    android:layout_height="fill_parent"
+    android:layout_centerInParent="true"
+  />
+
+
+<LinearLayout
 			  android:layout_width="fill_parent" 
               android:layout_height="fill_parent"
               android:orientation="vertical" 
-              android:background="@drawable/bell"
               android:gravity="bottom">
 
 <TextView android:text="@string/explanation" android:id="@+id/tvExplanation" 
@@ -12,3 +25,4 @@
 	android:background="@drawable/semitransparent"></TextView>
 
 </LinearLayout>
+</RelativeLayout>
