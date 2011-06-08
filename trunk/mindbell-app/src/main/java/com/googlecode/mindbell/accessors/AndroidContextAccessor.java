@@ -15,23 +15,29 @@
  */
 package com.googlecode.mindbell.accessors;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.googlecode.mindbell.MindBell;
+import com.googlecode.mindbell.MindBellPreferences;
 import com.googlecode.mindbell.R;
+import com.googlecode.mindbell.util.Utils;
 
 /**
  * @author marc
  * 
  */
 public class AndroidContextAccessor extends ContextAccessor {
-    public static final int KEYMUTEOFFHOOK   = R.string.keyMuteOffHook;
+    public static final int KEYMUTEOFFHOOK = R.string.keyMuteOffHook;
     public static final int KEYMUTEWITHPHONE = R.string.keyMuteWithPhone;
 
     public static AndroidContextAccessor get(Context context) {
@@ -40,9 +46,9 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     private final Context context;
 
-    private MediaPlayer   mediaPlayer    = null;
+    private MediaPlayer mediaPlayer = null;
 
-    private int           originalVolume = -1;
+    private int originalVolume = -1;
 
     private AndroidContextAccessor(Context context) {
         this.context = context;
@@ -60,9 +66,22 @@ public class AndroidContextAccessor extends ContextAccessor {
     }
 
     @Override
+    public int getAlarmMaxVolume() {
+        AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        return audioMan.getStreamMaxVolume(AudioManager.STREAM_ALARM);
+    }
+
+    @Override
+    public int getAlarmVolume() {
+        AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        return audioMan.getStreamVolume(AudioManager.STREAM_ALARM);
+    }
+
+    @Override
     public int getBellVolume() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String bellVolumeString = settings.getString(context.getString(R.string.keyVolume), "10");
+        String bellVolumeString = settings.getString(context.getString(R.string.keyVolume),
+                String.valueOf(getBellDefaultVolume()));
         assert bellVolumeString != null;
         try {
             int bellVolume = Integer.valueOf(bellVolumeString);
@@ -76,13 +95,6 @@ public class AndroidContextAccessor extends ContextAccessor {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         String key = context.getString(keyID);
         return settings.getBoolean(key, false);
-    }
-
-    @Override
-    public int getMusicVolume() {
-        AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        return audioMan.getStreamVolume(AudioManager.STREAM_MUSIC);
-
     }
 
     @Override
@@ -114,14 +126,14 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     private void restoreOriginalVolume() {
         if (originalVolume != -1) {
-            setMusicVolume(originalVolume);
+            setAlarmVolume(originalVolume);
         }
     }
 
     @Override
-    public void setMusicVolume(int volume) {
+    public void setAlarmVolume(int volume) {
         AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        audioMan.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+        audioMan.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0);
 
     }
 
@@ -134,23 +146,35 @@ public class AndroidContextAccessor extends ContextAccessor {
     @Override
     public void startBellSound(final Runnable runWhenDone) {
         MindBell.logDebug("Starting bell sound");
-        originalVolume = getMusicVolume();
+        originalVolume = getAlarmVolume();
         MindBell.logDebug("Remembering original music volume: " + originalVolume);
 
-        mediaPlayer = MediaPlayer.create(context, R.raw.bell10s);
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            public void onCompletion(MediaPlayer mp) {
-                MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
-                finishBellSound();
-                if (runWhenDone != null) {
-                    runWhenDone.run();
-                }
-            }
-        });
         int bellVolume = getBellVolume();
-        setMusicVolume(bellVolume);
+        setAlarmVolume(bellVolume);
         MindBell.logDebug("Ringing bell with volume " + bellVolume);
-        mediaPlayer.start();
+        Uri bellUri = Utils.getResourceUri(context, R.raw.bell10s);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+        try {
+            mediaPlayer.setDataSource(context, bellUri);
+            mediaPlayer.prepare();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    MindBell.logDebug("Upon completion, originalVolume is " + originalVolume);
+                    finishBellSound();
+                    if (runWhenDone != null) {
+                        runWhenDone.run();
+                    }
+                }
+            });
+            mediaPlayer.start();
+
+        } catch (IOException ioe) {
+            Log.e(MindBellPreferences.LOGTAG, "Cannot set up bell sound", ioe);
+            if (runWhenDone != null) {
+                runWhenDone.run();
+            }
+        }
 
     }
 

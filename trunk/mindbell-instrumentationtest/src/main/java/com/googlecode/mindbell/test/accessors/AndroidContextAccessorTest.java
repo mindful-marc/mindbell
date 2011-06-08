@@ -17,7 +17,7 @@ public class AndroidContextAccessorTest extends AndroidTestCase {
         // exercise
         ca.startBellSound(null);
         // verify
-        assertEquals(ca.getBellVolume(), ca.getMusicVolume());
+        assertEquals(ca.getBellVolume(), ca.getAlarmVolume());
     }
 
     public void testFinish() {
@@ -34,12 +34,12 @@ public class AndroidContextAccessorTest extends AndroidTestCase {
     public void testOriginalVolume() {
         // setup
         ContextAccessor ca = createContextAccessor();
-        int originalVolume = ca.getMusicVolume();
+        int originalVolume = ca.getAlarmVolume();
         // exercise
         ca.startBellSound(null);
         ca.finishBellSound();
         // verify
-        assertEquals(originalVolume, ca.getMusicVolume());
+        assertEquals(originalVolume, ca.getAlarmVolume());
 
     }
 
