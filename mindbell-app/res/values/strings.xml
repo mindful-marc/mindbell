@@ -23,6 +23,8 @@
 	 According to the Buddhist teacher Thich Nhat Hanh, this is an effective 
 	 means of developing mindfulness.</string>
 
+	<string name="howToSet">To activate the bell, use the menu button.</string>
+
 	<!-- Menu -->
 	<string name="menuSettings">Settings</string>
 	

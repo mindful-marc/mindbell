@@ -24,6 +24,8 @@
 	Lehrer Thich Nhat Hanh ist dies ein wirksames Mittel, um Achtsamkeit zu entwickeln.
 	</string>
 
+	<string name="howToSet">Mit dem Menü-Knopf können Sie die Glocke aktivieren.</string>
+	
 	<!-- Menu -->
 	<string name="menuSettings">Einstellungen</string>
 	
