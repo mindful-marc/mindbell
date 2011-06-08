@@ -30,6 +30,7 @@ public class MindBellMain extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidContextAccessor.get(this).updateBellSchedule();
         setContentView(R.layout.main);
     }
 

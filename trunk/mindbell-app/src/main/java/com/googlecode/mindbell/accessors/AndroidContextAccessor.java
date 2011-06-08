@@ -17,7 +17,11 @@ package com.googlecode.mindbell.accessors;
 
 import java.io.IOException;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -28,8 +32,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.googlecode.mindbell.MindBell;
+import com.googlecode.mindbell.MindBellMain;
 import com.googlecode.mindbell.MindBellPreferences;
 import com.googlecode.mindbell.R;
+import com.googlecode.mindbell.Scheduler;
 import com.googlecode.mindbell.util.Utils;
 
 /**
@@ -39,6 +45,8 @@ import com.googlecode.mindbell.util.Utils;
 public class AndroidContextAccessor extends ContextAccessor {
     public static final int KEYMUTEOFFHOOK = R.string.keyMuteOffHook;
     public static final int KEYMUTEWITHPHONE = R.string.keyMuteWithPhone;
+
+    private static final int uniqueNotificationID = R.layout.bell;
 
     public static AndroidContextAccessor get(Context context) {
         return new AndroidContextAccessor(context);
@@ -124,6 +132,11 @@ public class AndroidContextAccessor extends ContextAccessor {
         return getBooleanSetting(KEYMUTEWITHPHONE);
     }
 
+    private void removeStatusNotification() {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(uniqueNotificationID);
+    }
+
     private void restoreOriginalVolume() {
         if (originalVolume != -1) {
             setAlarmVolume(originalVolume);
@@ -176,6 +189,43 @@ public class AndroidContextAccessor extends ContextAccessor {
             }
         }
 
+    }
+
+    public void updateBellSchedule() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        PrefsAccessor prefs = new AndroidPrefsAccessor(sharedPrefs, context);
+        if (prefs.isBellActive()) {
+            Log.d(MindBellPreferences.LOGTAG, "Bell is active");
+            if (prefs.doStatusNotification()) {
+                updateStatusNotification(prefs);
+            } else {
+                removeStatusNotification();
+            }
+            Intent intent = new Intent(context, Scheduler.class);
+            PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            try {
+                sender.send();
+            } catch (PendingIntent.CanceledException e) {
+                Log.e(MindBellPreferences.LOGTAG, "Could not send: " + e.getMessage());
+            }
+        } else {
+            Log.d(MindBellPreferences.LOGTAG, "Bell is deactivated");
+        }
+    }
+
+    private void updateStatusNotification(PrefsAccessor prefs) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        Notification notif = new Notification(R.drawable.bell_status_active, "", System.currentTimeMillis());
+        CharSequence contentTitle = context.getText(R.string.statusTitleBellActive);
+        String contentText = context.getText(R.string.statusTextBellActive).toString();
+        contentText = contentText.replace("_STARTTIME_", prefs.getDaytimeStartString()).replace("_ENDTIME_",
+                prefs.getDaytimeEndString());
+        Intent notificationIntent = new Intent(context, MindBellMain.class);
+        PendingIntent contentIntent = PendingIntent
+                .getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notif.setLatestEventInfo(context.getApplicationContext(), contentTitle, contentText, contentIntent);
+        notif.flags |= Notification.FLAG_ONGOING_EVENT;
+        notificationManager.notify(uniqueNotificationID, notif);
     }
 
 }
