@@ -25,7 +25,7 @@
                 android:title="@string/prefsActive"
                 android:summaryOff="@string/summaryNotActive"
                 android:summaryOn="@string/summaryActive"
-               	android:defaultValue="true" />
+               	android:defaultValue="false" />
     </PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategoryDisplay">

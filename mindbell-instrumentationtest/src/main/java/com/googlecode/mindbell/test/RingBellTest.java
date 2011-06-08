@@ -45,9 +45,19 @@ public class RingBellTest extends AndroidTestCase {
     private void setBooleanContext(int keyID, boolean value) {
         String key = context.getString(keyID);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        // Log.d(MindBellPreferences.LOGTAG, "The following settings are in the shared prefs:");
+        // for (Entry<String, ?> k : sp.getAll().entrySet()) {
+        // Log.d(MindBellPreferences.LOGTAG, k.getKey() + " = " + k.getValue());
+        // }
         if (!booleanSettings.containsKey(key)) {
-            boolean orig = sp.getBoolean(key, value);
-            booleanSettings.put(key, orig);
+            if (sp.contains(key)) {
+                boolean orig = sp.getBoolean(key, value);
+                // Log.d(MindBellPreferences.LOGTAG, "Remembering setting: " + key + " == " + orig);
+                booleanSettings.put(key, orig);
+            } else {
+                // Log.d(MindBellPreferences.LOGTAG, "Remembering that setting was unset: " + key);
+                booleanSettings.put(key, null);
+            }
         }
         SharedPreferences.Editor spe = sp.edit();
         spe.putBoolean(key, value);
@@ -66,7 +76,6 @@ public class RingBellTest extends AndroidTestCase {
     protected void setUp() throws Exception {
         super.setUp();
         context = getContext();
-        fail();
     }
 
     @Override
@@ -74,8 +83,15 @@ public class RingBellTest extends AndroidTestCase {
         super.tearDown();
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor spe = sp.edit();
-        for (String s : booleanSettings.keySet()) {
-            spe.putBoolean(s, booleanSettings.get(s));
+        for (String key : booleanSettings.keySet()) {
+            Boolean value = booleanSettings.get(key);
+            if (value == null) {
+                // Log.d(MindBellPreferences.LOGTAG, "Restoring setting to unset: " + key);
+                spe.remove(key);
+            } else {
+                // Log.d(MindBellPreferences.LOGTAG, "Restoring setting: " + key + " = " + value);
+                spe.putBoolean(key, value);
+            }
         }
         spe.commit();
     }
