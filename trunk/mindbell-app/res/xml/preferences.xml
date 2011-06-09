@@ -63,7 +63,7 @@
 
         <ListPreference
                 android:key="@string/keyFrequency"
-                android:defaultValue="0"
+                android:defaultValue="3600000"
                 android:title="@string/prefsFrequency"
                 android:summary=""
                 android:entries="@array/bellFrequencies"
