@@ -15,7 +15,6 @@
  */
 package com.googlecode.mindbell.accessors;
 
-import android.app.AlarmManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -84,22 +83,27 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         return hours[getDaytimeStartHour()];
     }
 
+    // @Override
+    // public long getInterval() {
+    // int frequencySetting = Integer.valueOf(settings.getString(context.getString(R.string.keyFrequency), "0"));
+    // long interval;
+    // switch (frequencySetting) {
+    // case 1: // half hour
+    // interval = AlarmManager.INTERVAL_HALF_HOUR;
+    // break;
+    // case 2: // quarter of an hour
+    // interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+    // break;
+    // default:
+    // interval = AlarmManager.INTERVAL_HOUR;
+    // }
+    // // interval = 30*1000; // 30 seconds
+    // return interval;
+    // }
+
     @Override
     public long getInterval() {
-        int frequencySetting = Integer.valueOf(settings.getString(context.getString(R.string.keyFrequency), "0"));
-        long interval;
-        switch (frequencySetting) {
-        case 1: // half hour
-            interval = AlarmManager.INTERVAL_HALF_HOUR;
-            break;
-        case 2: // quarter of an hour
-            interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-            break;
-        default:
-            interval = AlarmManager.INTERVAL_HOUR;
-        }
-        // interval = 30*1000; // 30 seconds
-        return interval;
+        return Long.valueOf(settings.getString(context.getString(R.string.keyFrequency), "3600000"));
     }
 
     @Override

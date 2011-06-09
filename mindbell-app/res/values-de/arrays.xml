@@ -15,9 +15,14 @@
 -->
 <resources>
 <string-array name="bellFrequencies">
-	<item>Stunde</item>
-	<item>halbe Stunde</item>
+    <item>5 Minuten</item>
+    <item>10 Minuten</item>
     <item>Viertelstunde</item>
+	<item>halbe Stunde</item>
+	<item>Stunde</item>
+	<item>2 Stunden</item>
+	<item>3 Stunden</item>
+	<item>4 Stunden</item>
 </string-array>
 
 <string-array name="hourStrings">

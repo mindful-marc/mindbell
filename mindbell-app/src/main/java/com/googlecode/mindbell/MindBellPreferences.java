@@ -15,9 +15,6 @@
  */
 package com.googlecode.mindbell;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -31,17 +28,18 @@ public class MindBellPreferences extends PreferenceActivity {
 
     private String[] frequencies;
     private String[] hours;
-    private final Map<Preference, String[]> listPrefStrings = new HashMap<Preference, String[]>();
 
     private final Preference.OnPreferenceChangeListener listChangeListener = new Preference.OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            // We have put the index numbers as values:
-            int val = Integer.valueOf((String) newValue);
-            String[] prefStrings = listPrefStrings.get(preference);
-            if (prefStrings != null) {
-                preference.setSummary(prefStrings[val]);
+            assert preference instanceof ListPreference;
+            ListPreference lp = (ListPreference) preference;
+            int index = lp.findIndexOfValue((String) newValue);
+            if (index != -1) {
+                CharSequence newEntry = lp.getEntries()[index];
+                lp.setSummary(newEntry);
+                return true;
             }
-            return true;
+            return false;
         }
     };
 
@@ -55,9 +53,9 @@ public class MindBellPreferences extends PreferenceActivity {
         frequencies = getResources().getStringArray(R.array.bellFrequencies);
         hours = getResources().getStringArray(R.array.hourStrings);
 
-        setupListPreference(R.string.keyFrequency, frequencies);
-        setupListPreference(R.string.keyStart, hours);
-        setupListPreference(R.string.keyEnd, hours);
+        setupListPreference(R.string.keyFrequency);
+        setupListPreference(R.string.keyStart);
+        setupListPreference(R.string.keyEnd);
 
         setupVolumePreference();
 
@@ -76,11 +74,9 @@ public class MindBellPreferences extends PreferenceActivity {
         AndroidContextAccessor.get(this).updateBellSchedule();
     }
 
-    private void setupListPreference(int keyID, String[] valueStrings) {
+    private void setupListPreference(int keyID) {
         ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(keyID));
-        int val = Integer.valueOf(lp.getValue());
-        lp.setSummary(valueStrings[val]);
-        listPrefStrings.put(lp, valueStrings);
+        lp.setSummary(lp.getEntry());
         lp.setOnPreferenceChangeListener(listChangeListener);
     }
 
@@ -101,7 +97,6 @@ public class MindBellPreferences extends PreferenceActivity {
             lp.setValue(String.valueOf(defaultBellVolume));
         }
         lp.setSummary(lp.getValue());
-        listPrefStrings.put(lp, volumes);
         lp.setOnPreferenceChangeListener(listChangeListener);
     }
 
