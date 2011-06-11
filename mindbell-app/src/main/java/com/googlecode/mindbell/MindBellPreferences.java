@@ -19,9 +19,11 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
 import com.googlecode.mindbell.accessors.ContextAccessor;
+import com.hlidskialf.android.preference.SeekBarPreference;
 
 public class MindBellPreferences extends PreferenceActivity {
     public static final String LOGTAG = "MindBell";
@@ -43,6 +45,13 @@ public class MindBellPreferences extends PreferenceActivity {
         }
     };
 
+    private final Preference.OnPreferenceChangeListener volumeChangeListener = new Preference.OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            preference.setSummary(String.valueOf(newValue));
+            return true;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,8 +66,7 @@ public class MindBellPreferences extends PreferenceActivity {
         setupListPreference(R.string.keyStart);
         setupListPreference(R.string.keyEnd);
 
-        setupVolumePreference();
-
+        setupVolumeSlider();
     }
 
     @Override
@@ -80,24 +88,15 @@ public class MindBellPreferences extends PreferenceActivity {
         lp.setOnPreferenceChangeListener(listChangeListener);
     }
 
-    private void setupVolumePreference() {
-        // Dynamically fill volumes from audio manager's value range:
+    private void setupVolumeSlider() {
         ContextAccessor ca = AndroidContextAccessor.get(this);
-        int maxVolume = ca.getAlarmMaxVolume();
-        String[] volumes = new String[maxVolume + 1];
-        for (int i = 0; i <= maxVolume; i++) {
-            volumes[i] = String.valueOf(i);
-        }
-        ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
-        lp.setEntries(volumes);
-        lp.setEntryValues(volumes);
-        int defaultBellVolume = ca.getBellDefaultVolume();
-        lp.setDefaultValue(String.valueOf(defaultBellVolume));
-        if (lp.getValue() == null) {
-            lp.setValue(String.valueOf(defaultBellVolume));
-        }
-        lp.setSummary(lp.getValue());
-        lp.setOnPreferenceChangeListener(listChangeListener);
+        SeekBarPreference sbp = (SeekBarPreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
+        sbp.setDefaultValue(ca.getBellDefaultVolume());
+        sbp.setMax(ca.getAlarmMaxVolume());
+        int currentVolume = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.keyVolume),
+                ca.getBellDefaultVolume());
+        sbp.setSummary(String.valueOf(currentVolume));
+        sbp.setOnPreferenceChangeListener(volumeChangeListener);
     }
 
 }

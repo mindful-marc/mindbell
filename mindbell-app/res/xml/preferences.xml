@@ -42,9 +42,10 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategorySound">
-		<ListPreference android:title="@string/prefsVolume"
-			android:dialogTitle="@string/prefsVolume"
-			android:key="@string/keyVolume" />
+
+		<com.hlidskialf.android.preference.SeekBarPreference android:key="@string/keyVolume"
+	        android:title="@string/prefsVolume"
+			android:dialogTitle="@string/prefsVolume" />
 		<CheckBoxPreference android:key="@string/keyMuteWithPhone"
 			android:title="@string/prefsMuteWithPhone"
 			android:summaryOn="@string/summaryMuteWithPhone"
