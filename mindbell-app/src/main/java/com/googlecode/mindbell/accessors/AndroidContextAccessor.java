@@ -89,15 +89,7 @@ public class AndroidContextAccessor extends ContextAccessor {
     @Override
     public int getBellVolume() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String bellVolumeString = settings.getString(context.getString(R.string.keyVolume),
-                String.valueOf(getBellDefaultVolume()));
-        assert bellVolumeString != null;
-        try {
-            int bellVolume = Integer.valueOf(bellVolumeString);
-            return bellVolume;
-        } catch (NumberFormatException nfe) {
-            return 10;
-        }
+        return settings.getInt(context.getString(R.string.keyVolume), getBellDefaultVolume());
     }
 
     private boolean getBooleanSetting(int keyID) {
