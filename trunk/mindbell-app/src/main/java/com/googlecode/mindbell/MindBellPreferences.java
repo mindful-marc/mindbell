@@ -19,11 +19,8 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
-import com.googlecode.mindbell.accessors.ContextAccessor;
-import com.hlidskialf.android.preference.SeekBarPreference;
 
 public class MindBellPreferences extends PreferenceActivity {
     public static final String LOGTAG = "MindBell";
@@ -66,7 +63,7 @@ public class MindBellPreferences extends PreferenceActivity {
         setupListPreference(R.string.keyStart);
         setupListPreference(R.string.keyEnd);
 
-        setupVolumeSlider();
+        // setupVolumeSlider();
     }
 
     @Override
@@ -88,15 +85,15 @@ public class MindBellPreferences extends PreferenceActivity {
         lp.setOnPreferenceChangeListener(listChangeListener);
     }
 
-    private void setupVolumeSlider() {
-        ContextAccessor ca = AndroidContextAccessor.get(this);
-        SeekBarPreference sbp = (SeekBarPreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
-        sbp.setDefaultValue(ca.getBellDefaultVolume());
-        sbp.setMax(ca.getAlarmMaxVolume());
-        int currentVolume = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.keyVolume),
-                ca.getBellDefaultVolume());
-        sbp.setSummary(String.valueOf(currentVolume));
-        sbp.setOnPreferenceChangeListener(volumeChangeListener);
-    }
+    // private void setupVolumeSlider() {
+    // ContextAccessor ca = AndroidContextAccessor.get(this);
+    // VolumePreference sbp = (VolumePreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
+    // sbp.setDefaultValue(ca.getBellDefaultVolume());
+    // sbp.setMax(ca.getAlarmMaxVolume());
+    // int currentVolume = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.keyVolume),
+    // ca.getBellDefaultVolume());
+    // sbp.setSummary(String.valueOf(currentVolume));
+    // sbp.setOnPreferenceChangeListener(volumeChangeListener);
+    // }
 
 }

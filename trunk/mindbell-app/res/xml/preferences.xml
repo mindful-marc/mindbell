@@ -16,7 +16,8 @@
 
 
 <PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:mindful="http://mindful-apps.com/ns">
 
     <PreferenceCategory
             android:title="@string/prefsCategoryGlobal">
@@ -42,10 +43,17 @@
 	</PreferenceCategory>
 
 	<PreferenceCategory android:title="@string/prefsCategorySound">
-
+<!-- 
 		<com.hlidskialf.android.preference.SeekBarPreference android:key="@string/keyVolume"
 	        android:title="@string/prefsVolume"
 			android:dialogTitle="@string/prefsVolume" />
+			 -->
+			 
+		<com.googlecode.mindbell.preference.VolumePreference  android:key="@string/keyVolume"
+	        android:title="@string/prefsVolume"
+			android:dialogTitle="@string/prefsVolume"
+			mindful:ringtone="@raw/bell10s"
+			mindful:streamType="4" />
 		<CheckBoxPreference android:key="@string/keyMuteWithPhone"
 			android:title="@string/prefsMuteWithPhone"
 			android:summaryOn="@string/summaryMuteWithPhone"
