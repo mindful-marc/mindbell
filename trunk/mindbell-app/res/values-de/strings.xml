@@ -28,6 +28,7 @@
 	
 	<!-- Menu -->
 	<string name="menuSettings">Einstellungen</string>
+	<string name="menuAbout">Über mindful-apps.com</string>
 	
 	<!-- Preference window -->
 	<string name="preferencesTitle">Glocke der Achtsamkeit: Einstellungen</string>
