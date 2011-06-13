@@ -8,8 +8,8 @@
     
 
 <ImageView android:id="@+id/bell" 
-	android:layout_width="wrap_content" 
-	android:layout_height="wrap_content"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
 	android:scaleType="fitCenter"
-	android:src="@drawable/bell"></ImageView>
+	android:src="@drawable/bell" android:layout_gravity="center"></ImageView>
 </LinearLayout>

@@ -16,6 +16,7 @@
 package com.googlecode.mindbell;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -46,13 +47,38 @@ public class MindBellMain extends Activity {
     }
 
     @Override
+    protected Dialog onCreateDialog(int id) {
+        Dialog dialog;
+        switch (id) {
+        case R.id.about:
+            dialog = new Dialog(this);
+            dialog.setContentView(R.layout.about_dialog);
+            dialog.setTitle(R.string.menuAbout);
+            break;
+        default:
+            dialog = null;
+        }
+        return dialog;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the currently selected menu XML resource.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.settings, menu);
-        MenuItem settingsItem = menu.getItem(0);
+        MenuItem settingsItem = menu.findItem(R.id.settings);
         settingsItem.setIntent(new Intent(this, MindBellPreferences.class));
+        // MenuItem aboutItem = menu.findItem(R.id.about);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.about) {
+            showDialog(R.id.about);
+            return true;
+        }
+        return false;
     }
 
     @Override

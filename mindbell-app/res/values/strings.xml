@@ -25,8 +25,16 @@
 
 	<string name="howToSet">To activate the bell, use the menu button.</string>
 
+	<string name="aboutText">The Mindfulness Bell is created for you by mindful-apps.com.
+	
+	mindful-apps.com aims to give you a support for staying mindful in a busy life - for remembering what really counts.
+	
+	Visit us at http://www.mindful-apps.com!  
+	</string>
+
 	<!-- Menu -->
 	<string name="menuSettings">Settings</string>
+	<string name="menuAbout">About mindful-apps.com</string>
 	
 	<!-- Preference window -->
 	<string name="preferencesTitle">Mindfulness Bell Preferences</string>
