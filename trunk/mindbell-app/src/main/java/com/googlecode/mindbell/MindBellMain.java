@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
 import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
+import com.googlecode.mindbell.accessors.ContextAccessor;
 import com.googlecode.mindbell.logic.RingingLogic;
 
 public class MindBellMain extends Activity {
@@ -58,7 +59,8 @@ public class MindBellMain extends Activity {
     public boolean onTouchEvent(MotionEvent e) {
         if (e.getAction() == MotionEvent.ACTION_UP) {
             notifyIfNotActive();
-            RingingLogic.ringBell(AndroidContextAccessor.get(this), null);
+            ContextAccessor ca = AndroidContextAccessor.get(this);
+            RingingLogic.ringBell(ca, null);
         }
         return true;
     }

@@ -17,7 +17,6 @@ package com.googlecode.mindbell.logic;
 
 import com.googlecode.mindbell.accessors.ContextAccessor;
 
-
 /**
  * @author marc
  * 
@@ -30,8 +29,7 @@ public class RingingLogic {
      * @param context
      *            the context in which to play the sound.
      * @param runWhenDone
-     *            an optional Runnable to call on completion of the sound, or
-     *            null.
+     *            an optional Runnable to call on completion of the sound, or null.
      * @return true if bell started ringing, false otherwise
      */
     public static boolean ringBell(ContextAccessor ca, final Runnable runWhenDone) {
