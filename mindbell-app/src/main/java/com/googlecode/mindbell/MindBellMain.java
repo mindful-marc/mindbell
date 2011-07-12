@@ -83,7 +83,7 @@ public class MindBellMain extends Activity {
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
-        if (e.getAction() == MotionEvent.ACTION_UP) {
+        if (e.getAction() == MotionEvent.ACTION_DOWN) {
             notifyIfNotActive();
             ContextAccessor ca = AndroidContextAccessor.get(this);
             RingingLogic.ringBell(ca, null);

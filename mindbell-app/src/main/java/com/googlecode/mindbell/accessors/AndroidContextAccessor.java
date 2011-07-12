@@ -210,6 +210,7 @@ public class AndroidContextAccessor extends ContextAccessor {
             }
         } else {
             Log.d(MindBellPreferences.LOGTAG, "Bell is not active");
+            removeStatusNotification(); // whatever the setting, no notification if bell is not active
         }
     }
 
