@@ -52,7 +52,6 @@ public class MindBellMain extends Activity {
         switch (id) {
         case R.id.about:
             dialog = new AboutDialog(this);
-
             break;
         default:
             dialog = null;
