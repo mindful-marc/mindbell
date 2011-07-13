@@ -15,6 +15,9 @@
  */
 package com.googlecode.mindbell.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,6 +30,27 @@ import android.net.Uri;
  */
 public class Utils {
 
+    public static String getResourceAsString(Context context, int resid) throws NotFoundException {
+        Resources resources = context.getResources();
+        InputStream is = resources.openRawResource(resid);
+        try {
+            if (is != null && is.available() > 0) {
+                final byte[] data = new byte[is.available()];
+                is.read(data);
+                return new String(data);
+            }
+        } catch (IOException ioe) {
+            throw new RuntimeException(ioe);
+        } finally {
+            try {
+                is.close();
+            } catch (IOException ioe) {
+                // ignore
+            }
+        }
+        return null;
+    }
+
     /**
      * Convert a resource id into a Uri.
      * 
@@ -37,6 +61,5 @@ public class Utils {
     public static Uri getResourceUri(Context context, int resid) throws NotFoundException {
         Resources resources = context.getResources();
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + resources.getResourcePackageName(resid) + "/" + resid);
-
     }
 }

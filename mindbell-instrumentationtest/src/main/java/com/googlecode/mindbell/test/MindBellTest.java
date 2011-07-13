@@ -16,7 +16,7 @@ import com.googlecode.mindbell.MindBell;
 public class MindBellTest extends ActivityInstrumentationTestCase2<MindBell> {
 
     private Activity mActivity;
-    private View     mView;
+    private View mView;
 
     public MindBellTest() {
         super("com.googlecode.mindbell", MindBell.class);
@@ -28,10 +28,6 @@ public class MindBellTest extends ActivityInstrumentationTestCase2<MindBell> {
         mActivity = getActivity();
         mView = mActivity.findViewById(com.googlecode.mindbell.R.id.bell);
 
-    }
-
-    public void testDummy() {
-        assertTrue(true);
     }
 
     public void testPreconditions() {
