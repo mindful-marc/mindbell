@@ -15,6 +15,7 @@
  */
 package com.googlecode.mindbell;
 
+import static com.googlecode.mindbell.MindBellPreferences.TAG;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,7 @@ import com.googlecode.mindbell.logic.RingingLogic;
 public class MindBell extends Activity {
 
     public static void logDebug(String message) {
-        Log.d(MindBellPreferences.LOGTAG, message);
+        Log.d(TAG, message);
     }
 
     /** Called when the activity is first created. */

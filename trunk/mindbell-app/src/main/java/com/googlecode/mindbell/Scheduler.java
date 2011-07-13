@@ -15,6 +15,8 @@
  */
 package com.googlecode.mindbell;
 
+import static com.googlecode.mindbell.MindBellPreferences.TAG;
+
 import java.util.Calendar;
 
 import android.app.AlarmManager;
@@ -45,14 +47,14 @@ public class Scheduler extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.d(MindBellPreferences.LOGTAG, "random scheduler reached");
+        Log.d(TAG, "random scheduler reached");
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
         PrefsAccessor prefs = new AndroidPrefsAccessor(settings, context);
 
         if (!prefs.isBellActive()) {
-            Log.d(MindBellPreferences.LOGTAG, "bell is not active -- not ringing, not rescheduling.");
+            Log.d(TAG, "bell is not active -- not ringing, not rescheduling.");
             return;
         }
 
@@ -63,28 +65,27 @@ public class Scheduler extends BroadcastReceiver {
         long nextBellTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowMillis, prefs);
         alarmManager.set(AlarmManager.RTC_WAKEUP, nextBellTimeMillis, sender);
         TimeOfDay nextBellTime = new TimeOfDay(nextBellTimeMillis);
-        Log.d(MindBellPreferences.LOGTAG,
-                "scheduled next bell alarm for " + nextBellTime.hour + ":" + String.format("%02d", nextBellTime.minute));
+        Log.d(TAG, "scheduled next bell alarm for " + nextBellTime.hour + ":" + String.format("%02d", nextBellTime.minute));
 
         // ring if daytime
         if (!prefs.isDaytime()) {
-            Log.d(MindBellPreferences.LOGTAG, "not ringing, it is night time");
+            Log.d(TAG, "not ringing, it is night time");
             return;
         }
 
         if (prefs.doShowBell()) {
-            Log.d(MindBellPreferences.LOGTAG, "audio-visual ring");
+            Log.d(TAG, "audio-visual ring");
 
             Intent ringBell = new Intent(context, MindBell.class);
             PendingIntent bellIntent = PendingIntent.getActivity(context, -1, ringBell, PendingIntent.FLAG_UPDATE_CURRENT);
             try {
                 bellIntent.send();
             } catch (CanceledException e) {
-                Log.d(MindBellPreferences.LOGTAG, "cannot ring audio-visual bell: " + e.getMessage());
+                Log.d(TAG, "cannot ring audio-visual bell: " + e.getMessage());
             }
 
         } else { // ring audio-only immediately:
-            Log.d(MindBellPreferences.LOGTAG, "audio-only ring");
+            Log.d(TAG, "audio-only ring");
             new KeepAlive(AndroidContextAccessor.get(context), 15000).ringBell();
         }
 

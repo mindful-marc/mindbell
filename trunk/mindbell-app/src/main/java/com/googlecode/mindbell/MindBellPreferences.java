@@ -19,16 +19,17 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
 
 public class MindBellPreferences extends PreferenceActivity {
-    public static final String LOGTAG = "MindBell";
-
-    private String[] frequencies;
-    private String[] hours;
-
-    private final Preference.OnPreferenceChangeListener listChangeListener = new Preference.OnPreferenceChangeListener() {
+    /**
+     * @author marc
+     *
+     */
+    private static final class ListChangeListener implements Preference.OnPreferenceChangeListener {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             assert preference instanceof ListPreference;
             ListPreference lp = (ListPreference) preference;
@@ -40,14 +41,11 @@ public class MindBellPreferences extends PreferenceActivity {
             }
             return false;
         }
-    };
+    }
 
-    private final Preference.OnPreferenceChangeListener volumeChangeListener = new Preference.OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-            preference.setSummary(String.valueOf(newValue));
-            return true;
-        }
-    };
+    public static final String TAG = "MindBell";
+
+    private final Preference.OnPreferenceChangeListener listChangeListener = new ListChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +54,10 @@ public class MindBellPreferences extends PreferenceActivity {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
-        frequencies = getResources().getStringArray(R.array.bellFrequencies);
-        hours = getResources().getStringArray(R.array.hourStrings);
-
         setupListPreference(R.string.keyFrequency);
         setupListPreference(R.string.keyStart);
         setupListPreference(R.string.keyEnd);
 
-        // setupVolumeSlider();
     }
 
     @Override
@@ -77,6 +71,8 @@ public class MindBellPreferences extends PreferenceActivity {
         // Log.e(LOGTAG, "Could not send: " + e.getMessage());
         // }
         AndroidContextAccessor.get(this).updateBellSchedule();
+        int volume = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.keyVolume), -2);
+        Log.d(TAG, "Volume: " + String.valueOf(volume));
     }
 
     private void setupListPreference(int keyID) {
@@ -84,16 +80,5 @@ public class MindBellPreferences extends PreferenceActivity {
         lp.setSummary(lp.getEntry());
         lp.setOnPreferenceChangeListener(listChangeListener);
     }
-
-    // private void setupVolumeSlider() {
-    // ContextAccessor ca = AndroidContextAccessor.get(this);
-    // VolumePreference sbp = (VolumePreference) getPreferenceScreen().findPreference(getText(R.string.keyVolume));
-    // sbp.setDefaultValue(ca.getBellDefaultVolume());
-    // sbp.setMax(ca.getAlarmMaxVolume());
-    // int currentVolume = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.keyVolume),
-    // ca.getBellDefaultVolume());
-    // sbp.setSummary(String.valueOf(currentVolume));
-    // sbp.setOnPreferenceChangeListener(volumeChangeListener);
-    // }
 
 }
