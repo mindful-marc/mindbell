@@ -33,32 +33,16 @@ public class AboutDialog extends Dialog {
      * @param context
      */
     public AboutDialog(Context context) {
-        super(context);
-        init(context);
-    }
-
-    /**
-     * @param context
-     * @param cancelable
-     * @param cancelListener
-     */
-    public AboutDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, cancelable, cancelListener);
-        init(context);
-    }
-
-    /**
-     * @param context
-     * @param theme
-     */
-    public AboutDialog(Context context, int theme) {
-        super(context, theme);
+        super(context, R.style.aboutDialog);
         init(context);
     }
 
     private void init(Context context) {
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.about_dialog);
-        setTitle(R.string.menuAbout);
+        // setTitle(R.string.menuAbout);
+
         WebView w = (WebView) findViewById(R.id.aboutWebview);
         String html = Utils.getResourceAsString(context, R.raw.about);
         if (html != null) {
