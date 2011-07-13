@@ -15,6 +15,8 @@
  */
 package com.googlecode.mindbell.accessors;
 
+import static com.googlecode.mindbell.MindBellPreferences.TAG;
+
 import java.io.IOException;
 
 import android.app.Notification;
@@ -34,7 +36,6 @@ import android.widget.Toast;
 
 import com.googlecode.mindbell.MindBell;
 import com.googlecode.mindbell.MindBellMain;
-import com.googlecode.mindbell.MindBellPreferences;
 import com.googlecode.mindbell.R;
 import com.googlecode.mindbell.Scheduler;
 import com.googlecode.mindbell.util.Utils;
@@ -183,7 +184,7 @@ public class AndroidContextAccessor extends ContextAccessor {
             vibrator.vibrate(20);
 
         } catch (IOException ioe) {
-            Log.e(MindBellPreferences.LOGTAG, "Cannot set up bell sound", ioe);
+            Log.e(TAG, "Cannot set up bell sound", ioe);
             if (runWhenDone != null) {
                 runWhenDone.run();
             }
@@ -195,7 +196,7 @@ public class AndroidContextAccessor extends ContextAccessor {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         PrefsAccessor prefs = new AndroidPrefsAccessor(sharedPrefs, context);
         if (prefs.isBellActive()) {
-            Log.d(MindBellPreferences.LOGTAG, "Bell is active");
+            Log.d(TAG, "Bell is active");
             if (prefs.doStatusNotification()) {
                 updateStatusNotification(prefs);
             } else {
@@ -206,10 +207,10 @@ public class AndroidContextAccessor extends ContextAccessor {
             try {
                 sender.send();
             } catch (PendingIntent.CanceledException e) {
-                Log.e(MindBellPreferences.LOGTAG, "Could not send: " + e.getMessage());
+                Log.e(TAG, "Could not send: " + e.getMessage());
             }
         } else {
-            Log.d(MindBellPreferences.LOGTAG, "Bell is not active");
+            Log.d(TAG, "Bell is not active");
             removeStatusNotification(); // whatever the setting, no notification if bell is not active
         }
     }

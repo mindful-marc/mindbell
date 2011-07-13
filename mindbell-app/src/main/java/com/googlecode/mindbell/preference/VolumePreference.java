@@ -248,6 +248,10 @@ public class VolumePreference extends SeekBarPreference implements
         mRingtoneResId = attrs.getAttributeResourceValue(mindfulns, "ringtone", -1);
     }
 
+    // public void onActivityStop() {
+    // cleanup();
+    // }
+
     /**
      * Do clean up. This can be called multiple times!
      */
@@ -269,10 +273,6 @@ public class VolumePreference extends SeekBarPreference implements
         }
 
     }
-
-    // public void onActivityStop() {
-    // cleanup();
-    // }
 
     @Override
     protected void onBindDialogView(View view) {
@@ -296,6 +296,10 @@ public class VolumePreference extends SeekBarPreference implements
 
         if (!positiveResult && mSeekBarVolumizer != null) {
             mSeekBarVolumizer.revertVolume();
+        }
+
+        if (positiveResult && mSeekBarVolumizer != null) {
+            persistInt(mSeekBarVolumizer.mLastProgress);
         }
 
         cleanup();
