@@ -51,9 +51,8 @@ public class MindBellMain extends Activity {
         Dialog dialog;
         switch (id) {
         case R.id.about:
-            dialog = new Dialog(this);
-            dialog.setContentView(R.layout.about_dialog);
-            dialog.setTitle(R.string.menuAbout);
+            dialog = new AboutDialog(this);
+
             break;
         default:
             dialog = null;

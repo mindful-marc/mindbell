@@ -1,20 +1,16 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout_root"
-              android:orientation="horizontal"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:padding="10dp"
-              >
-    <ImageView android:id="@+id/image"
-               android:layout_width="wrap_content"
-               android:layout_height="fill_parent"
-               android:layout_marginRight="10dp"
-               android:src="@drawable/icon"
-               />
-    <TextView android:id="@+id/text"
-              android:layout_width="wrap_content"
-              android:layout_height="fill_parent"
-              android:textColor="#FFF"
-              android:text="@string/aboutText"
-              />
-</LinearLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:padding="10dp">
+	<Button android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_alignParentBottom="true"
+			android:text="OK"
+			android:id="@+id/aboutOkButton"
+			android:layout_centerInParent="true"/>
+    <WebView android:id="@+id/aboutWebview"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:layout_above="@id/aboutOkButton"/>
+</RelativeLayout>
