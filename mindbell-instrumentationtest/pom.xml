@@ -19,12 +19,20 @@
     <parent>
         <groupId>com.googlecode.mindbell</groupId>
         <artifactId>mindbell</artifactId>
-        <version>2.0-SNAPSHOT</version>
+        <version>2.0</version>
     </parent>
     <groupId>com.googlecode.mindbell</groupId>
     <artifactId>mindbell-instrumentationtest</artifactId>
     <packaging>apk</packaging>
     <name>MindBell Instrumentation Test</name>
+
+ <properties>
+      <!--
+        When not running a release, we are deploying the plain artifact (so no classifier)
+        This is overridden during the release.
+      -->
+      <zipaligned-classifier></zipaligned-classifier>
+  </properties>
 
     <dependencies>
         <dependency>
@@ -67,6 +75,43 @@
         </plugins>
     </build>
 
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <properties>
+        <!--
+          When running a release, we must deployed the final artifact (signed and zipaligned).
+        -->
+        <zipaligned-classifier>aligned</zipaligned-classifier>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-jarsigner-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>sign-application-it-apk</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+            <artifactId>maven-android-plugin</artifactId>
+            <configuration>
+              <sign>
+                <debug>false</debug>
+              </sign>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 
 </project>
