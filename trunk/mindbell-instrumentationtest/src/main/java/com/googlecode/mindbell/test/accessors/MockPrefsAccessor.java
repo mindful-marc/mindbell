@@ -32,6 +32,11 @@ public class MockPrefsAccessor extends PrefsAccessor {
     }
 
     @Override
+    public int getBellVolume(int defaultVolume) {
+        return 5;
+    }
+
+    @Override
     public TimeOfDay getDaytimeEnd() {
         return daytimeEnd;
     }
