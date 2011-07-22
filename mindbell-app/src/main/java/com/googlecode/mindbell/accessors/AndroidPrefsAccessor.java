@@ -15,9 +15,11 @@
  */
 package com.googlecode.mindbell.accessors;
 
+import static com.googlecode.mindbell.MindBellPreferences.TAG;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.googlecode.mindbell.R;
 import com.googlecode.mindbell.util.TimeOfDay;
@@ -146,7 +148,12 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
 
     @Override
     public long getInterval() {
-        return Long.valueOf(settings.getString(keyFrequency, "3600000"));
+        Log.d(TAG, "frequency: " + settings.getString(keyFrequency, "3600000"));
+        long interval = Long.valueOf(settings.getString(keyFrequency, "3600000"));
+        if (interval < 5 * 60000) { // min: 5 minutes
+            interval = 5 * 60000;
+        }
+        return interval;
     }
 
     @Override
