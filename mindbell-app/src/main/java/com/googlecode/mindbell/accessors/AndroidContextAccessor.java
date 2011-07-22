@@ -60,6 +60,8 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     private int originalVolume = -1;
 
+    private PrefsAccessor prefs = null;
+
     private AndroidContextAccessor(Context context) {
         this.context = context;
     }
@@ -89,14 +91,10 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     @Override
     public int getBellVolume() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        return settings.getInt(context.getString(R.string.keyVolume), getBellDefaultVolume());
-    }
-
-    private boolean getBooleanSetting(int keyID) {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        String key = context.getString(keyID);
-        return settings.getBoolean(key, false);
+        if (prefs == null) {
+            prefs = new AndroidPrefsAccessor(context);
+        }
+        return prefs.getBellVolume(getBellDefaultVolume());
     }
 
     @Override
@@ -118,12 +116,18 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     @Override
     public boolean isSettingMuteOffHook() {
-        return getBooleanSetting(KEYMUTEOFFHOOK);
+        if (prefs == null) {
+            prefs = new AndroidPrefsAccessor(context);
+        }
+        return prefs.isSettingMuteOffHook();
     }
 
     @Override
     public boolean isSettingMuteWithPhone() {
-        return getBooleanSetting(KEYMUTEWITHPHONE);
+        if (prefs == null) {
+            prefs = new AndroidPrefsAccessor(context);
+        }
+        return prefs.isSettingMuteWithPhone();
     }
 
     private void removeStatusNotification() {

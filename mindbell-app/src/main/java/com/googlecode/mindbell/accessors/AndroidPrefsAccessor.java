@@ -32,6 +32,16 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final Context context;
     private final String[] hours;
 
+    private final String keyShow;
+    private final String keyStatus;
+    private final String keyEnd;
+    private final String keyStart;
+    private final String keyFrequency;
+    private final String keyActive;
+    private final String keyVolume;
+    private final String keyMuteOffHook;
+    private final String keyMuteWithPhone;
+
     public AndroidPrefsAccessor(Context context) {
         this(PreferenceManager.getDefaultSharedPreferences(context), context);
     }
@@ -40,16 +50,67 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         this.settings = settings;
         this.context = context;
         hours = context.getResources().getStringArray(R.array.hourStrings);
+
+        keyShow = context.getString(R.string.keyShow);
+        keyStatus = context.getString(R.string.keyStatus);
+        keyEnd = context.getString(R.string.keyEnd);
+        keyStart = context.getString(R.string.keyStart);
+        keyFrequency = context.getString(R.string.keyFrequency);
+        keyActive = context.getString(R.string.keyActive);
+        keyVolume = context.getString(R.string.keyVolume);
+        keyMuteOffHook = context.getString(R.string.keyMuteOffHook);
+        keyMuteWithPhone = context.getString(R.string.keyMuteWithPhone);
+        checkSettings();
+    }
+
+    /**
+     * Check that any data in the SharedPreferences are of the expected type. Should we find anything that doesn't fit the
+     * expectations, we delete it.
+     */
+    private void checkSettings() {
+        // boolean settings:
+        String[] booleanSettings = new String[] { keyShow, keyStatus, keyActive, keyMuteOffHook, keyMuteWithPhone };
+        for (String s : booleanSettings) {
+            try {
+                settings.getBoolean(s, false);
+            } catch (ClassCastException e) {
+                settings.edit().remove(s).commit();
+            }
+        }
+        // string settings:
+        String[] stringSettings = new String[] { keyStart, keyEnd, keyFrequency };
+        for (String s : stringSettings) {
+            try {
+                settings.getString(s, null);
+            } catch (ClassCastException e) {
+                settings.edit().remove(s).commit();
+            }
+        }
+        // int settings:
+        String[] intSettings = new String[] { keyVolume };
+        for (String s : intSettings) {
+            try {
+                settings.getInt(s, 0);
+            } catch (ClassCastException e) {
+                settings.edit().remove(s).commit();
+            }
+        }
+
     }
 
     @Override
     public boolean doShowBell() {
-        return settings.getBoolean(context.getString(R.string.keyShow), true);
+        return settings.getBoolean(keyShow, true);
     }
 
     @Override
     public boolean doStatusNotification() {
-        return settings.getBoolean(context.getString(R.string.keyStatus), false);
+        return settings.getBoolean(keyStatus, false);
+    }
+
+    @Override
+    public int getBellVolume(int defaultVolume) {
+        return settings.getInt(keyVolume, defaultVolume);
     }
 
     @Override
@@ -61,7 +122,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
      * @return
      */
     private int getDaytimeEndHour() {
-        return Integer.valueOf(settings.getString(context.getString(R.string.keyEnd), "0"));
+        return Integer.valueOf(settings.getString(keyEnd, "0"));
     }
 
     @Override
@@ -75,7 +136,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     }
 
     private int getDaytimeStartHour() {
-        return Integer.valueOf(settings.getString(context.getString(R.string.keyStart), "0"));
+        return Integer.valueOf(settings.getString(keyStart, "0"));
     }
 
     @Override
@@ -83,32 +144,24 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         return hours[getDaytimeStartHour()];
     }
 
-    // @Override
-    // public long getInterval() {
-    // int frequencySetting = Integer.valueOf(settings.getString(context.getString(R.string.keyFrequency), "0"));
-    // long interval;
-    // switch (frequencySetting) {
-    // case 1: // half hour
-    // interval = AlarmManager.INTERVAL_HALF_HOUR;
-    // break;
-    // case 2: // quarter of an hour
-    // interval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-    // break;
-    // default:
-    // interval = AlarmManager.INTERVAL_HOUR;
-    // }
-    // // interval = 30*1000; // 30 seconds
-    // return interval;
-    // }
-
     @Override
     public long getInterval() {
-        return Long.valueOf(settings.getString(context.getString(R.string.keyFrequency), "3600000"));
+        return Long.valueOf(settings.getString(keyFrequency, "3600000"));
     }
 
     @Override
     public boolean isBellActive() {
-        return settings.getBoolean(context.getString(R.string.keyActive), false);
+        return settings.getBoolean(keyActive, false);
+    }
+
+    @Override
+    public boolean isSettingMuteOffHook() {
+        return settings.getBoolean(keyMuteOffHook, true);
+    }
+
+    @Override
+    public boolean isSettingMuteWithPhone() {
+        return settings.getBoolean(keyMuteWithPhone, true);
     }
 
 }

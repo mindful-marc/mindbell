@@ -36,6 +36,8 @@ public abstract class PrefsAccessor {
 
     public abstract boolean doStatusNotification();
 
+    public abstract int getBellVolume(int defaultVolume);
+
     public abstract TimeOfDay getDaytimeEnd();
 
     public abstract String getDaytimeEndString();
@@ -83,6 +85,14 @@ public abstract class PrefsAccessor {
         TimeOfDay tEnd = getDaytimeEnd();
 
         return t.isInInterval(tStart, tEnd);
+    }
+
+    public boolean isSettingMuteOffHook() {
+        return true;
+    }
+
+    public boolean isSettingMuteWithPhone() {
+        return true;
     }
 
 }
