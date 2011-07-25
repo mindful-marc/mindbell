@@ -15,7 +15,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.googlecode.mindbell"
-      android:versionName="2.0" android:versionCode="5">
+      android:versionName="2.1" android:versionCode="6">
       <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
       <uses-permission android:name="android.permission.VIBRATE" />
       
@@ -38,6 +38,8 @@
         </activity>
 
         <receiver android:name="Scheduler" android:process=":remote">
+        </receiver>
+        <receiver android:name="UpdateBellSchedule" android:process=":remote">
         	<intent-filter>
         		<action android:name="android.intent.action.BOOT_COMPLETED"/>
         	</intent-filter>
