@@ -15,19 +15,20 @@
  */
 package com.googlecode.mindbell;
 
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
 
 public class MindBellPreferences extends PreferenceActivity {
     /**
      * @author marc
-     *
+     * 
      */
     private static final class ListChangeListener implements Preference.OnPreferenceChangeListener {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -51,6 +52,9 @@ public class MindBellPreferences extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // check settings, delete any settings that are not valid
+        new AndroidPrefsAccessor(this);
+
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
 
@@ -63,16 +67,14 @@ public class MindBellPreferences extends PreferenceActivity {
     @Override
     public void onPause() {
         super.onPause();
-        // Intent intent = new Intent(this, MindBellSwitch.class);
-        // PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        // try {
-        // sender.send();
-        // } catch (PendingIntent.CanceledException e) {
-        // Log.e(LOGTAG, "Could not send: " + e.getMessage());
-        // }
-        AndroidContextAccessor.get(this).updateBellSchedule();
-        int volume = PreferenceManager.getDefaultSharedPreferences(this).getInt(getString(R.string.keyVolume), -2);
-        Log.d(TAG, "Volume: " + String.valueOf(volume));
+
+        Intent intent = new Intent(this, UpdateBellSchedule.class);
+        PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        try {
+            sender.send();
+        } catch (PendingIntent.CanceledException e) {
+            Log.e(TAG, "Could not send: " + e.getMessage());
+        }
     }
 
     private void setupListPreference(int keyID) {
