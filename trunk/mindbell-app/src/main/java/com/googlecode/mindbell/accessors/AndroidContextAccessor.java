@@ -86,7 +86,9 @@ public class AndroidContextAccessor extends ContextAccessor {
     @Override
     public int getAlarmVolume() {
         AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        return audioMan.getStreamVolume(AudioManager.STREAM_ALARM);
+        int alarmVolume = audioMan.getStreamVolume(AudioManager.STREAM_ALARM);
+        Log.d(TAG, "Alarm volume is " + alarmVolume);
+        return alarmVolume;
     }
 
     @Override
@@ -94,7 +96,9 @@ public class AndroidContextAccessor extends ContextAccessor {
         if (prefs == null) {
             prefs = new AndroidPrefsAccessor(context);
         }
-        return prefs.getBellVolume(getBellDefaultVolume());
+        int bellVolume = prefs.getBellVolume(getBellDefaultVolume());
+        Log.d(TAG, "Bell volume is " + bellVolume);
+        return bellVolume;
     }
 
     @Override
@@ -144,6 +148,7 @@ public class AndroidContextAccessor extends ContextAccessor {
     @Override
     public void setAlarmVolume(int volume) {
         AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        Log.d(TAG, "Setting alarm volume to " + volume);
         audioMan.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0);
 
     }
@@ -160,12 +165,12 @@ public class AndroidContextAccessor extends ContextAccessor {
 
         if (!isBellSoundPlaying()) {
             originalVolume = getAlarmVolume();
-            // MindBell.logDebug("Remembering original alarm volume: " + originalVolume);
+            MindBell.logDebug("Remembering original alarm volume: " + originalVolume);
         }
 
         int bellVolume = getBellVolume();
         setAlarmVolume(bellVolume);
-        // MindBell.logDebug("Ringing bell with volume " + bellVolume);
+        MindBell.logDebug("Ringing bell with volume " + bellVolume);
         Uri bellUri = Utils.getResourceUri(context, R.raw.bell10s);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
