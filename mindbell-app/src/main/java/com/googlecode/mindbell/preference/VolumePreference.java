@@ -137,7 +137,8 @@ public class VolumePreference extends SeekBarPreference implements
         private void initSeekBar(SeekBar seekBar) {
             seekBar.setMax(mAudioManager.getStreamMaxVolume(mStreamType));
             mOriginalStreamVolume = mAudioManager.getStreamVolume(mStreamType);
-            seekBar.setProgress(mOriginalStreamVolume);
+            int originalSetting = getPersistedInt(mOriginalStreamVolume);
+            seekBar.setProgress(originalSetting);
             seekBar.setOnSeekBarChangeListener(this);
 
             mContext.getContentResolver().registerContentObserver(System.getUriFor(System.VOLUME_SETTINGS[mStreamType]), false,
@@ -150,6 +151,7 @@ public class VolumePreference extends SeekBarPreference implements
             }
             if (mRingtone != null) {
                 mRingtone.setStreamType(mStreamType);
+                postSetVolume(seekBar.getProgress());
                 sample();
             }
         }
@@ -240,10 +242,10 @@ public class VolumePreference extends SeekBarPreference implements
 
     public VolumePreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        Log.d(TAG, "Attributes: " + attrs.getAttributeCount());
-        for (int i = 0; i < attrs.getAttributeCount(); i++) {
-            Log.d(TAG, "Attr " + i + ": " + attrs.getAttributeName(i) + "=" + attrs.getAttributeValue(i));
-        }
+        // Log.d(TAG, "Attributes: " + attrs.getAttributeCount());
+        // for (int i = 0; i < attrs.getAttributeCount(); i++) {
+        // Log.d(TAG, "Attr " + i + ": " + attrs.getAttributeName(i) + "=" + attrs.getAttributeValue(i));
+        // }
         mStreamType = attrs.getAttributeIntValue(mindfulns, "streamType", AudioManager.STREAM_NOTIFICATION);
         mRingtoneResId = attrs.getAttributeResourceValue(mindfulns, "ringtone", -1);
     }
@@ -299,7 +301,11 @@ public class VolumePreference extends SeekBarPreference implements
         }
 
         if (positiveResult && mSeekBarVolumizer != null) {
+            Log.d(TAG, "Persisting volume as " + mSeekBarVolumizer.mLastProgress);
             persistInt(mSeekBarVolumizer.mLastProgress);
+            Log.d(TAG, "And reverting volume to " + mSeekBarVolumizer.mOriginalStreamVolume);
+            mSeekBarVolumizer.revertVolume();
+
         }
 
         cleanup();
@@ -329,6 +335,7 @@ public class VolumePreference extends SeekBarPreference implements
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
+        Log.d(TAG, "onRestoreInstanceState");
         if (state == null || !state.getClass().equals(SavedState.class)) {
             // Didn't save state for us in onSaveInstanceState
             super.onRestoreInstanceState(state);
@@ -352,9 +359,11 @@ public class VolumePreference extends SeekBarPreference implements
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
         if (isPersistent()) {
+            Log.d(TAG, "onSaveInstanceState: isPersistent");
             // No need to save instance state since it's persistent
             return superState;
         }
+        Log.d(TAG, "onSaveInstanceState: is NOT Persistent");
 
         final SavedState myState = new SavedState(superState);
         if (mSeekBarVolumizer != null) {
