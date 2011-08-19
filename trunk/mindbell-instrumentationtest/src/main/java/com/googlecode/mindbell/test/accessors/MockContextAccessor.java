@@ -30,7 +30,7 @@ public class MockContextAccessor extends ContextAccessor {
 
     private static final int ORIGINAL_VOLUME = 7;
     private static final int MAX_VOLUME = 7;
-    private static final int BELL_VOLUME = 5;
+    private static final float BELL_VOLUME = 0.5f;
 
     private int alarmVolume = ORIGINAL_VOLUME;
 
@@ -51,7 +51,7 @@ public class MockContextAccessor extends ContextAccessor {
     }
 
     @Override
-    public int getBellVolume() {
+    public float getBellVolume() {
         return BELL_VOLUME;
     }
 
@@ -116,7 +116,6 @@ public class MockContextAccessor extends ContextAccessor {
     @Override
     public void startBellSound(final Runnable runWhenDone) {
         isPlaying = true;
-        alarmVolume = BELL_VOLUME;
 
         Timer t = new Timer();
         t.schedule(new TimerTask() {

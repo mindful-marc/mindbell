@@ -47,6 +47,9 @@
 	
 	<string name="prefsCategorySound">Klang</string>
 	<string name="prefsVolume">Lautstärke</string>
+	<string name="prefsVibrate">Vibrieren</string>
+	<string name="summaryVibrate">Glocke vibriert beim Läuten</string>
+	<string name="summaryNoVibrate">Glocke vibriert nicht beim Läuten</string>
 	<string name="prefsMuteWithPhone">Mit Telefon stummschalten</string>
 	<string name="summaryMuteWithPhone">Glocke schlägt nicht im Lautlosmodus</string>
 	<string name="summaryNoMuteWithPhone">Glocke schlägt auch im Lautlosmodus</string>

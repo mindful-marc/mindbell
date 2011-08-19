@@ -39,6 +39,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final String keyStatus;
     private final String keyMuteOffHook;
     private final String keyMuteWithPhone;
+    private final String keyVibrate;
 
     private final String keyFrequency;
     private final String keyStart;
@@ -51,12 +52,13 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final boolean defaultStatus = true;
     private final boolean defaultMuteOffHook = true;
     private final boolean defaultMuteWithPhone = true;
+    private final boolean defaultVibrate = false;
 
     private final String defaultFrequency = "3600000";
     private final String defaultStart = "9";
     private final String defaultEnd = "21";
 
-    private final int defaultVolume = 5;
+    private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
     public AndroidPrefsAccessor(Context context) {
         this(PreferenceManager.getDefaultSharedPreferences(context), context);
@@ -72,6 +74,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         keyStatus = context.getString(R.string.keyStatus);
         keyMuteOffHook = context.getString(R.string.keyMuteOffHook);
         keyMuteWithPhone = context.getString(R.string.keyMuteWithPhone);
+        keyVibrate = context.getString(R.string.keyVibrate);
 
         keyFrequency = context.getString(R.string.keyFrequency);
         keyStart = context.getString(R.string.keyStart);
@@ -87,7 +90,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
      */
     private void checkSettings() {
         // boolean settings:
-        String[] booleanSettings = new String[] { keyShow, keyStatus, keyActive, keyMuteOffHook, keyMuteWithPhone };
+        String[] booleanSettings = new String[] { keyShow, keyStatus, keyActive, keyMuteOffHook, keyMuteWithPhone, keyVibrate };
         for (String s : booleanSettings) {
             try {
                 settings.getBoolean(s, false);
@@ -106,11 +109,11 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
                 Log.w(TAG, "Removed setting '" + s + "' since it had wrong type");
             }
         }
-        // int settings:
-        String[] intSettings = new String[] { keyVolume };
-        for (String s : intSettings) {
+        // float settings:
+        String[] floatSettings = new String[] { keyVolume };
+        for (String s : floatSettings) {
             try {
-                settings.getInt(s, 0);
+                settings.getFloat(s, 0);
             } catch (ClassCastException e) {
                 settings.edit().remove(s).commit();
                 Log.w(TAG, "Removed setting '" + s + "' since it had wrong type");
@@ -152,6 +155,11 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
             settings.edit().putBoolean(keyMuteWithPhone, defaultMuteWithPhone).commit();
             Log.w(TAG, "Reset missing setting for '" + keyMuteWithPhone + "' to '" + defaultMuteWithPhone + "'");
         }
+        if (!settings.contains(keyVibrate)) {
+            settings.edit().putBoolean(keyVibrate, defaultVibrate).commit();
+            Log.w(TAG, "Reset missing setting for '" + keyVibrate + "' to '" + defaultVibrate + "'");
+        }
+
         if (!settings.contains(keyFrequency)) {
             settings.edit().putString(keyFrequency, defaultFrequency).commit();
             Log.w(TAG, "Reset missing setting for '" + keyFrequency + "' to '" + defaultFrequency + "'");
@@ -165,7 +173,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
             Log.w(TAG, "Reset missing setting for '" + keyEnd + "' to '" + defaultEnd + "'");
         }
         if (!settings.contains(keyVolume)) {
-            settings.edit().putInt(keyVolume, defaultVolume).commit();
+            settings.edit().putFloat(keyVolume, defaultVolume).commit();
             Log.w(TAG, "Reset missing setting for '" + keyVolume + "' to '" + defaultVolume + "'");
         }
         // and report the settings:
@@ -177,8 +185,8 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         for (String s : stringSettings) {
             sb.append(s).append(" = ").append(settings.getString(s, null)).append("\n");
         }
-        for (String s : intSettings) {
-            sb.append(s).append(" = ").append(settings.getInt(s, -1)).append("\n");
+        for (String s : floatSettings) {
+            sb.append(s).append(" = ").append(settings.getFloat(s, -1)).append("\n");
         }
         Log.d(TAG, sb.toString());
     }
@@ -194,8 +202,16 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     }
 
     @Override
-    public int getBellVolume(int defaultVolume) {
-        return settings.getInt(keyVolume, defaultVolume);
+    public float getBellVolume(float defaultVolume) {
+        if (defaultVolume > 1f) {
+            throw new IllegalArgumentException("Default volume out of range: " + defaultVolume);
+        }
+        try {
+            return settings.getFloat(keyVolume, defaultVolume);
+        } catch (ClassCastException e) {
+            Log.e(TAG, "Not a float for volume", e);
+            return defaultVolume;
+        }
     }
 
     @Override
@@ -252,6 +268,11 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean isSettingMuteWithPhone() {
         return settings.getBoolean(keyMuteWithPhone, defaultMuteWithPhone);
+    }
+
+    @Override
+    public boolean isSettingVibrate() {
+        return settings.getBoolean(keyVibrate, defaultVibrate);
     }
 
 }

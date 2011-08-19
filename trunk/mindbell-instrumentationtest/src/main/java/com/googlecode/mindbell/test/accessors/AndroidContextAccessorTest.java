@@ -17,7 +17,7 @@ public class AndroidContextAccessorTest extends AndroidTestCase {
         // exercise
         ca.startBellSound(null);
         // verify
-        assertEquals(ca.getBellVolume(), ca.getAlarmVolume());
+        assertEquals(ca.getAlarmMaxVolume(), ca.getAlarmVolume());
     }
 
     public void testFinish() {

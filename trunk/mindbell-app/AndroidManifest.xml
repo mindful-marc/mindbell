@@ -15,7 +15,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.googlecode.mindbell"
-      android:versionName="2.2" android:versionCode="7">
+      android:versionName="2.3" android:versionCode="8">
       <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
       <uses-permission android:name="android.permission.VIBRATE" />
       
