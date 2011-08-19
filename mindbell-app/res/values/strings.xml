@@ -53,6 +53,9 @@
 
 	<string name="prefsCategorySound">Sound</string>
 	<string name="prefsVolume">Volume</string>
+	<string name="prefsVibrate">Vibrate</string>
+	<string name="summaryVibrate">Bell vibrates while ringing</string>
+	<string name="summaryNoVibrate">Bell does not vibrate while ringing</string>
 	<string name="prefsMuteWithPhone">Mute with phone</string>
 	<string name="summaryMuteWithPhone">Bell will not ring when phone is muted</string>
 	<string name="summaryNoMuteWithPhone">Ring bell even when phone is muted</string>
@@ -78,6 +81,7 @@
 	<string name="keyStatus">status</string>
 	<string name="keyVolume">volume</string>
 	<string name="keyMuteWithPhone">muteWithPhone</string>
+	<string name="keyVibrate">vibrate</string>
 	<string name="keyMuteOffHook">muteOffHook</string>
 	<string name="keyFrequency">frequency</string>
 	<string name="keyStart">start</string>

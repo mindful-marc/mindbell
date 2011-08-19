@@ -32,8 +32,8 @@ public class MockPrefsAccessor extends PrefsAccessor {
     }
 
     @Override
-    public int getBellVolume(int defaultVolume) {
-        return 5;
+    public float getBellVolume(float defaultVolume) {
+        return 0.5f;
     }
 
     @Override

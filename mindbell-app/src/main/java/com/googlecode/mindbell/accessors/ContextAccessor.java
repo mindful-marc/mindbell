@@ -22,6 +22,9 @@ package com.googlecode.mindbell.accessors;
  * 
  */
 public abstract class ContextAccessor {
+    public static final float MINUS_ONE_DB = 0.891250938f;
+    public static final float MINUS_THREE_DB = 0.707945784f;
+    public static final float MINUS_SIX_DB = 0.501187234f;
 
     public abstract void finishBellSound();
 
@@ -29,11 +32,11 @@ public abstract class ContextAccessor {
 
     public abstract int getAlarmVolume();
 
-    public int getBellDefaultVolume() {
-        return (int) Math.ceil(getAlarmMaxVolume() * 0.67);
+    public float getBellDefaultVolume() {
+        return MINUS_SIX_DB;
     }
 
-    public abstract int getBellVolume();
+    public abstract float getBellVolume();
 
     public abstract boolean isBellSoundPlaying();
 
@@ -61,6 +64,10 @@ public abstract class ContextAccessor {
     public abstract boolean isSettingMuteOffHook();
 
     public abstract boolean isSettingMuteWithPhone();
+
+    public boolean isSettingVibrate() {
+        return false;
+    }
 
     public abstract void setAlarmVolume(int volume);
 

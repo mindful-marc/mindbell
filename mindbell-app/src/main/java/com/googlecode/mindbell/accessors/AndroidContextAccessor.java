@@ -58,8 +58,6 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     private MediaPlayer mediaPlayer = null;
 
-    private int originalVolume = -1;
-
     private PrefsAccessor prefs = null;
 
     private AndroidContextAccessor(Context context) {
@@ -74,7 +72,6 @@ public class AndroidContextAccessor extends ContextAccessor {
         }
         mediaPlayer.release();
         mediaPlayer = null;
-        restoreOriginalVolume();
     }
 
     @Override
@@ -92,11 +89,11 @@ public class AndroidContextAccessor extends ContextAccessor {
     }
 
     @Override
-    public int getBellVolume() {
+    public float getBellVolume() {
         if (prefs == null) {
             prefs = new AndroidPrefsAccessor(context);
         }
-        int bellVolume = prefs.getBellVolume(getBellDefaultVolume());
+        float bellVolume = prefs.getBellVolume(getBellDefaultVolume());
         Log.d(TAG, "Bell volume is " + bellVolume);
         return bellVolume;
     }
@@ -134,15 +131,17 @@ public class AndroidContextAccessor extends ContextAccessor {
         return prefs.isSettingMuteWithPhone();
     }
 
+    @Override
+    public boolean isSettingVibrate() {
+        if (prefs == null) {
+            prefs = new AndroidPrefsAccessor(context);
+        }
+        return prefs.isSettingVibrate();
+    }
+
     private void removeStatusNotification() {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(uniqueNotificationID);
-    }
-
-    private void restoreOriginalVolume() {
-        if (originalVolume != -1 && !isBellSoundPlaying()) {
-            setAlarmVolume(originalVolume);
-        }
     }
 
     @Override
@@ -163,17 +162,13 @@ public class AndroidContextAccessor extends ContextAccessor {
     public void startBellSound(final Runnable runWhenDone) {
         // MindBell.logDebug("Starting bell sound");
 
-        if (!isBellSoundPlaying()) {
-            originalVolume = getAlarmVolume();
-            MindBell.logDebug("Remembering original alarm volume: " + originalVolume);
-        }
-
-        int bellVolume = getBellVolume();
-        setAlarmVolume(bellVolume);
+        setAlarmVolume(getAlarmMaxVolume());
+        float bellVolume = getBellVolume();
         MindBell.logDebug("Ringing bell with volume " + bellVolume);
         Uri bellUri = Utils.getResourceUri(context, R.raw.bell10s);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+        mediaPlayer.setVolume(bellVolume, bellVolume);
         try {
             mediaPlayer.setDataSource(context, bellUri);
             mediaPlayer.prepare();
@@ -190,7 +185,12 @@ public class AndroidContextAccessor extends ContextAccessor {
             mediaPlayer.start();
 
             Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-            vibrator.vibrate(20);
+            if (isSettingVibrate()) {
+                long[] pattern = new long[] { 0, 100, 100, 800 };
+                vibrator.vibrate(pattern, -1);
+            } else {
+                vibrator.vibrate(20);
+            }
 
         } catch (IOException ioe) {
             Log.e(TAG, "Cannot set up bell sound", ioe);

@@ -10,13 +10,13 @@ public class ContextAccessorTest extends TestCase {
         return new MockContextAccessor();
     }
 
-    public void testBellVolume() {
+    public void testAlarmVolume() {
         // setup
         ContextAccessor ca = createContextAccessor();
         // exercise
         ca.startBellSound(null);
         // verify
-        assertEquals(ca.getBellVolume(), ca.getAlarmVolume());
+        assertEquals(ca.getAlarmMaxVolume(), ca.getAlarmVolume());
     }
 
     public void testFinish() {
@@ -107,8 +107,8 @@ public class ContextAccessorTest extends TestCase {
 
     public void testReasonableDefault() {
         ContextAccessor ca = createContextAccessor();
-        int bellDefaultVolume = ca.getBellDefaultVolume();
+        float bellDefaultVolume = ca.getBellDefaultVolume();
         assertTrue(0 <= bellDefaultVolume);
-        assertTrue(bellDefaultVolume <= ca.getAlarmMaxVolume());
+        assertTrue(bellDefaultVolume <= 1);
     }
 }

@@ -49,11 +49,16 @@
 			android:dialogTitle="@string/prefsVolume" />
 			 -->
 			 
-		<com.googlecode.mindbell.preference.VolumePreference  android:key="@string/keyVolume"
+		<com.googlecode.mindbell.preference.MediaVolumePreference  android:key="@string/keyVolume"
 	        android:title="@string/prefsVolume"
 			android:dialogTitle="@string/prefsVolume"
 			mindful:ringtone="@raw/bell10s"
 			mindful:streamType="4" />
+		<CheckBoxPreference android:key="@string/keyVibrate"
+			android:title="@string/prefsVibrate"
+			android:summaryOn="@string/summaryVibrate"
+			android:summaryOff="@string/summaryNoVibrate"
+			android:defaultValue="false"/>
 		<CheckBoxPreference android:key="@string/keyMuteWithPhone"
 			android:title="@string/prefsMuteWithPhone"
 			android:summaryOn="@string/summaryMuteWithPhone"

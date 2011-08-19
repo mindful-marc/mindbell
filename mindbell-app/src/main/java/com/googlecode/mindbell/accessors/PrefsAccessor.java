@@ -36,7 +36,7 @@ public abstract class PrefsAccessor {
 
     public abstract boolean doStatusNotification();
 
-    public abstract int getBellVolume(int defaultVolume);
+    public abstract float getBellVolume(float defaultVolume);
 
     public abstract TimeOfDay getDaytimeEnd();
 
@@ -93,6 +93,10 @@ public abstract class PrefsAccessor {
 
     public boolean isSettingMuteWithPhone() {
         return true;
+    }
+
+    public boolean isSettingVibrate() {
+        return false;
     }
 
 }
