@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2010 Marc Schroeder
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <string name="app_name">Glocke der Achtsamkeit</string>
+
+	<!-- Main window -->
+	<string name="explanation">
+	Die Glocke der Achtsamkeit erklingt regelmäßig im Laufe des Tages. Dadurch können wir 
+	kurz innehalten und uns bewusst werden, was wir gerade tun, und in welchem 
+	Geisteszustand wir das angehen, was wir gerade tun. Gemäß dem buddhistischen
+	Lehrer Thich Nhat Hanh ist dies ein wirksames Mittel, um Achtsamkeit zu entwickeln.
+	</string>
+
+	<string name="howToSet">Mit dem Menü-Knopf können Sie die Glocke aktivieren.</string>
+	
+	<!-- Menu -->
+	<string name="menuSettings">Einstellungen</string>
+	<string name="menuAbout">Über mindful-apps.com</string>
+	
+	<!-- Preference window -->
+	<string name="preferencesTitle">Glocke der Achtsamkeit: Einstellungen</string>
+	<string name="prefsCategoryGlobal">Globale Einstellungen</string>
+	<string name="prefsActive">Glocke der Achtsamkeit aktiv</string>
+	<string name="summaryNotActive">Glocke ist derzeit ausgeschaltet.</string>
+	<string name="summaryActive">Glocke ist derzeit angeschaltet.</string>
+	
+	<string name="prefsCategoryDisplay">Anzeige</string>
+	<string name="prefsShow">Glocke beim Schlagen zeigen</string>
+	<string name="summaryShow">Klang abspielen und Glocke anzeigen</string>
+	<string name="summaryDontShow">Klang abspielen aber Glocke nicht zeigen</string>
+	<string name="prefsStatus">Status-Icon anzeigen</string>
+	<string name="summaryStatus">Zeige Status-Icon wenn Glocke aktiv ist</string>
+	<string name="summaryNoStatus">Kein Status-Icon</string>
+	
+	<string name="prefsCategorySound">Klang</string>
+	<string name="prefsVolume">Lautstärke</string>
+	<string name="prefsVibrate">Vibrieren</string>
+	<string name="summaryVibrate">Glocke vibriert beim Läuten</string>
+	<string name="summaryNoVibrate">Glocke vibriert nicht beim Läuten</string>
+	<string name="prefsMuteWithPhone">Mit Telefon stummschalten</string>
+	<string name="summaryMuteWithPhone">Glocke schlägt nicht im Lautlosmodus</string>
+	<string name="summaryNoMuteWithPhone">Glocke schlägt auch im Lautlosmodus</string>
+	<string name="prefsMuteOffHook">Beim Telefonieren still</string>
+	<string name="summaryNotMuted">Glocke läutet auch während Telefongesprächen</string>
+	<string name="summaryMuted">Glocke läutet nicht während Telefongesprächen</string>
+
+	<string name="prefsCategoryDetails">Details</string>
+	<string name="prefsFrequency">Schlage die Glocke etwa alle...</string>
+	<string name="prefsStart">Starte Glocke täglich um...</string>
+	<string name="prefsEnd">Beende Glocke täglich um...</string>
+
+	<string name="prefsCategoryTry">Testen:</string>
+	<string name="prefsRingBell">Glocke schlagen</string>
+
+
+	<!-- Status bar notification -->
+	<string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
+	<string name="statusTextBellActive">Glocke schlägt von _STARTTIME_ bis _ENDTIME_</string>
+</resources>
