@@ -186,7 +186,7 @@ public class AndroidContextAccessor extends ContextAccessor {
 
             Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
             if (isSettingVibrate()) {
-                long[] pattern = new long[] { 0, 100, 100, 800 };
+                long[] pattern = new long[] { 100, 200, 100, 600 };
                 vibrator.vibrate(pattern, -1);
             } else {
                 vibrator.vibrate(20);
