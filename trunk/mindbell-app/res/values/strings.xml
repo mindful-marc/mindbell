@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2010 Marc Schroeder
+<!--
+     Copyright (C) 2010 Marc Schroeder
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,77 +15,80 @@
      limitations under the License.
 -->
 <resources>
+
     <string name="app_name">Mindfulness Bell</string>
 
-	<!-- Main window -->
-	<string name="explanation">The Mindfulness Bell rings periodically during the day,
+    <!-- Main window -->
+    <string name="explanation">The Mindfulness Bell rings periodically during the day,
 	 to give you the opportunity to hold on for a moment and consider what you are 
 	 currently doing, and in what state of mind you are while you are doing it. 
 	 According to the Buddhist teacher Thich Nhat Hanh, this is an effective 
 	 means of developing mindfulness.</string>
-
-	<string name="howToSet">To activate the bell, use the menu button.</string>
-
-	<string name="aboutText">The Mindfulness Bell is created for you by mindful-apps.com.
+    <string name="howToSet">To activate the bell, use the menu button.</string>
+    <string name="aboutText">he Mindfulness Bell is created for you by mindful-apps.com.
 	
 	mindful-apps.com aims to give you a support for staying mindful in a busy life - for remembering what really counts.
 	
-	Visit us at http://www.mindful-apps.com!   
-	</string>
+	Visit us at http://www.mindful-apps.com!   </string>
 
-	<!-- Menu -->
-	<string name="menuSettings">Settings</string>
-	<string name="menuAbout">About mindful-apps.com</string>
-	
-	<!-- Preference window -->
-	<string name="preferencesTitle">Mindfulness Bell Preferences</string>
-	<string name="prefsCategoryGlobal">Global settings</string>
-	<string name="prefsActive">Mindfulness Bell Active</string>
-	<string name="summaryNotActive">Mindfulness Bell is turned off.</string>
-	<string name="summaryActive">Mindfulness Bell is turned on.</string>
+    <!-- Menu -->
+    <string name="menuSettings">Settings</string>
+    <string name="menuAbout">About mindful-apps.com</string>
 
-	<string name="prefsCategoryDisplay">Display</string>
-	<string name="prefsShow">Show bell when ringing</string>
-	<string name="summaryShow">Play sound and show bell</string>
-	<string name="summaryDontShow">Play sound but do not show bell</string>
-	<string name="prefsStatus">Show status icon</string>
-	<string name="summaryStatus">Show status icon when bell is active</string>
-	<string name="summaryNoStatus">No status icon, set and forget</string>
+    <!-- Preference window -->
+    <string name="preferencesTitle">Mindfulness Bell Preferences</string>
+    <string name="prefsCategoryGlobal">Global settings</string>
+    <string name="prefsActive">Mindfulness Bell Active</string>
+    <string name="summaryNotActive">Mindfulness Bell is turned off.</string>
+    <string name="summaryActive">Mindfulness Bell is turned on.</string>
+    <string name="prefsCategoryDisplay">Display</string>
+    <string name="prefsShow">Show bell when ringing</string>
+    <string name="summaryShow">Play sound and show bell</string>
+    <string name="summaryDontShow">Play sound but do not show bell</string>
+    <string name="prefsStatus">Show status icon</string>
+    <string name="summaryStatus">Show status icon when bell is active</string>
+    <string name="summaryNoStatus">No status icon, set and forget</string>
+    <string name="prefsCategorySound">Sound</string>
+    <string name="prefsVolume">Volume</string>
+    <string name="prefsVibrate">Vibrate</string>
+    <string name="summaryVibrate">Bell vibrates while ringing</string>
+    <string name="summaryNoVibrate">Bell does not vibrate while ringing</string>
+    <string name="prefsMuteWithPhone">Mute with phone</string>
+    <string name="summaryMuteWithPhone">Bell will not ring when phone is muted</string>
+    <string name="summaryNoMuteWithPhone">Ring bell even when phone is muted</string>
+    <string name="prefsMuteOffHook">Mute during phone calls</string>
+    <string name="summaryNotMuted">Bell will also ring during phone calls</string>
+    <string name="summaryMuted">Bell will not ring during phone calls</string>
+    <string name="prefsCategoryDetails">Details</string>
+    <string name="prefsFrequency">Ring bell about every...</string>
+    <string name="prefsStart">Start bell every day at...</string>
+    <string name="prefsEnd">Stop bell every day at...</string>
+    <string name="prefsCategoryTry">Try it now</string>
+    <string name="prefsRingBell">Ring Bell</string>
 
-	<string name="prefsCategorySound">Sound</string>
-	<string name="prefsVolume">Volume</string>
-	<string name="prefsVibrate">Vibrate</string>
-	<string name="summaryVibrate">Bell vibrates while ringing</string>
-	<string name="summaryNoVibrate">Bell does not vibrate while ringing</string>
-	<string name="prefsMuteWithPhone">Mute with phone</string>
-	<string name="summaryMuteWithPhone">Bell will not ring when phone is muted</string>
-	<string name="summaryNoMuteWithPhone">Ring bell even when phone is muted</string>
-	<string name="prefsMuteOffHook">Mute during phone calls</string>
-	<string name="summaryNotMuted">Bell will also ring during phone calls</string>
-	<string name="summaryMuted">Bell will not ring during phone calls</string>
+    <!-- Status bar notification -->
+    <string name="statusTitleBellActive">Mindfulness Bell is active</string>
+    <string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
 
-	<string name="prefsCategoryDetails">Details</string>
-	<string name="prefsFrequency">Ring bell about every...</string>
-	<string name="prefsStart">Start bell every day at...</string>
-	<string name="prefsEnd">Stop bell every day at...</string>
+    <!-- Offer popup -->
+    <string name="main_title_popup">New from Mindful Apps</string>
+    <string name="main_message1_popup">Nature Sounds Alarm Clock - the alarm that you set with your finger!</string>
+    <string name="main_message2_popup">Wake up to pleasant nature sounds.</string>
+    <string name="main_yes_popup">Show me</string>
+    <string name="main_no_popup">No thanks</string>
+    <string name="main_uri_popup">market://details?id=com.mindful_apps.alarm.natural</string>
 
-	<string name="prefsCategoryTry">Try it now</string>
-	<string name="prefsRingBell">Ring Bell</string>
+    <!-- Preference keys (don't localize) -->
+    <string name="keyActive">active</string>
+    <string name="keyShow">show</string>
+    <string name="keyStatus">status</string>
+    <string name="keyVolume">volume</string>
+    <string name="keyMuteWithPhone">muteWithPhone</string>
+    <string name="keyVibrate">vibrate</string>
+    <string name="keyMuteOffHook">muteOffHook</string>
+    <string name="keyFrequency">frequency</string>
+    <string name="keyStart">start</string>
+    <string name="keyEnd">end</string>
+    <string name="keyTry">try</string>
 
-	<!-- Status bar notification -->
-	<string name="statusTitleBellActive">Mindfulness Bell is active</string>
-	<string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
-	
-	<!-- Preference keys (don't localize) -->
-	<string name="keyActive">active</string>
-	<string name="keyShow">show</string>
-	<string name="keyStatus">status</string>
-	<string name="keyVolume">volume</string>
-	<string name="keyMuteWithPhone">muteWithPhone</string>
-	<string name="keyVibrate">vibrate</string>
-	<string name="keyMuteOffHook">muteOffHook</string>
-	<string name="keyFrequency">frequency</string>
-	<string name="keyStart">start</string>
-	<string name="keyEnd">end</string>
-	<string name="keyTry">try</string>
 </resources>
