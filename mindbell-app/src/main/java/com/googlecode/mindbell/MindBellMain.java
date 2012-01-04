@@ -16,13 +16,19 @@
 package com.googlecode.mindbell;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
@@ -31,6 +37,24 @@ import com.googlecode.mindbell.accessors.ContextAccessor;
 import com.googlecode.mindbell.logic.RingingLogic;
 
 public class MindBellMain extends Activity {
+    private static final String POPUP_PREFS_FILE = "popup-prefs";
+    private static final String KEY_POPUP = "popup";
+    private SharedPreferences popupPrefs;
+
+    private void checkWhetherToShowPopup() {
+        if (!hasShownPopup()) {
+            setPopupShown(true);
+            showPopup();
+        }
+    }
+
+    /**
+     * @return
+     */
+    private boolean hasShownPopup() {
+        return popupPrefs.getBoolean(KEY_POPUP, false);
+    }
+
     /**
      * 
      */
@@ -43,6 +67,7 @@ public class MindBellMain extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        popupPrefs = getSharedPreferences(POPUP_PREFS_FILE, MODE_PRIVATE);
         setContentView(R.layout.main);
     }
 
@@ -87,5 +112,38 @@ public class MindBellMain extends Activity {
             RingingLogic.ringBell(ca, null);
         }
         return true;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            checkWhetherToShowPopup();
+        }
+    }
+
+    private void setPopupShown(boolean shown) {
+        popupPrefs.edit().putBoolean(KEY_POPUP, shown).commit();
+    }
+
+    /**
+     * 
+     */
+    private void showPopup() {
+        DialogInterface.OnClickListener yesListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                takeUserToOffer();
+            }
+        };
+
+        View popupView = LayoutInflater.from(this).inflate(R.layout.popup_dialog, null);
+        new AlertDialog.Builder(this).setTitle(R.string.main_title_popup).setIcon(R.drawable.alarm_natural_icon)
+                .setView(popupView).setPositiveButton(R.string.main_yes_popup, yesListener)
+                .setNegativeButton(R.string.main_no_popup, null).show();
+    }
+
+    private void takeUserToOffer() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.main_uri_popup))));
     }
 }
