@@ -53,6 +53,9 @@
     <string name="prefsMuteOffHook">Beim Telefonieren still</string>
     <string name="summaryNotMuted">Glocke läutet auch während Telefongesprächen</string>
     <string name="summaryMuted">Glocke läutet nicht während Telefongesprächen</string>
+    <string name="prefsMuteInFlightMode">Im Flugmodus still</string>
+    <string name="summaryNotMutedInFlightMode">Glocke läutet auch im Flugmodus</string>
+    <string name="summaryMutedInFlightMode">Glocke läutet nicht im Flugmodus</string>
     <string name="prefsCategoryDetails">Details</string>
     <string name="prefsFrequency">Schlage die Glocke etwa alle...</string>
     <string name="prefsStart">Starte Glocke täglich um...</string>

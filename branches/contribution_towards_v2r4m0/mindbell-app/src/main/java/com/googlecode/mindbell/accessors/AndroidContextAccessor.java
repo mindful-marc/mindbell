@@ -30,6 +30,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.provider.Settings.Global;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -45,6 +47,7 @@ import com.googlecode.mindbell.util.Utils;
  * 
  */
 public class AndroidContextAccessor extends ContextAccessor {
+    public static final int KEYMUTEINFLIGHTMODE = R.string.keyMuteInFlightMode;
     public static final int KEYMUTEOFFHOOK = R.string.keyMuteOffHook;
     public static final int KEYMUTEWITHPHONE = R.string.keyMuteWithPhone;
 
@@ -104,6 +107,12 @@ public class AndroidContextAccessor extends ContextAccessor {
     }
 
     @Override
+    public boolean isPhoneInFlightMode() {
+        // Using AIRPLANE_MODE_ON requires API-Level 17 (JELLY_BEAN_MR1, 4.2)
+        return Settings.System.getInt(context.getContentResolver(), Global.AIRPLANE_MODE_ON, 0) == 1;
+    }
+
+    @Override
     public boolean isPhoneMuted() {
         final AudioManager audioMan = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         return audioMan.getStreamVolume(AudioManager.STREAM_RING) == 0;
@@ -113,6 +122,14 @@ public class AndroidContextAccessor extends ContextAccessor {
     public boolean isPhoneOffHook() {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE;
+    }
+
+    @Override
+    public boolean isSettingMuteInFlightMode() {
+        if (prefs == null) {
+            prefs = new AndroidPrefsAccessor(context);
+        }
+        return prefs.isSettingMuteInFlightMode();
     }
 
     @Override

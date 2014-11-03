@@ -16,8 +16,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.googlecode.mindbell"
-    android:versionCode="9"
-    android:versionName="2.3.1" >
+    android:versionCode="10"
+    android:versionName="2.4.0" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -62,6 +62,6 @@
         </receiver>
     </application>
 
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="17" />
 
 </manifest>
