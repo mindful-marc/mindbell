@@ -30,8 +30,6 @@ import android.net.Uri;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Settings.Global;
-import android.provider.Settings;
-import android.provider.Settings.Global;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;

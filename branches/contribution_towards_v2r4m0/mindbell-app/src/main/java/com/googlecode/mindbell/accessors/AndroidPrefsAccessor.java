@@ -18,7 +18,6 @@ package com.googlecode.mindbell.accessors;
 import static com.googlecode.mindbell.MindBellPreferences.TAG;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.googlecode.mindbell.R;
@@ -62,7 +61,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
     public AndroidPrefsAccessor(Context context) {
-        this.settings = PreferenceManager.getDefaultSharedPreferences(context);
+        this.settings = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
 
         hours = context.getResources().getStringArray(R.array.hourStrings);
 
