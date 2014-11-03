@@ -35,7 +35,7 @@ public class RingingLogic {
     public static boolean ringBell(ContextAccessor ca, final Runnable runWhenDone) {
 
         // 1. Verify if we should be muted
-        if (ca.isMuteRequested()) {
+        if (ca.isMuteRequested(true)) {
             if (runWhenDone != null) {
                 runWhenDone.run();
             }

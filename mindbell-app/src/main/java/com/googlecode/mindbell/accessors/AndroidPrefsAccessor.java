@@ -31,7 +31,6 @@ import com.googlecode.mindbell.util.TimeOfDay;
 public class AndroidPrefsAccessor extends PrefsAccessor {
 
     private final SharedPreferences settings;
-    private final Context context;
     private final String[] hours;
 
     private final String keyActive;
@@ -63,12 +62,8 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
     public AndroidPrefsAccessor(Context context) {
-        this(PreferenceManager.getDefaultSharedPreferences(context), context);
-    }
+        this.settings = PreferenceManager.getDefaultSharedPreferences(context);
 
-    public AndroidPrefsAccessor(SharedPreferences settings, Context context) {
-        this.settings = settings;
-        this.context = context;
         hours = context.getResources().getStringArray(R.array.hourStrings);
 
         keyActive = context.getString(R.string.keyActive);
@@ -196,7 +191,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         for (String s : floatSettings) {
             sb.append(s).append(" = ").append(settings.getFloat(s, -1)).append("\n");
         }
-        Log.d(TAG, sb.toString());
+        Log.v(TAG, sb.toString());
     }
 
     @Override
