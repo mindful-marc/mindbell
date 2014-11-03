@@ -20,6 +20,7 @@
     android:versionName="2.4.0" >
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
@@ -50,18 +51,27 @@
         </activity>
 
         <receiver
-            android:name="Scheduler"
-            android:process=":remote" >
+            android:name="Scheduler" >
+            <!-- android:process=":remote"  -->
         </receiver>
         <receiver
-            android:name="UpdateBellSchedule"
-            android:process=":remote" >
+            android:name="UpdateBellSchedule" >
+            <!-- android:process=":remote"  -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name="UpdateStatusNotification" >
+            <!-- android:process=":remote"  -->
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+                <action android:name="android.intent.action.PHONE_STATE" />
+                <action android:name="android.media.RINGER_MODE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 
-    <uses-sdk android:minSdkVersion="17" />
+    <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="17"/>
 
 </manifest>

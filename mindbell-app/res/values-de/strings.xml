@@ -67,6 +67,11 @@
     <string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
     <string name="statusTextBellActive">Glocke schlägt von _STARTTIME_ bis _ENDTIME_</string>
 
+    <!-- Reasons why bell is muted -->
+    <string name="reasonMutedWithPhone">Glocke still wie das Handy</string>
+    <string name="reasonMutedOffHook">Glocke still während Telenaten</string>
+    <string name="reasonMutedInFlightMode">Glocke still im Flugmodus</string>
+
     <!-- Offer popup -->
     <string name="main_title_popup">Neu von Mindful Apps</string>
     <string name="main_message1_popup">Naturklang-Wecker - der Wecker, den du mit dem Finger stellst!</string>

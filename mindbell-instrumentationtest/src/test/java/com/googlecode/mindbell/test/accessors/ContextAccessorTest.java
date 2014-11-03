@@ -36,7 +36,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneInFlightMode(true);
         ca.setSettingMuteInFlightMode(false);
         // exercise/verify
-        assertFalse(ca.isMuteRequested());
+        assertFalse(ca.isMuteRequested(true));
     }
 
     public void testInFlightMode_false2() {
@@ -45,7 +45,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneInFlightMode(false);
         ca.setSettingMuteInFlightMode(true);
         // exercise/verify
-        assertFalse(ca.isMuteRequested());
+        assertFalse(ca.isMuteRequested(true));
     }
 
     public void testInFlightMode_true() {
@@ -54,7 +54,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneInFlightMode(true);
         ca.setSettingMuteInFlightMode(true);
         // exercise/verify
-        assertTrue(ca.isMuteRequested());
+        assertTrue(ca.isMuteRequested(true));
     }
 
     public void testMuted_false1() {
@@ -63,7 +63,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneMuted(true);
         ca.setSettingMuteWithPhone(false);
         // exercise/verify
-        assertFalse(ca.isMuteRequested());
+        assertFalse(ca.isMuteRequested(true));
     }
 
     public void testMuted_false2() {
@@ -72,7 +72,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneMuted(false);
         ca.setSettingMuteWithPhone(true);
         // exercise/verify
-        assertFalse(ca.isMuteRequested());
+        assertFalse(ca.isMuteRequested(true));
     }
 
     public void testMuted_true() {
@@ -81,7 +81,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneMuted(true);
         ca.setSettingMuteWithPhone(true);
         // exercise/verify
-        assertTrue(ca.isMuteRequested());
+        assertTrue(ca.isMuteRequested(true));
     }
 
     public void testOffHook_false1() {
@@ -90,7 +90,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneOffHook(true);
         ca.setSettingMuteOffHook(false);
         // exercise/verify
-        assertFalse(ca.isMuteRequested());
+        assertFalse(ca.isMuteRequested(true));
     }
 
     public void testOffHook_false2() {
@@ -99,7 +99,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneOffHook(false);
         ca.setSettingMuteOffHook(true);
         // exercise/verify
-        assertFalse(ca.isMuteRequested());
+        assertFalse(ca.isMuteRequested(true));
     }
 
     public void testOffHook_true() {
@@ -108,7 +108,7 @@ public class ContextAccessorTest extends TestCase {
         ca.setPhoneOffHook(true);
         ca.setSettingMuteOffHook(true);
         // exercise/verify
-        assertTrue(ca.isMuteRequested());
+        assertTrue(ca.isMuteRequested(true));
     }
 
     public void testOriginalVolume() {
