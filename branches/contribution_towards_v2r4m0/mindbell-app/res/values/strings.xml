@@ -63,15 +63,20 @@
     <string name="summaryNotMutedInFlightMode">Bell will also ring in flight mode</string>
     <string name="summaryMutedInFlightMode">Bell will not ring in flight mode</string>
     <string name="prefsCategoryDetails">Details</string>
-    <string name="prefsFrequency">Ring bell about every...</string>
-    <string name="prefsStart">Start bell every day at...</string>
-    <string name="prefsEnd">Stop bell every day at...</string>
+    <string name="prefsFrequency">Ring bell about every &#8230;</string>
+    <string name="prefsStart">Start bell every day at &#8230;</string>
+    <string name="prefsEnd">Stop bell every day at &#8230;</string>
     <string name="prefsCategoryTry">Try it now</string>
     <string name="prefsRingBell">Ring Bell</string>
 
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Mindfulness Bell is active</string>
     <string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
+
+    <!-- Reasons why bell is muted -->
+    <string name="reasonMutedWithPhone">Bell muted with phone</string>
+    <string name="reasonMutedOffHook">Bell muted during calls</string>
+    <string name="reasonMutedInFlightMode">Bell muted in flight mode</string>
 
     <!-- Offer popup -->
     <string name="main_title_popup">New from Mindful Apps</string>
