@@ -87,6 +87,10 @@ public abstract class PrefsAccessor {
         return t.isInInterval(tStart, tEnd);
     }
 
+    public boolean isSettingMuteInFlightMode() {
+        return true;
+    }
+
     public boolean isSettingMuteOffHook() {
         return true;
     }

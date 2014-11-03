@@ -41,25 +41,36 @@ public abstract class ContextAccessor {
     public abstract boolean isBellSoundPlaying();
 
     public boolean isMuteRequested() {
-        boolean mute = false;
-        // If we are to be muted, don't go any further:
+
+        // Should bell be muted when phone is muted?
         if (isSettingMuteWithPhone() && isPhoneMuted()) {
-            mute = true;
             showMessage("muting bell because the phone is muted");
+            return true;
         }
 
-        // If settings ask us to mute if the phone is active in a call, and that
-        // is the case, do not play.
+        // Should bell be muted when phone is off hook (or ringing)?
         if (isSettingMuteOffHook() && isPhoneOffHook()) {
-            mute = true;
             showMessage("muting bell because the phone is off hook");
+            return true;
         }
-        return mute;
+
+        // Should bell be muted when phone is in flight mode?
+        if (isSettingMuteInFlightMode() && isPhoneInFlightMode()) {
+            showMessage("muting bell because the phone is is in flight mode");
+            return true;
+        }
+
+        // No need to suppress the bell
+        return false;
     }
+
+    public abstract boolean isPhoneInFlightMode();
 
     public abstract boolean isPhoneMuted();
 
     public abstract boolean isPhoneOffHook();
+
+    public abstract boolean isSettingMuteInFlightMode();
 
     public abstract boolean isSettingMuteOffHook();
 

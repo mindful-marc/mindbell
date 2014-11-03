@@ -37,6 +37,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final String keyActive;
     private final String keyShow;
     private final String keyStatus;
+    private final String keyMuteInFlightMode;
     private final String keyMuteOffHook;
     private final String keyMuteWithPhone;
     private final String keyVibrate;
@@ -50,6 +51,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final boolean defaultActive = false;
     private final boolean defaultShow = true;
     private final boolean defaultStatus = true;
+    private final boolean defaultMuteInFlightMode = false;
     private final boolean defaultMuteOffHook = true;
     private final boolean defaultMuteWithPhone = true;
     private final boolean defaultVibrate = false;
@@ -72,6 +74,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         keyActive = context.getString(R.string.keyActive);
         keyShow = context.getString(R.string.keyShow);
         keyStatus = context.getString(R.string.keyStatus);
+        keyMuteInFlightMode = context.getString(R.string.keyMuteInFlightMode);
         keyMuteOffHook = context.getString(R.string.keyMuteOffHook);
         keyMuteWithPhone = context.getString(R.string.keyMuteWithPhone);
         keyVibrate = context.getString(R.string.keyVibrate);
@@ -90,7 +93,8 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
      */
     private void checkSettings() {
         // boolean settings:
-        String[] booleanSettings = new String[] { keyShow, keyStatus, keyActive, keyMuteOffHook, keyMuteWithPhone, keyVibrate };
+        String[] booleanSettings = new String[] { keyShow, keyStatus, keyActive, keyMuteInFlightMode, keyMuteOffHook,
+                keyMuteWithPhone, keyVibrate };
         for (String s : booleanSettings) {
             try {
                 settings.getBoolean(s, false);
@@ -146,6 +150,10 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         if (!settings.contains(keyStatus)) {
             settings.edit().putBoolean(keyStatus, defaultStatus).commit();
             Log.w(TAG, "Reset missing setting for '" + keyStatus + "' to '" + defaultStatus + "'");
+        }
+        if (!settings.contains(keyMuteInFlightMode)) {
+            settings.edit().putBoolean(keyMuteInFlightMode, defaultMuteInFlightMode).commit();
+            Log.w(TAG, "Reset missing setting for '" + keyMuteInFlightMode + "' to '" + defaultMuteInFlightMode + "'");
         }
         if (!settings.contains(keyMuteOffHook)) {
             settings.edit().putBoolean(keyMuteOffHook, defaultMuteOffHook).commit();
@@ -258,6 +266,11 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean isBellActive() {
         return settings.getBoolean(keyActive, defaultActive);
+    }
+
+    @Override
+    public boolean isSettingMuteInFlightMode() {
+        return settings.getBoolean(keyMuteInFlightMode, defaultMuteInFlightMode);
     }
 
     @Override

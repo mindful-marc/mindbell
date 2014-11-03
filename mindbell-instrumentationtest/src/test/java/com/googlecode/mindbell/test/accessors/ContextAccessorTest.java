@@ -30,6 +30,33 @@ public class ContextAccessorTest extends TestCase {
 
     }
 
+    public void testInFlightMode_false1() {
+        // setup
+        MockContextAccessor ca = new MockContextAccessor();
+        ca.setPhoneInFlightMode(true);
+        ca.setSettingMuteInFlightMode(false);
+        // exercise/verify
+        assertFalse(ca.isMuteRequested());
+    }
+
+    public void testInFlightMode_false2() {
+        // setup
+        MockContextAccessor ca = new MockContextAccessor();
+        ca.setPhoneInFlightMode(false);
+        ca.setSettingMuteInFlightMode(true);
+        // exercise/verify
+        assertFalse(ca.isMuteRequested());
+    }
+
+    public void testInFlightMode_true() {
+        // setup
+        MockContextAccessor ca = new MockContextAccessor();
+        ca.setPhoneInFlightMode(true);
+        ca.setSettingMuteInFlightMode(true);
+        // exercise/verify
+        assertTrue(ca.isMuteRequested());
+    }
+
     public void testMuted_false1() {
         // setup
         MockContextAccessor ca = new MockContextAccessor();

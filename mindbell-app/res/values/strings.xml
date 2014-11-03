@@ -59,6 +59,9 @@
     <string name="prefsMuteOffHook">Mute during phone calls</string>
     <string name="summaryNotMuted">Bell will also ring during phone calls</string>
     <string name="summaryMuted">Bell will not ring during phone calls</string>
+    <string name="prefsMuteInFlightMode">Mute in flight mode</string>
+    <string name="summaryNotMutedInFlightMode">Bell will also ring in flight mode</string>
+    <string name="summaryMutedInFlightMode">Bell will not ring in flight mode</string>
     <string name="prefsCategoryDetails">Details</string>
     <string name="prefsFrequency">Ring bell about every...</string>
     <string name="prefsStart">Start bell every day at...</string>
@@ -86,6 +89,7 @@
     <string name="keyMuteWithPhone">muteWithPhone</string>
     <string name="keyVibrate">vibrate</string>
     <string name="keyMuteOffHook">muteOffHook</string>
+    <string name="keyMuteInFlightMode">muteOffInFlightMode</string>
     <string name="keyFrequency">frequency</string>
     <string name="keyStart">start</string>
     <string name="keyEnd">end</string>
