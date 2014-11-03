@@ -51,19 +51,19 @@
         </activity>
 
         <receiver
-            android:name="Scheduler" >
-            <!-- android:process=":remote"  -->
+            android:name="Scheduler"
+            android:process=":remote" >
         </receiver>
         <receiver
-            android:name="UpdateBellSchedule" >
-            <!-- android:process=":remote"  -->
+            android:name="UpdateBellSchedule"
+            android:process=":remote" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="UpdateStatusNotification" >
-            <!-- android:process=":remote"  -->
+            android:name="UpdateStatusNotification"
+            android:process=":remote" >
             <intent-filter>
                 <action android:name="android.intent.action.AIRPLANE_MODE" />
                 <action android:name="android.intent.action.PHONE_STATE" />
