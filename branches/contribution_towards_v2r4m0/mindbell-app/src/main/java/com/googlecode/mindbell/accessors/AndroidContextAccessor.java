@@ -24,12 +24,12 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.provider.Settings.Global;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.telephony.TelephonyManager;
@@ -99,6 +99,21 @@ public class AndroidContextAccessor extends ContextAccessor {
         float bellVolume = prefs.getBellVolume(getBellDefaultVolume());
         Log.d(TAG, "Bell volume is " + bellVolume);
         return bellVolume;
+    }
+
+    @Override
+    protected String getReasonMutedInFlightMode() {
+        return context.getText(R.string.reasonMutedInFlightMode).toString();
+    }
+
+    @Override
+    protected String getReasonMutedOffHook() {
+        return context.getText(R.string.reasonMutedOffHook).toString();
+    }
+
+    @Override
+    protected String getReasonMutedWithPhone() {
+        return context.getText(R.string.reasonMutedWithPhone).toString();
     }
 
     @Override
@@ -219,15 +234,10 @@ public class AndroidContextAccessor extends ContextAccessor {
     }
 
     public void updateBellSchedule() {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        PrefsAccessor prefs = new AndroidPrefsAccessor(sharedPrefs, context);
+        PrefsAccessor prefs = new AndroidPrefsAccessor(context);
+        updateStatusNotification(prefs, true);
         if (prefs.isBellActive()) {
-            Log.d(TAG, "Bell is active");
-            if (prefs.doStatusNotification()) {
-                updateStatusNotification(prefs);
-            } else {
-                removeStatusNotification();
-            }
+            Log.d(TAG, "Update bell schedule for active bell");
             Intent intent = new Intent(context, Scheduler.class);
             PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             try {
@@ -235,25 +245,47 @@ public class AndroidContextAccessor extends ContextAccessor {
             } catch (PendingIntent.CanceledException e) {
                 Log.e(TAG, "Could not send: " + e.getMessage());
             }
-        } else {
-            Log.d(TAG, "Bell is not active");
-            removeStatusNotification(); // whatever the setting, no notification if bell is not active
         }
     }
 
-    private void updateStatusNotification(PrefsAccessor prefs) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notif = new Notification(R.drawable.bell_status_active, "", System.currentTimeMillis());
-        CharSequence contentTitle = context.getText(R.string.statusTitleBellActive);
-        String contentText = context.getText(R.string.statusTextBellActive).toString();
-        contentText = contentText.replace("_STARTTIME_", prefs.getDaytimeStartString()).replace("_ENDTIME_",
-                prefs.getDaytimeEndString());
-        Intent notificationIntent = new Intent(context, MindBellMain.class);
-        PendingIntent contentIntent = PendingIntent
-                .getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notif.setLatestEventInfo(context.getApplicationContext(), contentTitle, contentText, contentIntent);
-        notif.flags |= Notification.FLAG_ONGOING_EVENT;
-        notificationManager.notify(uniqueNotificationID, notif);
+    /**
+     * This is about updating status notifcation on changes in system settings, removal of notification is done by
+     * udpateBellSchedule().
+     */
+    public void updateStatusNotification() {
+        PrefsAccessor prefs = new AndroidPrefsAccessor(context);
+        updateStatusNotification(prefs, false);
+    }
+
+    private void updateStatusNotification(PrefsAccessor prefs, boolean shouldShowMessage) {
+        if (!prefs.isBellActive() || !prefs.doStatusNotification()) { // bell inactive or no notification wanted?
+            Log.i(TAG, "remove status notification because of inactive bell or unwanted notification");
+            removeStatusNotification();
+        } else {
+            // Suppose bell is not muted
+            int statusDrawable = R.drawable.bell_status_active;
+            CharSequence contentTitle = context.getText(R.string.statusTitleBellActive);
+            String contentText = context.getText(R.string.statusTextBellActive).toString();
+            String muteRequestReason = getMuteRequestReason(shouldShowMessage);
+            // Override icon and notification text if bell is muted
+            if (muteRequestReason != null) {
+                statusDrawable = R.drawable.bell_status_active_but_muted;
+                contentText = muteRequestReason;
+            }
+            contentText = contentText.replace("_STARTTIME_", prefs.getDaytimeStartString()).replace("_ENDTIME_",
+                    prefs.getDaytimeEndString());
+            // Now do the notification update
+            Log.i(TAG, "Update status notification: " + contentText);
+            NotificationManager notificationManager = (NotificationManager) context
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notif = new Notification(statusDrawable, "", System.currentTimeMillis());
+            Intent notificationIntent = new Intent(context, MindBellMain.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            notif.setLatestEventInfo(context.getApplicationContext(), contentTitle, contentText, contentIntent);
+            notif.flags |= Notification.FLAG_ONGOING_EVENT;
+            notificationManager.notify(uniqueNotificationID, notif);
+        }
     }
 
 }
