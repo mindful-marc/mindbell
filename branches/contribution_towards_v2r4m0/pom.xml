@@ -18,7 +18,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.googlecode.mindbell</groupId>
     <artifactId>mindbell</artifactId>
-    <version>2.3.1</version>
+    <version>2.4.0</version>
     <packaging>pom</packaging>
     <name>MindBell</name>
 
@@ -30,15 +30,19 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- To make the following dependency available, get a local copy of -->
+            <!-- https://github.com/mosabua/maven-android-sdk-deployer and run in that directory, -->
+            <!-- mvn install -P 4.2 -->
             <dependency>
-                <groupId>com.google.android</groupId>
-                <artifactId>android</artifactId>
-                <version>2.3.3</version>
+              <groupId>android</groupId>
+              <artifactId>android</artifactId>
+              <version>4.2.2_r2</version>
+              <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.android</groupId>
                 <artifactId>android-test</artifactId>
-                <version>2.3.3</version>
+                <version>4.1.1.4</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -56,10 +60,10 @@
                 <plugin>
                     <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                     <artifactId>android-maven-plugin</artifactId>
-                    <version>3.0.0-alpha-14</version>
+                    <version>3.8.2</version>
                     <configuration>
                         <sdk>
-                            <platform>10</platform>
+                            <platform>17</platform>
                         </sdk>
                         <emulator>
                             <avd>233</avd>
