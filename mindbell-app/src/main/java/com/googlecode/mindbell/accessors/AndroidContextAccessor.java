@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Settings.Global;
@@ -121,8 +122,12 @@ public class AndroidContextAccessor extends ContextAccessor {
 
     @Override
     public boolean isPhoneInFlightMode() {
-        // Using AIRPLANE_MODE_ON requires API-Level 17 (JELLY_BEAN_MR1, 4.2)
-        return Settings.System.getInt(context.getContentResolver(), Global.AIRPLANE_MODE_ON, 0) == 1;
+        // With API-Level 17 Settings.System.AIRPLANE_MODE_ON has been marked as deprecated and moved to Global
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            return Settings.System.getInt(context.getContentResolver(), Global.AIRPLANE_MODE_ON, 0) == 1;
+        } else {
+            return Settings.System.getInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1;
+        }
     }
 
     @Override

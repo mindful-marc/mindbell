@@ -7,6 +7,6 @@
 
     <uses-library android:name="android.test.runner" />
     </application>
-    <uses-sdk android:minSdkVersion="17"/>
+    <uses-sdk android:minSdkVersion="10"/>
     <instrumentation android:targetPackage="com.googlecode.mindbell" android:name="android.test.InstrumentationTestRunner" />
 </manifest> 
