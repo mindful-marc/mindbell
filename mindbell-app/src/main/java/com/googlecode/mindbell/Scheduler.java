@@ -25,8 +25,6 @@ import android.app.PendingIntent.CanceledException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
@@ -50,8 +48,7 @@ public class Scheduler extends BroadcastReceiver {
         Log.d(TAG, "random scheduler reached");
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-        PrefsAccessor prefs = new AndroidPrefsAccessor(settings, context);
+        PrefsAccessor prefs = new AndroidPrefsAccessor(context);
 
         if (!prefs.isBellActive()) {
             Log.d(TAG, "bell is not active -- not ringing, not rescheduling.");

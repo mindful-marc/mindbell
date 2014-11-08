@@ -38,28 +38,61 @@ public abstract class ContextAccessor {
 
     public abstract float getBellVolume();
 
+    /**
+     * Check whether bell should be muted, show reason if wanted, and return reason, null otherwise.
+     */
+    public String getMuteRequestReason(boolean shouldShowMessage) {
+        String reason = null;
+        if (isSettingMuteWithPhone() && isPhoneMuted()) { // Mute bell with phone?
+            reason = getReasonMutedWithPhone();
+        } else if (isSettingMuteOffHook() && isPhoneOffHook()) { // Mute bell while phone is off hook (or ringing)?
+            reason = getReasonMutedOffHook();
+        } else if (isSettingMuteInFlightMode() && isPhoneInFlightMode()) { // Mute bell while in flight mode?
+            reason = getReasonMutedInFlightMode();
+        }
+        if (reason != null && shouldShowMessage) {
+            showMessage(reason);
+        }
+        return reason;
+    }
+
+    /**
+     * Returns reason to mute bell as String, override when concrete context is available.
+     */
+    protected String getReasonMutedInFlightMode() {
+        return "bell muted in flight mode";
+    }
+
+    /**
+     * Returns reason to mute bell as String, override when concrete context is available.
+     */
+    protected String getReasonMutedOffHook() {
+        return "bell muted during calls";
+    }
+
+    /**
+     * Returns reason to mute bell as String, override when concrete context is available.
+     */
+    protected String getReasonMutedWithPhone() {
+        return "bell muted with phone";
+    }
+
     public abstract boolean isBellSoundPlaying();
 
-    public boolean isMuteRequested() {
-        boolean mute = false;
-        // If we are to be muted, don't go any further:
-        if (isSettingMuteWithPhone() && isPhoneMuted()) {
-            mute = true;
-            showMessage("muting bell because the phone is muted");
-        }
-
-        // If settings ask us to mute if the phone is active in a call, and that
-        // is the case, do not play.
-        if (isSettingMuteOffHook() && isPhoneOffHook()) {
-            mute = true;
-            showMessage("muting bell because the phone is off hook");
-        }
-        return mute;
+    /**
+     * Return whether bell should be muted and show reason message if wanted.
+     */
+    public boolean isMuteRequested(boolean shouldShowMessage) {
+        return getMuteRequestReason(shouldShowMessage) != null;
     }
+
+    public abstract boolean isPhoneInFlightMode();
 
     public abstract boolean isPhoneMuted();
 
     public abstract boolean isPhoneOffHook();
+
+    public abstract boolean isSettingMuteInFlightMode();
 
     public abstract boolean isSettingMuteOffHook();
 
