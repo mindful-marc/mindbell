@@ -18,6 +18,8 @@ package com.googlecode.mindbell.accessors;
 import static com.googlecode.mindbell.MindBellPreferences.TAG;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.googlecode.mindbell.R;
@@ -61,7 +63,14 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
     public AndroidPrefsAccessor(Context context) {
-        this.settings = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
+        // At least in API-Level 17 (JELLY_BEAN_MR1) changes made in the settings dialog did not arrive in
+        // UpdateStatusNotification. The latter "saw" older settings. That could be solved by using MODE_MULTI_PROCESS which is
+        // not available in API-Level 10, the minimum required version for MindBell.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            this.settings = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
+        } else {
+            this.settings = PreferenceManager.getDefaultSharedPreferences(context);
+        }
 
         hours = context.getResources().getStringArray(R.array.hourStrings);
 
