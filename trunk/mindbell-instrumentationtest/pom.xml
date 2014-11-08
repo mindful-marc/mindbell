@@ -19,7 +19,7 @@
     <parent>
         <groupId>com.googlecode.mindbell</groupId>
         <artifactId>mindbell</artifactId>
-        <version>2.3</version>
+        <version>2.3.1</version>
     </parent>
     <groupId>com.googlecode.mindbell</groupId>
     <artifactId>mindbell-instrumentationtest</artifactId>
