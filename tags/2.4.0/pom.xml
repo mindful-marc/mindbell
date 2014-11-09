@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright (C) 2009 Jayway AB
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.googlecode.mindbell</groupId>
+    <artifactId>mindbell</artifactId>
+    <version>2.4.0</version>
+    <packaging>pom</packaging>
+    <name>MindBell</name>
+
+    <modules>
+        <module>mindbell-app</module>
+        <module>mindbell-instrumentationtest</module>
+    </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- To make the following dependency available, get a local copy of -->
+            <!-- https://github.com/mosabua/maven-android-sdk-deployer and run in that directory, -->
+            <!-- mvn install -P 4.2 -->
+            <dependency>
+              <groupId>android</groupId>
+              <artifactId>android</artifactId>
+              <version>4.2.2_r2</version>
+              <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.android</groupId>
+                <artifactId>android-test</artifactId>
+                <version>4.1.1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.4</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <artifactId>android-maven-plugin</artifactId>
+                    <version>3.8.2</version>
+                    <configuration>
+                        <sdk>
+                            <platform>17</platform>
+                        </sdk>
+                        <emulator>
+                            <avd>233</avd>
+                            <wait>1000</wait> <!-- wait time for the emulator to start -->
+                            <options>-snapshot maven-snapshot</options>
+                        </emulator>
+                        <deleteConflictingFiles>true</deleteConflictingFiles>
+                        <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                    </configuration>
+                    <extensions>true</extensions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3</version>
+                </plugin>
+		<plugin>
+		  <artifactId>maven-enforcer-plugin</artifactId>
+		  <version>1.0</version>
+		</plugin>
+		<plugin>
+		  <artifactId>maven-release-plugin</artifactId>
+		  <version>2.1</version>
+		  <configuration>
+		    <autoVersionSubmodules>true</autoVersionSubmodules>
+		  </configuration>
+		</plugin>
+		<plugin>
+		  <artifactId>maven-jarsigner-plugin</artifactId>
+		  <version>1.2</version>
+		  <inherited>true</inherited>
+		  <configuration>
+		    <removeExistingSignatures>true</removeExistingSignatures>
+		    <archiveDirectory />
+		    <archive>${project.build.directory}/${project.build.finalName}.${project.packaging}</archive>
+		    <verbose>true</verbose>
+		    <certs>true</certs>
+		    <keystore>${sign.keystore}</keystore>
+		    <alias>${sign.alias}</alias>
+		    <storepass>${sign.storepass}</storepass>
+		    <keypass>${sign.keypass}</keypass>
+		  </configuration>
+		</plugin>
+		<plugin>
+		  <groupId>com.pyx4me</groupId>
+		  <artifactId>proguard-maven-plugin</artifactId>
+		  <version>2.0.4</version>
+		  <dependencies>
+		    <dependency>
+		      <groupId>net.sf.proguard</groupId>
+		      <artifactId>proguard</artifactId>
+		      <version>4.4</version>
+		      <scope>runtime</scope>
+		    </dependency>
+		  </dependencies>
+		  <configuration>
+		    <proguardVersion>4.4</proguardVersion>
+		  </configuration>
+		</plugin>
+            </plugins>
+
+        </pluginManagement>
+    </build>
+
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>enforce-signing-properties</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <requireProperty>
+                      <property>sign.keystore</property>
+                      <message>The 'sign.keystore' property is missing. It must contain the path to the keystore used to sign the application.</message>
+                    </requireProperty>
+                    <requireFilesExist>
+                      <files>
+                        <file>${sign.keystore}</file>
+                      </files>
+                      <message>The 'sign.keystore' property does not point to a file. It must contain the path to the keystore used to sign the application.</message>
+                    </requireFilesExist>
+                    <requireProperty>
+                      <property>sign.alias</property>
+                      <message>The 'sign.alias' property is missing. It must contain the key alias used to sign the application.</message>
+                    </requireProperty>
+                    <requireProperty>
+                      <property>sign.storepass</property>
+                      <message>The 'sign.storepass' property is missing. It must contain the password of the keystore used to sign the application.
+                      </message>
+                    </requireProperty>
+                    <requireProperty>
+                      <property>sign.keypass</property>
+                      <message>The 'sign.keypass' property is missing. It must contain the password of the key used to sign the application.</message>
+                    </requireProperty>
+                  </rules>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <family>unix</family>
+        </os>
+      </activation>
+      <properties>
+        <rt.jar.path>${java.home}/lib/rt.jar</rt.jar.path>
+        <jsse.jar.path>${java.home}/lib/jsse.jar</jsse.jar.path>
+      </properties>
+    </profile>
+    <!-- mac profile has to be after unix since running on mac will trigger
+      both -->
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <properties>
+        <!-- absolute path -->
+        <!--<rt.jar.path>/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Classes/classes.jar</rt.jar.path> -->
+        <!-- or with JAVA_HOME /System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home/ -->
+        <rt.jar.path>${java.home}/../Classes/classes.jar</rt.jar.path>
+        <jsse.jar.path>${java.home}/../Classes/jsse.jar</jsse.jar.path>
+      </properties>
+    </profile>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <rt.jar.path>${java.home}/jre/lib/rt.jar</rt.jar.path>
+        <jsse.jar.path>${java.home}/jre/lib/jsse.jar</jsse.jar.path>
+      </properties>
+    </profile>
+  </profiles>
+
+
+
+
+  <reporting>
+    <plugins>
+      <plugin>
+	<artifactId>maven-pmd-plugin</artifactId>
+	<version>2.5</version>
+	<configuration>
+		<linkXref>true</linkXref>
+		<sourceEncoding>UTF-8</sourceEncoding>
+		<minimumTokens>30</minimumTokens>
+		<targetJdk>1.5</targetJdk>
+	</configuration>
+      </plugin>
+      <!--plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-checkstyle-plugin</artifactId>
+	<version>2.6</version>
+      </plugin-->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>2.0.1</version>
+        <configuration>
+          <findbugsXmlOutput>true</findbugsXmlOutput>
+          <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+          <xmlOutput>true</xmlOutput>
+	  <excludeFilterFile>findbugs-excludes.xml</excludeFilterFile>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
+
+</project>
