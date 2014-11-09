@@ -69,7 +69,7 @@
 
     <!-- Reasons why bell is muted -->
     <string name="reasonMutedWithPhone">Glocke still wie das Handy</string>
-    <string name="reasonMutedOffHook">Glocke still während Telenaten</string>
+    <string name="reasonMutedOffHook">Glocke still während Telefonaten</string>
     <string name="reasonMutedInFlightMode">Glocke still im Flugmodus</string>
 
     <!-- Offer popup -->
