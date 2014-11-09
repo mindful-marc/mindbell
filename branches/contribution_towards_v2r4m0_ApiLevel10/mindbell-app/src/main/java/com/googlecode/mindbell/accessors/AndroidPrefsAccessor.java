@@ -63,10 +63,9 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
     public AndroidPrefsAccessor(Context context) {
-        // At least in API-Level 17 (JELLY_BEAN_MR1) changes made in the settings dialog did not arrive in
-        // UpdateStatusNotification. The latter "saw" older settings. That could be solved by using MODE_MULTI_PROCESS which is
-        // not available in API-Level 10, the minimum required version for MindBell.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        // From target SDK version 11 (HONEYCOMB) upwards changes made in the settings dialog do not arrive in
+        // UpdateStatusNotification if MODE_MULTI_PROCESS is not set, see API docs for MODE_MULTI_PROCESS.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             this.settings = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
         } else {
             this.settings = PreferenceManager.getDefaultSharedPreferences(context);
