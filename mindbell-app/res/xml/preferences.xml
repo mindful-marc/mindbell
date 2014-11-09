@@ -70,6 +70,12 @@
             android:summaryOff="@string/summaryNotMuted"
             android:summaryOn="@string/summaryMuted" 
 			android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="@string/keyMuteInFlightMode"
+            android:title="@string/prefsMuteInFlightMode"
+            android:summaryOff="@string/summaryNotMutedInFlightMode"
+            android:summaryOn="@string/summaryMutedInFlightMode" 
+			android:defaultValue="true"/>
 	</PreferenceCategory>
 
     <PreferenceCategory

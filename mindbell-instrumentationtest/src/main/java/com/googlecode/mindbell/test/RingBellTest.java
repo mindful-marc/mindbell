@@ -64,6 +64,10 @@ public class RingBellTest extends AndroidTestCase {
         spe.commit();
     }
 
+    private void setContextMuteInFlightMode(boolean value) {
+        setBooleanContext(AndroidContextAccessor.KEYMUTEINFLIGHTMODE, value);
+    }
+
     private void setContextMuteOffHook(boolean value) {
         setBooleanContext(AndroidContextAccessor.KEYMUTEOFFHOOK, value);
     }
