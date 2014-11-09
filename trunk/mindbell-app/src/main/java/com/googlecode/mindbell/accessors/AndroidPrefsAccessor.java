@@ -18,6 +18,7 @@ package com.googlecode.mindbell.accessors;
 import static com.googlecode.mindbell.MindBellPreferences.TAG;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -31,12 +32,12 @@ import com.googlecode.mindbell.util.TimeOfDay;
 public class AndroidPrefsAccessor extends PrefsAccessor {
 
     private final SharedPreferences settings;
-    private final Context context;
     private final String[] hours;
 
     private final String keyActive;
     private final String keyShow;
     private final String keyStatus;
+    private final String keyMuteInFlightMode;
     private final String keyMuteOffHook;
     private final String keyMuteWithPhone;
     private final String keyVibrate;
@@ -50,6 +51,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final boolean defaultActive = false;
     private final boolean defaultShow = true;
     private final boolean defaultStatus = true;
+    private final boolean defaultMuteInFlightMode = false;
     private final boolean defaultMuteOffHook = true;
     private final boolean defaultMuteWithPhone = true;
     private final boolean defaultVibrate = false;
@@ -61,17 +63,20 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
     public AndroidPrefsAccessor(Context context) {
-        this(PreferenceManager.getDefaultSharedPreferences(context), context);
-    }
+        // From target SDK version 11 (HONEYCOMB) upwards changes made in the settings dialog do not arrive in
+        // UpdateStatusNotification if MODE_MULTI_PROCESS is not set, see API docs for MODE_MULTI_PROCESS.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            this.settings = context.getSharedPreferences(context.getPackageName() + "_preferences", Context.MODE_MULTI_PROCESS);
+        } else {
+            this.settings = PreferenceManager.getDefaultSharedPreferences(context);
+        }
 
-    public AndroidPrefsAccessor(SharedPreferences settings, Context context) {
-        this.settings = settings;
-        this.context = context;
         hours = context.getResources().getStringArray(R.array.hourStrings);
 
         keyActive = context.getString(R.string.keyActive);
         keyShow = context.getString(R.string.keyShow);
         keyStatus = context.getString(R.string.keyStatus);
+        keyMuteInFlightMode = context.getString(R.string.keyMuteInFlightMode);
         keyMuteOffHook = context.getString(R.string.keyMuteOffHook);
         keyMuteWithPhone = context.getString(R.string.keyMuteWithPhone);
         keyVibrate = context.getString(R.string.keyVibrate);
@@ -90,7 +95,8 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
      */
     private void checkSettings() {
         // boolean settings:
-        String[] booleanSettings = new String[] { keyShow, keyStatus, keyActive, keyMuteOffHook, keyMuteWithPhone, keyVibrate };
+        String[] booleanSettings = new String[] { keyShow, keyStatus, keyActive, keyMuteInFlightMode, keyMuteOffHook,
+                keyMuteWithPhone, keyVibrate };
         for (String s : booleanSettings) {
             try {
                 settings.getBoolean(s, false);
@@ -147,6 +153,10 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
             settings.edit().putBoolean(keyStatus, defaultStatus).commit();
             Log.w(TAG, "Reset missing setting for '" + keyStatus + "' to '" + defaultStatus + "'");
         }
+        if (!settings.contains(keyMuteInFlightMode)) {
+            settings.edit().putBoolean(keyMuteInFlightMode, defaultMuteInFlightMode).commit();
+            Log.w(TAG, "Reset missing setting for '" + keyMuteInFlightMode + "' to '" + defaultMuteInFlightMode + "'");
+        }
         if (!settings.contains(keyMuteOffHook)) {
             settings.edit().putBoolean(keyMuteOffHook, defaultMuteOffHook).commit();
             Log.w(TAG, "Reset missing setting for '" + keyMuteOffHook + "' to '" + defaultMuteOffHook + "'");
@@ -188,7 +198,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         for (String s : floatSettings) {
             sb.append(s).append(" = ").append(settings.getFloat(s, -1)).append("\n");
         }
-        Log.d(TAG, sb.toString());
+        Log.v(TAG, sb.toString());
     }
 
     @Override
@@ -258,6 +268,11 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean isBellActive() {
         return settings.getBoolean(keyActive, defaultActive);
+    }
+
+    @Override
+    public boolean isSettingMuteInFlightMode() {
+        return settings.getBoolean(keyMuteInFlightMode, defaultMuteInFlightMode);
     }
 
     @Override

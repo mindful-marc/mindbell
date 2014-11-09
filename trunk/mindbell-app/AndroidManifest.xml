@@ -13,55 +13,47 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.googlecode.mindbell"
-    android:versionCode="9"
-    android:versionName="2.3.1" >
+--><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="10" android:versionName="2.4.0" package="com.googlecode.mindbell">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
-    <application
-        android:icon="@drawable/icon"
-        android:label="@string/app_name" >
-        <activity
-            android:name="MindBellMain"
-            android:label="@string/app_name" >
+    <application android:debuggable="false" android:icon="@drawable/icon" android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name="MindBellMain">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name="MindBellPreferences"
-            android:label="@string/preferencesTitle" >
+        <activity android:label="@string/preferencesTitle" android:name="MindBellPreferences">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name="MindBell"
-            android:label="@string/app_name" >
+        <activity android:label="@string/app_name" android:name="MindBell">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="Scheduler"
-            android:process=":remote" >
+        <receiver android:name="Scheduler" android:process=":remote">
         </receiver>
-        <receiver
-            android:name="UpdateBellSchedule"
-            android:process=":remote" >
+        <receiver android:name="UpdateBellSchedule" android:process=":remote">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver android:name="UpdateStatusNotification" android:process=":remote">
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE"/>
+                <action android:name="android.intent.action.PHONE_STATE"/>
+                <action android:name="android.media.RINGER_MODE_CHANGED"/>
             </intent-filter>
         </receiver>
     </application>
 
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="17"/>
 
 </manifest>
