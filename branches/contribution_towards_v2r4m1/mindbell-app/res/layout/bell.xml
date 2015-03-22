@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent" 
+              android:layout_height="fill_parent"
+              android:orientation="vertical" 
+                android:background="#ff0f0f41">
+    
+    
+
+<ImageView android:id="@+id/bell" 
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent"
+	android:scaleType="fitCenter"
+	android:src="@drawable/bell" android:layout_gravity="center"></ImageView>
+</LinearLayout>
