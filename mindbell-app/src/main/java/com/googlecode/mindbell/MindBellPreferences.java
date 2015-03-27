@@ -15,10 +15,16 @@
  */
 package com.googlecode.mindbell;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
@@ -28,7 +34,7 @@ import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
 public class MindBellPreferences extends PreferenceActivity {
     /**
      * @author marc
-     * 
+     *
      */
     private static final class ListChangeListener implements Preference.OnPreferenceChangeListener {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -44,9 +50,31 @@ public class MindBellPreferences extends PreferenceActivity {
         }
     }
 
+    private static final class MultiSelectListChangeListener implements Preference.OnPreferenceChangeListener {
+        public boolean onPreferenceChange(Preference preference, Object newValues) {
+            assert preference instanceof MultiSelectListPreference;
+            MultiSelectListPreference mslp = (MultiSelectListPreference) preference;
+            setMultiSelectListPreferenceSummary(mslp, (Set<?>) newValues);
+            return true;
+        }
+    }
+
+    private static void setMultiSelectListPreferenceSummary(MultiSelectListPreference mslp, Set<?> newValues) {
+        List<CharSequence> newEntries = new ArrayList<CharSequence>();
+        CharSequence[] entryValues = mslp.getEntryValues();
+        for (int index = 0; index < entryValues.length; index++) {
+            if (((HashSet<?>) newValues).contains(entryValues[index])) {
+                newEntries.add(mslp.getEntries()[index]);
+            }
+        }
+        mslp.setSummary(newEntries.toString());
+    }
+
     public static final String TAG = "MindBell";
 
     private final Preference.OnPreferenceChangeListener listChangeListener = new ListChangeListener();
+
+    private final Preference.OnPreferenceChangeListener multiSelectListChangeListener = new MultiSelectListChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +89,7 @@ public class MindBellPreferences extends PreferenceActivity {
         setupListPreference(R.string.keyFrequency);
         setupListPreference(R.string.keyStart);
         setupListPreference(R.string.keyEnd);
+        setupMultiSelectListPreference(R.string.keyActiveOnDaysOfWeek);
 
     }
 
@@ -81,6 +110,12 @@ public class MindBellPreferences extends PreferenceActivity {
         ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(keyID));
         lp.setSummary(lp.getEntry());
         lp.setOnPreferenceChangeListener(listChangeListener);
+    }
+
+    private void setupMultiSelectListPreference(int keyID) {
+        MultiSelectListPreference mslp = (MultiSelectListPreference) getPreferenceScreen().findPreference(getText(keyID));
+        setMultiSelectListPreferenceSummary(mslp, mslp.getValues());
+        mslp.setOnPreferenceChangeListener(multiSelectListChangeListener);
     }
 
 }

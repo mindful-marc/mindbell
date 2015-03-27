@@ -57,12 +57,13 @@
     <string name="summaryNotMutedInFlightMode">Glocke läutet auch im Flugmodus</string>
     <string name="summaryMutedInFlightMode">Glocke läutet nicht im Flugmodus</string>
     <string name="prefsCategoryDetails">Details</string>
-    <string name="prefsFrequency">Schlage die Glocke etwa alle...</string>
-    <string name="prefsStart">Starte Glocke täglich um...</string>
-    <string name="prefsEnd">Beende Glocke täglich um...</string>
+    <string name="prefsFrequency">Schlage die Glocke etwa alle &#8230;</string>
+    <string name="prefsStart">Starte Glocke täglich um &#8230;</string>
+    <string name="prefsEnd">Beende Glocke täglich um &#8230;</string>
     <string name="prefsCategoryTry">Testen:</string>
     <string name="prefsRingBell">Glocke schlagen</string>
-
+    <string name="prefsActiveOnDaysOfWeek">Tage an denen die Glocke aktiv ist &#8230;</string>
+    
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
     <string name="statusTextBellActive">Glocke schlägt von _STARTTIME_ bis _ENDTIME_</string>
