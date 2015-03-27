@@ -107,7 +107,17 @@
                 android:entries="@array/hourStrings"
                 android:entryValues="@array/hourValues"
                 android:dialogTitle="@string/prefsEnd" />
-    </PreferenceCategory>
+        
+        <MultiSelectListPreference
+                android:key="@string/keyActiveOnDaysOfWeek"
+                android:defaultValue="@array/daysOfWeekValues"
+                android:title="@string/prefsActiveOnDaysOfWeek"
+                android:summary=""
+                android:entries="@array/daysOfWeek"
+                android:entryValues="@array/daysOfWeekValues"
+                android:dialogTitle="@string/prefsActiveOnDaysOfWeek" />
+        
+	</PreferenceCategory>
 
     <!-- PreferenceCategory
             android:title="@string/prefsCategoryTry">

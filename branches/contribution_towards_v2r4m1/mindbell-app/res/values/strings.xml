@@ -68,6 +68,7 @@
     <string name="prefsEnd">Stop bell every day at &#8230;</string>
     <string name="prefsCategoryTry">Try it now</string>
     <string name="prefsRingBell">Ring Bell</string>
+    <string name="prefsActiveOnDaysOfWeek">Days of week to be active &#8230;</string>
 
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Mindfulness Bell is active</string>
@@ -98,6 +99,7 @@
     <string name="keyFrequency">frequency</string>
     <string name="keyStart">start</string>
     <string name="keyEnd">end</string>
+    <string name="keyActiveOnDaysOfWeek">activeOnDaysOfWeek</string>
     <string name="keyTry">try</string>
 
 </resources>
