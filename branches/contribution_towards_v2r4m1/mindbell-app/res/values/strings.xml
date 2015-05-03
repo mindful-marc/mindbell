@@ -69,6 +69,7 @@
     <string name="prefsCategoryTry">Try it now</string>
     <string name="prefsRingBell">Ring Bell</string>
     <string name="prefsActiveOnDaysOfWeek">Days of week to be active &#8230;</string>
+    <string name="atLeastOneActiveDayNeeded">Specify at least one day</string>
 
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Mindfulness Bell is active</string>
