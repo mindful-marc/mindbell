@@ -28,6 +28,7 @@ import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
 
@@ -54,6 +55,10 @@ public class MindBellPreferences extends PreferenceActivity {
         public boolean onPreferenceChange(Preference preference, Object newValues) {
             assert preference instanceof MultiSelectListPreference;
             MultiSelectListPreference mslp = (MultiSelectListPreference) preference;
+            if (((Set<?>) newValues).isEmpty()) {
+                Toast.makeText(mslp.getContext(), R.string.atLeastOneActiveDayNeeded, Toast.LENGTH_SHORT).show();
+                return false;
+            }
             setMultiSelectListPreferenceSummary(mslp, (Set<?>) newValues);
             return true;
         }

@@ -63,6 +63,7 @@
     <string name="prefsCategoryTry">Testen:</string>
     <string name="prefsRingBell">Glocke schlagen</string>
     <string name="prefsActiveOnDaysOfWeek">Tage an denen die Glocke aktiv ist &#8230;</string>
+    <string name="atLeastOneActiveDayNeeded">Mindestens einen Tag angeben</string>
     
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
