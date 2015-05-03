@@ -16,6 +16,11 @@
 package com.googlecode.mindbell.accessors;
 
 import static com.googlecode.mindbell.MindBellPreferences.TAG;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -27,7 +32,7 @@ import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * @author marc
- * 
+ *
  */
 public class AndroidPrefsAccessor extends PrefsAccessor {
 
@@ -45,6 +50,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final String keyFrequency;
     private final String keyStart;
     private final String keyEnd;
+    private final String keyActiveOnDaysOfWeek;
 
     private final String keyVolume;
 
@@ -59,6 +65,8 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final String defaultFrequency = "3600000";
     private final String defaultStart = "9";
     private final String defaultEnd = "21";
+    private final Set<String> defaultActiveOnDaysOfWeek = new HashSet<String>(Arrays.asList(new String[] { "2", "3", "4", "5",
+            "6" })); // MO-FR
 
     private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
@@ -84,6 +92,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         keyFrequency = context.getString(R.string.keyFrequency);
         keyStart = context.getString(R.string.keyStart);
         keyEnd = context.getString(R.string.keyEnd);
+        keyActiveOnDaysOfWeek = context.getString(R.string.keyActiveOnDaysOfWeek);
 
         keyVolume = context.getString(R.string.keyVolume);
         checkSettings();
@@ -110,6 +119,16 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         for (String s : stringSettings) {
             try {
                 settings.getString(s, null);
+            } catch (ClassCastException e) {
+                settings.edit().remove(s).commit();
+                Log.w(TAG, "Removed setting '" + s + "' since it had wrong type");
+            }
+        }
+        // string set settings:
+        String[] stringSetSettings = new String[] { keyActiveOnDaysOfWeek };
+        for (String s : stringSetSettings) {
+            try {
+                settings.getStringSet(s, null);
             } catch (ClassCastException e) {
                 settings.edit().remove(s).commit();
                 Log.w(TAG, "Removed setting '" + s + "' since it had wrong type");
@@ -182,6 +201,10 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
             settings.edit().putString(keyEnd, defaultEnd).commit();
             Log.w(TAG, "Reset missing setting for '" + keyEnd + "' to '" + defaultEnd + "'");
         }
+        if (!settings.contains(keyActiveOnDaysOfWeek)) {
+            settings.edit().putStringSet(keyActiveOnDaysOfWeek, defaultActiveOnDaysOfWeek).commit();
+            Log.w(TAG, "Reset missing setting for '" + keyActiveOnDaysOfWeek + "' to '" + defaultActiveOnDaysOfWeek + "'");
+        }
         if (!settings.contains(keyVolume)) {
             settings.edit().putFloat(keyVolume, defaultVolume).commit();
             Log.w(TAG, "Reset missing setting for '" + keyVolume + "' to '" + defaultVolume + "'");
@@ -194,6 +217,9 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         }
         for (String s : stringSettings) {
             sb.append(s).append(" = ").append(settings.getString(s, null)).append("\n");
+        }
+        for (String s : stringSetSettings) {
+            sb.append(s).append(" = ").append(settings.getStringSet(s, null)).append("\n");
         }
         for (String s : floatSettings) {
             sb.append(s).append(" = ").append(settings.getFloat(s, -1)).append("\n");
@@ -209,6 +235,16 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean doStatusNotification() {
         return settings.getBoolean(keyStatus, defaultStatus);
+    }
+
+    @Override
+    public Set<Integer> getActiveOnDaysOfWeek() {
+        Set<String> strings = settings.getStringSet(keyActiveOnDaysOfWeek, defaultActiveOnDaysOfWeek);
+        Set<Integer> integers = new HashSet<Integer>();
+        for (String string : strings) {
+            integers.add(Integer.valueOf(string));
+        }
+        return integers;
     }
 
     @Override

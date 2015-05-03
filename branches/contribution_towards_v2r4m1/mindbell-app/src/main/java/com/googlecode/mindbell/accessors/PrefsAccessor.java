@@ -16,17 +16,18 @@
 package com.googlecode.mindbell.accessors;
 
 import java.util.Calendar;
+import java.util.Set;
 
 import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * @author marc
- * 
+ *
  */
 public abstract class PrefsAccessor {
 
     /**
-     * 
+     *
      */
     public PrefsAccessor() {
         super();
@@ -35,6 +36,8 @@ public abstract class PrefsAccessor {
     public abstract boolean doShowBell();
 
     public abstract boolean doStatusNotification();
+
+    public abstract Set<Integer> getActiveOnDaysOfWeek();
 
     public abstract float getBellVolume(float defaultVolume);
 
