@@ -15,9 +15,14 @@
  */
 package com.googlecode.mindbell.test.logic;
 
+import static com.googlecode.mindbell.MindBellPreferences.TAG;
+
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 
 import junit.framework.TestCase;
+import android.util.Log;
 
 import com.googlecode.mindbell.accessors.PrefsAccessor;
 import com.googlecode.mindbell.logic.SchedulerLogic;
@@ -26,78 +31,277 @@ import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * @author marc
- * 
+ *
  */
 public class SchedulerLogicTest extends TestCase {
 
-    MockPrefsAccessor dayPrefs;
-    MockPrefsAccessor nightPrefs;
-    long timeMillis1200;
-    long timeMillis0100;
-    long timeMillis2300;
-    long timeMillis2059;
-
-    @Override
-    public void setUp() {
-        dayPrefs = new MockPrefsAccessor();
+    private PrefsAccessor getDayPrefs() {
+        MockPrefsAccessor dayPrefs = new MockPrefsAccessor();
         dayPrefs.setDaytimeStart(new TimeOfDay(9, 0));
         dayPrefs.setDaytimeEnd(new TimeOfDay(21, 0));
-        nightPrefs = new MockPrefsAccessor();
+        dayPrefs.setActiveOnDaysOfWeek(new HashSet<Integer>(Arrays.asList(new Integer[] { 2, 3, 4, 5, 6 })));
+        return dayPrefs;
+    }
+
+    private PrefsAccessor getNightPrefs() {
+        MockPrefsAccessor nightPrefs = new MockPrefsAccessor();
         nightPrefs.setDaytimeStart(new TimeOfDay(13, 0));
         nightPrefs.setDaytimeEnd(new TimeOfDay(2, 0));
+        nightPrefs.setActiveOnDaysOfWeek(new HashSet<Integer>(Arrays.asList(new Integer[] { 2, 3, 4, 5, 6 })));
+        return nightPrefs;
+    }
+
+    private long getTimeMillis(int hour, int minute, int weekday) {
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 12);
-        cal.set(Calendar.MINUTE, 0);
-        timeMillis1200 = cal.getTimeInMillis();
-        cal.set(Calendar.HOUR_OF_DAY, 1);
-        timeMillis0100 = cal.getTimeInMillis();
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        timeMillis2300 = cal.getTimeInMillis();
-        cal.set(Calendar.HOUR_OF_DAY, 20);
-        cal.set(Calendar.MINUTE, 59);
-        timeMillis2059 = cal.getTimeInMillis();
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.DAY_OF_WEEK, weekday);
+        return cal.getTimeInMillis();
     }
 
-    public void testRescheduleIsAfterTime() {
-        PrefsAccessor prefs = dayPrefs;
-        long timeMillis = timeMillis1200;
-        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(timeMillis, prefs);
-        assertTrue(targetTimeMillis > timeMillis);
+    private int getWeekday(long timeMillis) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(timeMillis);
+        return cal.get(Calendar.DAY_OF_WEEK);
     }
 
-    public void testRescheduleYieldsDay1() {
-        PrefsAccessor prefs = dayPrefs;
-        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(timeMillis1200, prefs);
+    public void testRescheduleYieldsDayFriday1() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.FRIDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.FRIDAY, getWeekday(targetTimeMillis));
         assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
     }
 
-    public void testRescheduleYieldsDay2() {
-        PrefsAccessor prefs = dayPrefs;
-        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(timeMillis0100, prefs);
+    public void testRescheduleYieldsDayFriday2() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.FRIDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.FRIDAY, getWeekday(targetTimeMillis));
         assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
     }
 
-    public void testRescheduleYieldsDay3() {
-        PrefsAccessor prefs = dayPrefs;
-        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(timeMillis2300, prefs);
+    public void testRescheduleYieldsDayFriday3() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(23, 00, Calendar.FRIDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
         assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
     }
 
-    public void testRescheduleYieldsDay4() {
-        PrefsAccessor prefs = dayPrefs;
-        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(timeMillis2059, prefs);
+    public void testRescheduleYieldsDayFriday4() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(20, 59, Calendar.FRIDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
         assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
     }
 
-    public void testRescheduleYieldsDay5() {
-        PrefsAccessor prefs = nightPrefs;
-        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(timeMillis0100, prefs);
+    public void testRescheduleYieldsDayFriday5() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.FRIDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.FRIDAY, getWeekday(targetTimeMillis));
         assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
     }
 
-    public void testRescheduleYieldsDay6() {
-        PrefsAccessor prefs = nightPrefs;
-        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(timeMillis1200, prefs);
+    public void testRescheduleYieldsDayFriday6() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.FRIDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.FRIDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDayMonday1() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.MONDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDayMonday2() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.MONDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDayMonday3() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(23, 00, Calendar.MONDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.TUESDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDayMonday4() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(20, 59, Calendar.MONDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.TUESDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDayMonday5() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.MONDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDayMonday6() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.MONDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySaturday1() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.SATURDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySaturday2() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.SATURDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySaturday3() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(23, 00, Calendar.SATURDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySaturday4() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(20, 59, Calendar.SATURDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySaturday5() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.SATURDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySaturday6() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.SATURDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySunday1() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.SUNDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySunday2() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.SUNDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySunday3() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(23, 00, Calendar.SUNDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySunday4() {
+        PrefsAccessor prefs = getDayPrefs();
+        long nowTimeMillis = getTimeMillis(20, 59, Calendar.SUNDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySunday5() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(01, 00, Calendar.SUNDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
+        assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
+    }
+
+    public void testRescheduleYieldsDaySunday6() {
+        PrefsAccessor prefs = getNightPrefs();
+        long nowTimeMillis = getTimeMillis(12, 00, Calendar.SUNDAY);
+        long targetTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowTimeMillis, prefs);
+        Log.d(TAG, (new TimeOfDay(nowTimeMillis)).toString() + " -> " + (new TimeOfDay(targetTimeMillis)).toString());
+        assertTrue(targetTimeMillis > nowTimeMillis);
+        assertEquals(Calendar.MONDAY, getWeekday(targetTimeMillis));
         assertTrue(prefs.isDaytime(new TimeOfDay(targetTimeMillis)));
     }
 

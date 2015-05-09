@@ -51,43 +51,46 @@ public abstract class PrefsAccessor {
 
     public abstract long getInterval();
 
-    public long getNextDaytimeEndInMillis() {
-        TimeOfDay tNow = new TimeOfDay();
-        TimeOfDay tEnd = getDaytimeEnd();
-        Calendar evening = Calendar.getInstance();
-        evening.set(Calendar.HOUR_OF_DAY, tEnd.hour);
-        evening.set(Calendar.MINUTE, tEnd.minute);
-        evening.set(Calendar.SECOND, 0);
-        if (tEnd.isBefore(tNow)) { // today's end time has already passed
-            evening.add(Calendar.DATE, 1);
-        }
-        return evening.getTimeInMillis();
-    }
-
-    public long getNextDaytimeStartInMillis() {
+    public long getNextDaytimeStartInMillis(long nightTimeMillis) {
         TimeOfDay tStart = getDaytimeStart();
-        TimeOfDay tNow = new TimeOfDay();
         Calendar morning = Calendar.getInstance();
+        morning.setTimeInMillis(nightTimeMillis);
         morning.set(Calendar.HOUR_OF_DAY, tStart.hour);
         morning.set(Calendar.MINUTE, tStart.minute);
         morning.set(Calendar.SECOND, 0);
-        if (tStart.isBefore(tNow)) { // today's start time has already passed
-            morning.add(Calendar.DATE, 1);
+        if (morning.getTimeInMillis() <= nightTimeMillis) { // today's start time has already passed
+            morning.add(Calendar.DATE, 1); // therefore go to morning of next day
+        }
+        while (!(new TimeOfDay(morning)).isActiveOnThatDay(getActiveOnDaysOfWeek())) { // inactive on that day?
+            morning.add(Calendar.DATE, 1); // therefore go to morning of next day
         }
         return morning.getTimeInMillis();
     }
 
     public abstract boolean isBellActive();
 
+    /**
+     * Returns true if the bell should ring now, method name carries the historical meaning.
+     *
+     * @return whether bell should ring
+     */
     public boolean isDaytime() {
         return isDaytime(new TimeOfDay());
     }
 
+    /**
+     * Returns true if the bell should ring at the given TimeOfDay, so t must be in the active time interval and the weekday of t
+     * must be activated. The method name carries the historical meaning.
+     *
+     * @return whether bell should ring
+     */
     public boolean isDaytime(TimeOfDay t) {
         TimeOfDay tStart = getDaytimeStart();
         TimeOfDay tEnd = getDaytimeEnd();
-
-        return t.isInInterval(tStart, tEnd);
+        if (!t.isInInterval(tStart, tEnd)) {
+            return false; // time is before or after active time interval
+        }
+        return t.isActiveOnThatDay(getActiveOnDaysOfWeek());
     }
 
     public boolean isSettingMuteInFlightMode() {
