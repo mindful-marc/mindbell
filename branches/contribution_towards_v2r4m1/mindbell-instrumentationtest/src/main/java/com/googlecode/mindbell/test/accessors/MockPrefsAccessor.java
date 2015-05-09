@@ -21,7 +21,7 @@ public class MockPrefsAccessor extends PrefsAccessor {
 
     private String daytimeStartString = "09:00";
 
-    private final Set<Integer> activeOnDaysOfWeek = new HashSet<Integer>(Arrays.asList(new Integer[] { 2, 3, 4, 5, 6 })); // MO-FR
+    private Set<Integer> activeOnDaysOfWeek = new HashSet<Integer>(Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 6, 7 }));
 
     private long interval = 3600000;
 
@@ -75,6 +75,14 @@ public class MockPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean isBellActive() {
         return bellActive;
+    }
+
+    /**
+     * @param activeOnDaysOfWeek
+     *            the activeOnDaysOfWeek to set
+     */
+    public void setActiveOnDaysOfWeek(Set<Integer> activeOnDaysOfWeek) {
+        this.activeOnDaysOfWeek = activeOnDaysOfWeek;
     }
 
     /**

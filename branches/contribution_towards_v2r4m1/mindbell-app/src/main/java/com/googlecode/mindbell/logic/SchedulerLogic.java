@@ -22,18 +22,15 @@ import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * @author marc
- * 
+ *
  */
 public class SchedulerLogic {
-    private static Random random = new Random();
-
-    public static long getNextTargetTimeMillis(long nowMillis, PrefsAccessor prefs) {
+    public static long getNextTargetTimeMillis(long nowTimeMillis, PrefsAccessor prefs) {
         long meanInterval = prefs.getInterval();
         long randomInterval = getRandomInterval(meanInterval);
-        long targetTimeMillis = nowMillis + randomInterval;
-        if (!prefs.isDaytime(new TimeOfDay(targetTimeMillis))) {
-            // target is in night time
-            long dayStartMillis = prefs.getNextDaytimeStartInMillis();
+        long targetTimeMillis = nowTimeMillis + randomInterval;
+        if (!prefs.isDaytime(new TimeOfDay(targetTimeMillis))) { // inactive time?
+            long dayStartMillis = prefs.getNextDaytimeStartInMillis(targetTimeMillis);
             targetTimeMillis = dayStartMillis + randomInterval - meanInterval / 2;
             assert targetTimeMillis >= dayStartMillis;
         }
@@ -43,7 +40,7 @@ public class SchedulerLogic {
     /**
      * Compute a random value following a Gaussian distribution around the given mean. The value is guaranteed not to fall below
      * 0.5 * mean and not above 1.5 * mean.
-     * 
+     *
      * @param mean
      * @return
      */
@@ -57,4 +54,6 @@ public class SchedulerLogic {
         }
         return value;
     }
+
+    private static Random random = new Random();
 }
