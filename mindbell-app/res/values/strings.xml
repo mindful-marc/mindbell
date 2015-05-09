@@ -25,7 +25,7 @@
 	 According to the Buddhist teacher Thich Nhat Hanh, this is an effective 
 	 means of developing mindfulness.</string>
     <string name="howToSet">To activate the bell, use the menu button.</string>
-    <string name="aboutText">he Mindfulness Bell is created for you by mindful-apps.com.
+    <string name="aboutText" translatable="false">The Mindfulness Bell is created for you by mindful-apps.com.
 	
 	mindful-apps.com aims to give you a support for staying mindful in a busy life - for remembering what really counts.
 	
@@ -86,21 +86,21 @@
     <string name="main_message2_popup">Wake up to pleasant nature sounds.</string>
     <string name="main_yes_popup">Show me</string>
     <string name="main_no_popup">No thanks</string>
-    <string name="main_uri_popup">market://details?id=com.mindful_apps.alarm.natural</string>
+    <string name="main_uri_popup" translatable="false">market://details?id=com.mindful_apps.alarm.natural</string>
 
     <!-- Preference keys (don't localize) -->
-    <string name="keyActive">active</string>
-    <string name="keyShow">show</string>
-    <string name="keyStatus">status</string>
-    <string name="keyVolume">volume</string>
-    <string name="keyMuteWithPhone">muteWithPhone</string>
-    <string name="keyVibrate">vibrate</string>
-    <string name="keyMuteOffHook">muteOffHook</string>
-    <string name="keyMuteInFlightMode">muteOffInFlightMode</string>
-    <string name="keyFrequency">frequency</string>
-    <string name="keyStart">start</string>
-    <string name="keyEnd">end</string>
-    <string name="keyActiveOnDaysOfWeek">activeOnDaysOfWeek</string>
-    <string name="keyTry">try</string>
+    <string name="keyActive" translatable="false">active</string>
+    <string name="keyShow" translatable="false">show</string>
+    <string name="keyStatus" translatable="false">status</string>
+    <string name="keyVolume" translatable="false">volume</string>
+    <string name="keyMuteWithPhone" translatable="false">muteWithPhone</string>
+    <string name="keyVibrate" translatable="false">vibrate</string>
+    <string name="keyMuteOffHook" translatable="false">muteOffHook</string>
+    <string name="keyMuteInFlightMode" translatable="false">muteOffInFlightMode</string>
+    <string name="keyFrequency" translatable="false">frequency</string>
+    <string name="keyStart" translatable="false">start</string>
+    <string name="keyEnd" translatable="false">end</string>
+    <string name="keyActiveOnDaysOfWeek" translatable="false">activeOnDaysOfWeek</string>
+    <string name="keyTry" translatable="false">try</string>
 
 </resources>
