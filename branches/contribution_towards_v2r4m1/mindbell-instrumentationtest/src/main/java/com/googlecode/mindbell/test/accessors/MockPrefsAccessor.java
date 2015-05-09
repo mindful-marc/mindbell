@@ -23,6 +23,8 @@ public class MockPrefsAccessor extends PrefsAccessor {
 
     private Set<Integer> activeOnDaysOfWeek = new HashSet<Integer>(Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 6, 7 }));
 
+    private String activeOnDaysOfWeekString = "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday";
+
     private long interval = 3600000;
 
     private boolean bellActive = true;
@@ -40,6 +42,11 @@ public class MockPrefsAccessor extends PrefsAccessor {
     @Override
     public Set<Integer> getActiveOnDaysOfWeek() {
         return activeOnDaysOfWeek;
+    }
+
+    @Override
+    public String getActiveOnDaysOfWeekString() {
+        return activeOnDaysOfWeekString;
     }
 
     @Override
@@ -83,6 +90,14 @@ public class MockPrefsAccessor extends PrefsAccessor {
      */
     public void setActiveOnDaysOfWeek(Set<Integer> activeOnDaysOfWeek) {
         this.activeOnDaysOfWeek = activeOnDaysOfWeek;
+    }
+
+    /**
+     * @param activeOnDaysOfWeekString
+     *            the activeOnDaysOfWeekString to set
+     */
+    public void setActiveOnDaysOfWeekString(String activeOnDaysOfWeekString) {
+        this.activeOnDaysOfWeekString = activeOnDaysOfWeekString;
     }
 
     /**
