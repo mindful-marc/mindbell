@@ -73,7 +73,7 @@
 
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Mindfulness Bell is active</string>
-    <string name="statusTextBellActive">Bell will ring from _STARTTIME_ to _ENDTIME_</string>
+    <string name="statusTextBellActive">_STARTTIME_ to _ENDTIME_ on _WEEKDAYS_</string>
 
     <!-- Reasons why bell is muted -->
     <string name="reasonMutedWithPhone">Bell muted with phone</string>

@@ -39,6 +39,8 @@ public abstract class PrefsAccessor {
 
     public abstract Set<Integer> getActiveOnDaysOfWeek();
 
+    public abstract String getActiveOnDaysOfWeekString();
+
     public abstract float getBellVolume(float defaultVolume);
 
     public abstract TimeOfDay getDaytimeEnd();
