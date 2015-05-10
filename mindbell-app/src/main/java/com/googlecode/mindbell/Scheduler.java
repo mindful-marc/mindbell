@@ -36,9 +36,9 @@ import com.googlecode.mindbell.util.TimeOfDay;
 
 /**
  * Ring the bell and reschedule.
- * 
+ *
  * @author marc
- * 
+ *
  */
 public class Scheduler extends BroadcastReceiver {
 
@@ -62,7 +62,8 @@ public class Scheduler extends BroadcastReceiver {
         long nextBellTimeMillis = SchedulerLogic.getNextTargetTimeMillis(nowMillis, prefs);
         alarmManager.set(AlarmManager.RTC_WAKEUP, nextBellTimeMillis, sender);
         TimeOfDay nextBellTime = new TimeOfDay(nextBellTimeMillis);
-        Log.d(TAG, "scheduled next bell alarm for " + nextBellTime.hour + ":" + String.format("%02d", nextBellTime.minute));
+        Log.d(TAG, "scheduled next bell alarm for " + nextBellTime.hour + ":" + String.format("%02d", nextBellTime.minute)
+                + " on weekday " + nextBellTime.weekday);
 
         // ring if daytime
         if (!prefs.isDaytime()) {
