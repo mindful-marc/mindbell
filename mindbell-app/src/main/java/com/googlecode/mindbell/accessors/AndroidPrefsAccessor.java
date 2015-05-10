@@ -67,6 +67,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
     private final String defaultEnd = "21";
     private final Set<String> defaultActiveOnDaysOfWeek = new HashSet<String>(Arrays.asList(new String[] { "2", "3", "4", "5",
             "6" })); // MO-FR
+    private final String[] weekdayAbbreviations;
 
     private final float defaultVolume = AndroidContextAccessor.MINUS_SIX_DB;
 
@@ -93,6 +94,7 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
         keyStart = context.getString(R.string.keyStart);
         keyEnd = context.getString(R.string.keyEnd);
         keyActiveOnDaysOfWeek = context.getString(R.string.keyActiveOnDaysOfWeek);
+        weekdayAbbreviations = context.getResources().getStringArray(R.array.weekdayAbbreviations);
 
         keyVolume = context.getString(R.string.keyVolume);
         checkSettings();
@@ -245,6 +247,21 @@ public class AndroidPrefsAccessor extends PrefsAccessor {
             integers.add(Integer.valueOf(string));
         }
         return integers;
+    }
+
+    @Override
+    public String getActiveOnDaysOfWeekString() {
+        Set<Integer> activeOnDaysOfWeek = getActiveOnDaysOfWeek();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < weekdayAbbreviations.length; i++) {
+            if (activeOnDaysOfWeek.contains(Integer.valueOf(i + 1))) { // active on this day?
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(weekdayAbbreviations[i]); // add day to the list of active days
+            }
+        }
+        return sb.toString();
     }
 
     @Override

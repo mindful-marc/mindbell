@@ -15,9 +15,7 @@
  */
 package com.googlecode.mindbell;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import android.app.PendingIntent;
@@ -65,14 +63,17 @@ public class MindBellPreferences extends PreferenceActivity {
     }
 
     private static void setMultiSelectListPreferenceSummary(MultiSelectListPreference mslp, Set<?> newValues) {
-        List<CharSequence> newEntries = new ArrayList<CharSequence>();
-        CharSequence[] entryValues = mslp.getEntryValues();
-        for (int index = 0; index < entryValues.length; index++) {
-            if (((HashSet<?>) newValues).contains(entryValues[index])) {
-                newEntries.add(mslp.getEntries()[index]);
+        String[] weekdayAbbreviations = mslp.getContext().getResources().getStringArray(R.array.weekdayAbbreviations);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < weekdayAbbreviations.length; i++) {
+            if (((HashSet<?>) newValues).contains(String.valueOf(i + 1))) { // is this day selected?
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(weekdayAbbreviations[i]); // add day to the list of active days
             }
         }
-        mslp.setSummary(newEntries.toString());
+        mslp.setSummary(sb.toString());
     }
 
     public static final String TAG = "MindBell";

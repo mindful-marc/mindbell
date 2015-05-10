@@ -42,18 +42,19 @@ import com.googlecode.mindbell.util.Utils;
 
 /**
  * @author marc
- * 
+ *
  */
 public class AndroidContextAccessor extends ContextAccessor {
-    public static final int KEYMUTEINFLIGHTMODE = R.string.keyMuteInFlightMode;
-    public static final int KEYMUTEOFFHOOK = R.string.keyMuteOffHook;
-    public static final int KEYMUTEWITHPHONE = R.string.keyMuteWithPhone;
-
-    private static final int uniqueNotificationID = R.layout.bell;
-
     public static AndroidContextAccessor get(Context context) {
         return new AndroidContextAccessor(context);
     }
+
+    public static final int KEYMUTEINFLIGHTMODE = R.string.keyMuteInFlightMode;
+    public static final int KEYMUTEOFFHOOK = R.string.keyMuteOffHook;
+
+    public static final int KEYMUTEWITHPHONE = R.string.keyMuteWithPhone;
+
+    private static final int uniqueNotificationID = R.layout.bell;
 
     private final Context context;
 
@@ -269,8 +270,8 @@ public class AndroidContextAccessor extends ContextAccessor {
                 statusDrawable = R.drawable.bell_status_active_but_muted;
                 contentText = muteRequestReason;
             }
-            contentText = contentText.replace("_STARTTIME_", prefs.getDaytimeStartString()).replace("_ENDTIME_",
-                    prefs.getDaytimeEndString());
+            contentText = contentText.replace("_STARTTIME_", prefs.getDaytimeStartString())
+                    .replace("_ENDTIME_", prefs.getDaytimeEndString()).replace("_WEEKDAYS_", prefs.getActiveOnDaysOfWeekString());
             // Now do the notification update
             Log.i(TAG, "Update status notification: " + contentText);
             NotificationManager notificationManager = (NotificationManager) context

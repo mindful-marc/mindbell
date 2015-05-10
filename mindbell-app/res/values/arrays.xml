@@ -93,6 +93,7 @@
 </string-array>
 
 
+	<!-- Weekdays for selection in MindBellPreferences -->
 	<string-array name="daysOfWeek">
 		<item>Sunday</item>
 		<item>Monday</item>
@@ -102,7 +103,8 @@
 		<item>Friday</item>
 		<item>Saturday</item>
 	</string-array>
-	
+
+	<!-- Internal value (regarding Calendar) for the weekday selection in MindBellPreferences -->	
 	<string-array name="daysOfWeekValues">
 		<item>1</item>
 		<item>2</item>
@@ -111,6 +113,17 @@
 		<item>5</item>
 		<item>6</item>
 		<item>7</item>
+	</string-array>
+	
+	<!-- Abbreviations for weekdays ordered by their internal value -->
+	<string-array name="weekdayAbbreviations">
+		<item>Sun</item>
+		<item>Mon</item>
+		<item>Tue</item>
+		<item>Wed</item>
+		<item>Thu</item>
+		<item>Fri</item>
+		<item>Sat</item>
 	</string-array>
 
 </resources>
