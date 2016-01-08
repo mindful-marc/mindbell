@@ -21,25 +21,24 @@ import java.util.TimerTask;
 import com.googlecode.mindbell.accessors.ContextAccessor;
 
 public class MockContextAccessor extends ContextAccessor {
+    private static final int MAX_VOLUME = 7;
+    private static final float BELL_VOLUME = 0.5f;
     private boolean isSettingMuteWithPhone = false;
     private boolean isSettingMuteOffHook = false;
     private boolean isSettingMuteInFlightMode = false;
     private boolean isPhoneMuted = false;
+
     private boolean isPhoneOffHook = false;
     private boolean isPhoneInFlightMode = false;
+
     private boolean isPlaying = false;
-
     private long mockSoundDuration = 1000; // ms
-    private static final int ORIGINAL_VOLUME = 7;
-
-    private static final int MAX_VOLUME = 7;
-    private static final float BELL_VOLUME = 0.5f;
-    private int alarmVolume = ORIGINAL_VOLUME;
+    private int alarmVolume;
 
     @Override
     public void finishBellSound() {
         isPlaying = false;
-        alarmVolume = ORIGINAL_VOLUME;
+        setAlarmVolume(originalVolume);
     }
 
     @Override
@@ -98,6 +97,7 @@ public class MockContextAccessor extends ContextAccessor {
 
     @Override
     public void setAlarmVolume(int volume) {
+        alarmVolume = volume;
     }
 
     public void setPhoneInFlightMode(boolean isPhoneInFlightMode) {
@@ -135,6 +135,8 @@ public class MockContextAccessor extends ContextAccessor {
 
     @Override
     public void startBellSound(final Runnable runWhenDone) {
+        originalVolume = getAlarmVolume();
+        setAlarmVolume(MAX_VOLUME);
         isPlaying = true;
 
         Timer t = new Timer();

@@ -1,9 +1,9 @@
 package com.googlecode.mindbell.test.accessors;
 
-import android.test.AndroidTestCase;
-
 import com.googlecode.mindbell.accessors.AndroidContextAccessor;
 import com.googlecode.mindbell.accessors.ContextAccessor;
+
+import android.test.AndroidTestCase;
 
 public class AndroidContextAccessorTest extends AndroidTestCase {
 
@@ -23,12 +23,14 @@ public class AndroidContextAccessorTest extends AndroidTestCase {
     public void testFinish() {
         // setup
         ContextAccessor ca = createContextAccessor();
-        ca.startBellSound(null);
+        ca.setAlarmVolume(ca.getAlarmMaxVolume() / 2);
+        int alarmVolume = ca.getAlarmVolume();
         // exercise
+        ca.startBellSound(null);
         ca.finishBellSound();
         // verify
         assertFalse(ca.isBellSoundPlaying());
-
+        assertEquals(alarmVolume, ca.getAlarmVolume());
     }
 
     public void testOriginalVolume() {
@@ -40,7 +42,6 @@ public class AndroidContextAccessorTest extends AndroidTestCase {
         ca.finishBellSound();
         // verify
         assertEquals(originalVolume, ca.getAlarmVolume());
-
     }
 
     public void testPlay() {

@@ -1,8 +1,8 @@
 package com.googlecode.mindbell.test.accessors;
 
-import junit.framework.TestCase;
-
 import com.googlecode.mindbell.accessors.ContextAccessor;
+
+import junit.framework.TestCase;
 
 public class ContextAccessorTest extends TestCase {
 
@@ -22,12 +22,14 @@ public class ContextAccessorTest extends TestCase {
     public void testFinish() {
         // setup
         ContextAccessor ca = createContextAccessor();
-        ca.startBellSound(null);
+        ca.setAlarmVolume(ca.getAlarmMaxVolume() / 2);
+        int alarmVolume = ca.getAlarmVolume();
         // exercise
+        ca.startBellSound(null);
         ca.finishBellSound();
         // verify
         assertFalse(ca.isBellSoundPlaying());
-
+        assertEquals(alarmVolume, ca.getAlarmVolume());
     }
 
     public void testInFlightMode_false1() {

@@ -19,6 +19,12 @@ import static com.googlecode.mindbell.MindBellPreferences.TAG;
 
 import java.io.IOException;
 
+import com.googlecode.mindbell.MindBell;
+import com.googlecode.mindbell.MindBellMain;
+import com.googlecode.mindbell.R;
+import com.googlecode.mindbell.Scheduler;
+import com.googlecode.mindbell.util.Utils;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -34,15 +40,9 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.googlecode.mindbell.MindBell;
-import com.googlecode.mindbell.MindBellMain;
-import com.googlecode.mindbell.R;
-import com.googlecode.mindbell.Scheduler;
-import com.googlecode.mindbell.util.Utils;
-
 /**
  * @author marc
- * 
+ *
  */
 public class AndroidContextAccessor extends ContextAccessor {
     public static final int KEYMUTEINFLIGHTMODE = R.string.keyMuteInFlightMode;
@@ -73,6 +73,7 @@ public class AndroidContextAccessor extends ContextAccessor {
         }
         mediaPlayer.release();
         mediaPlayer = null;
+        setAlarmVolume(originalVolume);
     }
 
     @Override
@@ -191,6 +192,7 @@ public class AndroidContextAccessor extends ContextAccessor {
     public void startBellSound(final Runnable runWhenDone) {
         // MindBell.logDebug("Starting bell sound");
 
+        originalVolume = getAlarmVolume();
         setAlarmVolume(getAlarmMaxVolume());
         float bellVolume = getBellVolume();
         MindBell.logDebug("Ringing bell with volume " + bellVolume);
