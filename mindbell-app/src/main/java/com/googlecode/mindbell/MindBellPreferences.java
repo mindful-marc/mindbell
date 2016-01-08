@@ -15,20 +15,25 @@
  */
 package com.googlecode.mindbell;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
 
 public class MindBellPreferences extends PreferenceActivity {
     /**
      * @author marc
-     * 
+     *
      */
     private static final class ListChangeListener implements Preference.OnPreferenceChangeListener {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -44,9 +49,38 @@ public class MindBellPreferences extends PreferenceActivity {
         }
     }
 
+    private static final class MultiSelectListChangeListener implements Preference.OnPreferenceChangeListener {
+        public boolean onPreferenceChange(Preference preference, Object newValues) {
+            assert preference instanceof MultiSelectListPreference;
+            MultiSelectListPreference mslp = (MultiSelectListPreference) preference;
+            if (((Set<?>) newValues).isEmpty()) {
+                Toast.makeText(mslp.getContext(), R.string.atLeastOneActiveDayNeeded, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            setMultiSelectListPreferenceSummary(mslp, (Set<?>) newValues);
+            return true;
+        }
+    }
+
+    private static void setMultiSelectListPreferenceSummary(MultiSelectListPreference mslp, Set<?> newValues) {
+        String[] weekdayAbbreviations = mslp.getContext().getResources().getStringArray(R.array.weekdayAbbreviations);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < weekdayAbbreviations.length; i++) {
+            if (((HashSet<?>) newValues).contains(String.valueOf(i + 1))) { // is this day selected?
+                if (sb.length() > 0) {
+                    sb.append(", ");
+                }
+                sb.append(weekdayAbbreviations[i]); // add day to the list of active days
+            }
+        }
+        mslp.setSummary(sb.toString());
+    }
+
     public static final String TAG = "MindBell";
 
     private final Preference.OnPreferenceChangeListener listChangeListener = new ListChangeListener();
+
+    private final Preference.OnPreferenceChangeListener multiSelectListChangeListener = new MultiSelectListChangeListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +95,7 @@ public class MindBellPreferences extends PreferenceActivity {
         setupListPreference(R.string.keyFrequency);
         setupListPreference(R.string.keyStart);
         setupListPreference(R.string.keyEnd);
+        setupMultiSelectListPreference(R.string.keyActiveOnDaysOfWeek);
 
     }
 
@@ -81,6 +116,12 @@ public class MindBellPreferences extends PreferenceActivity {
         ListPreference lp = (ListPreference) getPreferenceScreen().findPreference(getText(keyID));
         lp.setSummary(lp.getEntry());
         lp.setOnPreferenceChangeListener(listChangeListener);
+    }
+
+    private void setupMultiSelectListPreference(int keyID) {
+        MultiSelectListPreference mslp = (MultiSelectListPreference) getPreferenceScreen().findPreference(getText(keyID));
+        setMultiSelectListPreferenceSummary(mslp, mslp.getValues());
+        mslp.setOnPreferenceChangeListener(multiSelectListChangeListener);
     }
 
 }

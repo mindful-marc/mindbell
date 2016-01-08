@@ -1,5 +1,9 @@
 package com.googlecode.mindbell.test.accessors;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.googlecode.mindbell.accessors.PrefsAccessor;
 import com.googlecode.mindbell.util.TimeOfDay;
 
@@ -17,6 +21,10 @@ public class MockPrefsAccessor extends PrefsAccessor {
 
     private String daytimeStartString = "09:00";
 
+    private Set<Integer> activeOnDaysOfWeek = new HashSet<Integer>(Arrays.asList(new Integer[] { 1, 2, 3, 4, 5, 6, 7 }));
+
+    private String activeOnDaysOfWeekString = "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday";
+
     private long interval = 3600000;
 
     private boolean bellActive = true;
@@ -29,6 +37,16 @@ public class MockPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean doStatusNotification() {
         return statusNotification;
+    }
+
+    @Override
+    public Set<Integer> getActiveOnDaysOfWeek() {
+        return activeOnDaysOfWeek;
+    }
+
+    @Override
+    public String getActiveOnDaysOfWeekString() {
+        return activeOnDaysOfWeekString;
     }
 
     @Override
@@ -64,6 +82,22 @@ public class MockPrefsAccessor extends PrefsAccessor {
     @Override
     public boolean isBellActive() {
         return bellActive;
+    }
+
+    /**
+     * @param activeOnDaysOfWeek
+     *            the activeOnDaysOfWeek to set
+     */
+    public void setActiveOnDaysOfWeek(Set<Integer> activeOnDaysOfWeek) {
+        this.activeOnDaysOfWeek = activeOnDaysOfWeek;
+    }
+
+    /**
+     * @param activeOnDaysOfWeekString
+     *            the activeOnDaysOfWeekString to set
+     */
+    public void setActiveOnDaysOfWeekString(String activeOnDaysOfWeekString) {
+        this.activeOnDaysOfWeekString = activeOnDaysOfWeekString;
     }
 
     /**
