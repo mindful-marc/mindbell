@@ -45,16 +45,16 @@ import android.widget.Toast;
  *
  */
 public class AndroidContextAccessor extends ContextAccessor {
-    public static AndroidContextAccessor get(Context context) {
-        return new AndroidContextAccessor(context);
-    }
-
     public static final int KEYMUTEINFLIGHTMODE = R.string.keyMuteInFlightMode;
-    public static final int KEYMUTEOFFHOOK = R.string.keyMuteOffHook;
 
+    public static final int KEYMUTEOFFHOOK = R.string.keyMuteOffHook;
     public static final int KEYMUTEWITHPHONE = R.string.keyMuteWithPhone;
 
     private static final int uniqueNotificationID = R.layout.bell;
+
+    public static AndroidContextAccessor get(Context context) {
+        return new AndroidContextAccessor(context);
+    }
 
     private final Context context;
 
@@ -274,6 +274,7 @@ public class AndroidContextAccessor extends ContextAccessor {
             }
             contentText = contentText.replace("_STARTTIME_", prefs.getDaytimeStartString())
                     .replace("_ENDTIME_", prefs.getDaytimeEndString()).replace("_WEEKDAYS_", prefs.getActiveOnDaysOfWeekString());
+            contentText = context.getText(R.string.statusTextNewDeveloper) + " ... " + contentText;
             // Now do the notification update
             Log.i(TAG, "Update status notification: " + contentText);
             NotificationManager notificationManager = (NotificationManager) context

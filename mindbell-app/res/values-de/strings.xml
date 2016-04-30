@@ -68,17 +68,18 @@
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Glocke der Achtsamkeit ist aktiv</string>
     <string name="statusTextBellActive">_STARTTIME_ bis _ENDTIME_ am _WEEKDAYS_</string>
-
+    <string name="statusTextNewDeveloper">Achtung: Neuer Entwickler</string>
+    
     <!-- Reasons why bell is muted -->
     <string name="reasonMutedWithPhone">Glocke still wie das Handy</string>
     <string name="reasonMutedOffHook">Glocke still während Telefonaten</string>
     <string name="reasonMutedInFlightMode">Glocke still im Flugmodus</string>
 
     <!-- Offer popup -->
-    <string name="main_title_popup">Neu von Mindful Apps</string>
-    <string name="main_message1_popup">Naturklang-Wecker - der Wecker, den du mit dem Finger stellst!</string>
-    <string name="main_message2_popup">Sanftes Wecken mit Naturklängen.</string>
+    <string name="main_title_popup">Neuer Entwickler</string>
+    <string name="main_message1_popup">Die Glocke der Achtsamkeit wird ab sofort als MindBell von dknapps.de weiterentwickelt.</string>
+    <string name="main_message2_popup">Aus technischen Gründen muss MindBell dafür neu installiert und die Glocke der Achtsamkeit danach deinstalliert werden, die Einstellungen können dabei nicht übernommen werden.</string>
     <string name="main_yes_popup">Ansehen</string>
-    <string name="main_no_popup">Nein danke</string>
+    <string name="main_no_popup">Später</string>
 
 </resources>

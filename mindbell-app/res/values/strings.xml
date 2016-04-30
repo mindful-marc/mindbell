@@ -74,6 +74,7 @@
     <!-- Status bar notification -->
     <string name="statusTitleBellActive">Mindfulness Bell is active</string>
     <string name="statusTextBellActive">_STARTTIME_ to _ENDTIME_ on _WEEKDAYS_</string>
+    <string name="statusTextNewDeveloper">Attention: New Developer</string>
 
     <!-- Reasons why bell is muted -->
     <string name="reasonMutedWithPhone">Bell muted with phone</string>
@@ -81,12 +82,12 @@
     <string name="reasonMutedInFlightMode">Bell muted in flight mode</string>
 
     <!-- Offer popup -->
-    <string name="main_title_popup">New from Mindful Apps</string>
-    <string name="main_message1_popup">Nature Sounds Alarm Clock - the alarm that you set with your finger!</string>
-    <string name="main_message2_popup">Wake up to pleasant nature sounds.</string>
+    <string name="main_title_popup">New Developer</string>
+    <string name="main_message1_popup">From now on Mindfulness Bell is maintained as MindBell by dknapps.de.</string>
+    <string name="main_message2_popup">For technical reasons you have to install MindBell and uninstall Mindfulness Bell afterwards. Settings cannot be transferred.</string>
     <string name="main_yes_popup">Show me</string>
-    <string name="main_no_popup">No thanks</string>
-    <string name="main_uri_popup" translatable="false">market://details?id=com.mindful_apps.alarm.natural</string>
+    <string name="main_no_popup">Later</string>
+    <string name="main_uri_popup" translatable="false">market://details?id=de.dknapps.mindbell</string>
 
     <!-- Preference keys (don't localize) -->
     <string name="keyActive" translatable="false">active</string>

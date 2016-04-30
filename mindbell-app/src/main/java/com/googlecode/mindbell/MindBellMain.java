@@ -15,6 +15,11 @@
  */
 package com.googlecode.mindbell;
 
+import com.googlecode.mindbell.accessors.AndroidContextAccessor;
+import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
+import com.googlecode.mindbell.accessors.ContextAccessor;
+import com.googlecode.mindbell.logic.RingingLogic;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -30,11 +35,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
-import com.googlecode.mindbell.accessors.AndroidContextAccessor;
-import com.googlecode.mindbell.accessors.AndroidPrefsAccessor;
-import com.googlecode.mindbell.accessors.ContextAccessor;
-import com.googlecode.mindbell.logic.RingingLogic;
 
 public class MindBellMain extends Activity {
     private static final String POPUP_PREFS_FILE = "popup-prefs";
@@ -56,7 +56,7 @@ public class MindBellMain extends Activity {
     }
 
     /**
-     * 
+     *
      */
     private void notifyIfNotActive() {
         if (!new AndroidPrefsAccessor(this).isBellActive()) {
@@ -68,6 +68,7 @@ public class MindBellMain extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         popupPrefs = getSharedPreferences(POPUP_PREFS_FILE, MODE_PRIVATE);
+        setPopupShown(false); // Reminder to migrate to de.dknapps.mindbell once per app start
         setContentView(R.layout.main);
     }
 
@@ -127,7 +128,7 @@ public class MindBellMain extends Activity {
     }
 
     /**
-     * 
+     *
      */
     private void showPopup() {
         DialogInterface.OnClickListener yesListener = new DialogInterface.OnClickListener() {
@@ -138,9 +139,8 @@ public class MindBellMain extends Activity {
         };
 
         View popupView = LayoutInflater.from(this).inflate(R.layout.popup_dialog, null);
-        new AlertDialog.Builder(this).setTitle(R.string.main_title_popup).setIcon(R.drawable.alarm_natural_icon)
-                .setView(popupView).setPositiveButton(R.string.main_yes_popup, yesListener)
-                .setNegativeButton(R.string.main_no_popup, null).show();
+        new AlertDialog.Builder(this).setTitle(R.string.main_title_popup).setIcon(R.drawable.icon).setView(popupView)
+                .setPositiveButton(R.string.main_yes_popup, yesListener).setNegativeButton(R.string.main_no_popup, null).show();
     }
 
     private void takeUserToOffer() {
